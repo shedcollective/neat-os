@@ -1,0 +1,27 @@
+# PAUSED. The licence is MIT. Publishing stays off (ADR-0017).
+# The install is a git pin:
+#   file: sibling or github:shedcollective/neat-os#vX.Y.Z
+# Cloud Agents still cannot read the registry. No Packages token for an agent.
+# Do not add a release trigger or an npm publish line while this stays paused.
+#
+# Release flow stays: feature, then develop, then main, then a tagged GitHub Release
+#   gh release create vX.Y.Z --target main
+# The tag is the installable git ref. Publishing is not a release step.
+
+name: Publish npm (paused)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paused:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub Packages publish is paused
+        run: |
+          echo "Publishing stays paused. The licence is MIT (ADR-0017)."
+          echo "Do not npm publish. Until a package exists, consumers install the git ref."
+          exit 1

@@ -1,0 +1,4 @@
+{
+  "name": "neat-os",
+  "install": "bash .cursor/install.sh"
+}

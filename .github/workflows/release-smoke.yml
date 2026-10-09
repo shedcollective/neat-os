@@ -1,0 +1,51 @@
+# Runs after a person publishes a GitHub Release.
+# Installs the tag the way a product repository will, and asserts consume.
+# Does not publish to npm. publish-npm.yml stays paused (ADR-0017, ADR-0010). The licence is MIT.
+
+name: Release smoke
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  install-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install published tag into a scratch consumer
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          if [ -z "${TAG}" ]; then
+            echo "release tag_name is empty" >&2
+            exit 1
+          fi
+          consumer="$(mktemp -d)"
+          cd "$consumer"
+          npm init -y >/dev/null
+          # Consumer pins are github:shedcollective/neat-os#vX.Y.Z.
+          # Install the repository that published the Release.
+          npm install "git+https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git#${TAG}"
+          node -e "
+            const fs = require('fs');
+            const neatOs = require('@shedcollective/neat-os');
+            if (neatOs.name !== '@shedcollective/neat-os') process.exit(1);
+            if (!fs.existsSync(neatOs.skillsDir)) {
+              console.error('missing skillsDir', neatOs.skillsDir);
+              process.exit(1);
+            }
+            const hit = neatOs.resolveConsume();
+            if (hit.mode !== 'node_modules') {
+              console.error('expected node_modules mode, got', hit.mode);
+              process.exit(1);
+            }
+            console.log('release-smoke OK', neatOs.version, process.env.TAG, hit.mode);
+          "

@@ -1,0 +1,41 @@
+{
+  "name": "@shedcollective/neat-os",
+  "version": "0.4.0",
+  "description": "Shed agency OS. Principles, playbooks, and project templates. Install from git (file: sibling or github:shedcollective/neat-os#vX.Y.Z).",
+  "license": "MIT",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "packages/npm/index.js",
+    "packages/npm/index.d.ts",
+    "packages/npm/resolve-consume.js",
+    "packages/npm/package.json",
+    "skills",
+    "templates",
+    "principles",
+    "conventions",
+    "stacks"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shedcollective/neat-os.git"
+  },
+  "homepage": "https://github.com/shedcollective/neat-os",
+  "bugs": {
+    "url": "https://github.com/shedcollective/neat-os/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "bash scripts/check"
+  }
+}

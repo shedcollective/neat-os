@@ -1,0 +1,149 @@
+name: Validate neat-os
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      # The neutral-reference check reads pull request commits when this is a pull_request.
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: bash scripts/check
+      - name: Smoke sibling file install and require API
+        run: |
+          set -euo pipefail
+          consumer="$(mktemp -d)"
+          cd "$consumer"
+          npm init -y >/dev/null
+          npm install "$GITHUB_WORKSPACE"
+          node -e "
+            const fs = require('fs');
+            const neatOs = require('@shedcollective/neat-os');
+            if (neatOs.name !== '@shedcollective/neat-os') process.exit(1);
+            if (!neatOs.version) process.exit(1);
+            for (const key of ['skillsDir', 'templatesDir', 'principlesDir', 'conventionsDir']) {
+              if (!fs.existsSync(neatOs[key])) {
+                console.error('missing', key, neatOs[key]);
+                process.exit(1);
+              }
+            }
+            console.log('sibling require OK', neatOs.version);
+          "
+      - name: Smoke npm install from this commit SHA
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # On pull_request, github.sha is the merge commit under refs/pull/<n>/merge.
+          # That commit is not a branch tip. npm checks a SHA out only while
+          # ls-remote still advertises it, so the install fails with "unable to read tree".
+          # The head SHA is the branch tip. On push, github.sha is that tip.
+          INSTALL_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${INSTALL_SHA}" ]; then
+            echo "install SHA is empty" >&2
+            exit 1
+          fi
+          echo "npm install git ref ${INSTALL_SHA}"
+          consumer="$(mktemp -d)"
+          cd "$consumer"
+          npm init -y >/dev/null
+          # Consumer pins are github:shedcollective/neat-os#vX.Y.Z.
+          # This job installs the repository the workflow is running in, so the
+          # same file smokes a commit on the archive and on shedcollective/neat-os.
+          npm install "git+https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git#${INSTALL_SHA}"
+          node -e "
+            const fs = require('fs');
+            const neatOs = require('@shedcollective/neat-os');
+            if (neatOs.name !== '@shedcollective/neat-os') process.exit(1);
+            if (!neatOs.version) process.exit(1);
+            if (!fs.existsSync(neatOs.skillsDir)) {
+              console.error('missing skillsDir', neatOs.skillsDir);
+              process.exit(1);
+            }
+            const hit = neatOs.resolveConsume();
+            if (hit.mode !== 'node_modules') {
+              console.error('expected node_modules mode, got', hit.mode);
+              process.exit(1);
+            }
+            console.log('git SHA install OK', neatOs.version, hit.mode);
+          "
+      - name: Smoke init scaffold then gather fill
+        run: |
+          set -euo pipefail
+          chmod +x skills/init/scripts/copy-templates.sh skills/init/scripts/resolve-consume.sh skills/gather/scripts/light-scan.sh
+          tmp="$(mktemp -d)"
+          git -C "$tmp" init -q
+          git -C "$tmp" config user.email "dev@example.com"
+          git -C "$tmp" config user.name "neat-os"
+          printf '%s\n' '{"name":"acme/site","require":{"php":"^8.3","laravel/framework":"^11.0","nails/common":"^1.0"}}' > "$tmp/composer.json"
+          printf '%s\n' '{"name":"@acme/site","private":true,"dependencies":{"react":"^18.2.0"}}' > "$tmp/package.json"
+          mkdir -p "$tmp/app" "$tmp/src"
+          unset NEAT_OS_ROOT
+          unset NEAT_OS_TICKET_PREFIX
+          unset NEAT_OS_JIRA_PREFIX
+          unset SHED_OS_ROOT
+          unset SHED_OS_TICKET_PREFIX
+          unset SHED_OS_JIRA_PREFIX
+          bash skills/init/scripts/copy-templates.sh "$tmp"
+          test -f "$tmp/AGENTS.md"
+          test -f "$tmp/.agents/features/TEMPLATE.md"
+          test -f "$tmp/.agents/project.md"
+          test -f "$tmp/.agents/README.md"
+          test -f "$tmp/.agents/platforms/README.md"
+          test -f "$tmp/.agents/platforms/TEMPLATE.md"
+          test ! -e "$tmp/.agents/skills"
+          test ! -e "$tmp/.agents/platforms/frontend.md"
+          grep -q 'Agent Guide' "$tmp/.agents/README.md"
+          grep -q 'Critical Docker' "$tmp/.agents/README.md"
+          grep -q '{{PROJECT_NAME}}' "$tmp/.agents/README.md"
+          grep -q '## Platform leaves' "$tmp/AGENTS.md"
+          grep -q 'None yet' "$tmp/AGENTS.md"
+          grep -q 'Containers / Compose: {{to confirm}}' "$tmp/.agents/project.md"
+          if grep -q Laravel "$tmp/.agents/project.md"; then
+            echo "init must not fill stack evidence" >&2
+            exit 1
+          fi
+          if grep -q 'Project facts only' "$tmp/.agents/README.md"; then
+            echo "Agent Guide must not be a thin pointer" >&2
+            exit 1
+          fi
+          bash skills/gather/scripts/light-scan.sh "$tmp"
+          grep -q Laravel "$tmp/.agents/project.md"
+          grep -q Nails "$tmp/.agents/project.md"
+          grep -q 'TODO / ask: ticket prefix' "$tmp/.agents/project.md"
+          grep -q 'Awaiting interview' "$tmp/.agents/project.md"
+          grep -q Laravel "$tmp/AGENTS.md"
+          grep -q Laravel "$tmp/.agents/README.md"
+          test -f "$tmp/.agents/platforms/frontend.md"
+          test -f "$tmp/.agents/platforms/backend.md"
+          grep -q '.agents/platforms/frontend.md' "$tmp/AGENTS.md"
+          grep -q '.agents/platforms/backend.md' "$tmp/AGENTS.md"
+          grep -q React "$tmp/.agents/platforms/frontend.md"
+          grep -q Laravel "$tmp/.agents/platforms/backend.md"
+          if grep -q 'None yet' "$tmp/AGENTS.md"; then
+            echo "multi-surface gather must replace Platform leaves None yet" >&2
+            exit 1
+          fi
+          if grep -E '^- Client:[[:space:]]*$' "$tmp/.agents/project.md"; then
+            echo "scan-only project.md must not leave a blank Client bullet" >&2
+            exit 1
+          fi
+          if grep -q '{{PROJECT_NAME}}' "$tmp/AGENTS.md" "$tmp/.agents/README.md"; then
+            echo "gather scan must replace leftover {{PROJECT_NAME}}" >&2
+            exit 1
+          fi
+          if bash skills/init/scripts/resolve-consume.sh "$tmp"; then
+            echo "expected missing consume on an isolated client" >&2
+            exit 1
+          fi

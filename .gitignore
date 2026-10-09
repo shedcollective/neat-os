@@ -1,0 +1,14 @@
+node_modules/
+vendor/
+composer.lock
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Staged copies used only when packing the npm package
+packages/npm/skills/
+packages/npm/templates/
+packages/npm/principles/
+packages/npm/conventions/

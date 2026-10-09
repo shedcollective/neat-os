@@ -1,0 +1,21 @@
+{
+  "name": "shedcollective/neat-os",
+  "description": "neat-os Composer library tree (PHP metadata only). Not the VCS entrypoint. Knowledge is not shipped via Composer.",
+  "type": "library",
+  "license": "MIT",
+  "version": "0.4.0",
+  "require": {
+    "php": ">=8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Neat\\Os\\": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-develop": "0.4.x-dev",
+      "dev-main": "0.4.x-dev"
+    }
+  }
+}

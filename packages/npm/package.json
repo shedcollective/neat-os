@@ -1,0 +1,40 @@
+{
+  "name": "@shedcollective/neat-os",
+  "version": "0.4.0",
+  "description": "neat-os path helpers. Consumers install the repo root via file: or github:shedcollective/neat-os#vX.Y.Z.",
+  "license": "MIT",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "resolve-consume.js",
+    "README.md",
+    "skills",
+    "templates",
+    "principles",
+    "conventions",
+    "stacks"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shedcollective/neat-os.git",
+    "directory": "packages/npm"
+  },
+  "homepage": "https://github.com/shedcollective/neat-os",
+  "bugs": {
+    "url": "https://github.com/shedcollective/neat-os/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "prepack": "node ../../scripts/stage-npm.js"
+  }
+}
