@@ -40,7 +40,7 @@ A product repository pins a neat-os release. `init` copies templates into `AGENT
 | [Determinism](principles/determinism.md) | The same inputs give tested, trusted results |
 | [Parallelism](principles/parallelism.md) | Independent workers, including Cloud Agents, can run at once |
 
-Each goal has a few one-line principles beneath it. The index is [principles/README.md](principles/README.md). There are twelve.
+Each goal has a few one-line principles beneath it. The index is [principles/README.md](principles/README.md).
 
 ## Building blocks
 

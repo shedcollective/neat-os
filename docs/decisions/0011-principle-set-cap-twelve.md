@@ -1,6 +1,6 @@
 # 0011 — Principle set cap is twelve
 
-**Status:** Accepted
+**Status:** Superseded by 0018
 **Date:** 2026-09-10
 
 ## Context
