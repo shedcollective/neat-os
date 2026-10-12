@@ -385,8 +385,8 @@ for (const link of principleIndex.matchAll(/\(([a-z0-9-]+\.md)\)/g)) {
     fail(`principles/README.md links missing leaf ${link[1]}`);
   }
 }
-if (leaves.length > 12) {
-  fail(`principles: ${leaves.length} leaves; keep the set small (≤ 12, ADR-0011) or justify in an ADR`);
+if (leaves.length > 13) {
+  fail(`principles: ${leaves.length} leaves; keep the set small (≤ 13, ADR-0018) or justify in an ADR`);
 }
 
 // Conventions index ↔ files.

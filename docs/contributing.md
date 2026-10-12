@@ -30,7 +30,7 @@ Decide which kind of mechanism it is before you create it. The six kinds are def
 
 | Kind | When to add one |
 | --- | --- |
-| Principle | One judgement rule that changed a real decision in shipped work and cannot be checked by software. Create `principles/<slug>.md` with the sections *Applies when*, *The decision it changes*, and *Source*, and add it under a goal in `principles/README.md`. Keep the set at twelve or fewer ([ADR-0011](decisions/0011-principle-set-cap-twelve.md)). Candidates usually arrive as `learn` proposals, and a person elevates them. |
+| Principle | One judgement rule that changed a real decision in shipped work and cannot be checked by software. Create `principles/<slug>.md` with the sections *Applies when*, *The decision it changes*, and *Source*, and add it under a goal in `principles/README.md`. Keep the set at thirteen or fewer ([ADR-0018](decisions/0018-principle-set-cap-thirteen.md)). Candidates usually arrive as `learn` proposals, and a person elevates them. |
 | Convention | A fact every Shed repository shares, such as git-flow or which ticket system to use. Create `conventions/<topic>.md` and list it in `conventions/README.md`. Playbooks read it, and `gather` must not ask about it. |
 | Playbook | An ordered sequence whose failure mode is a skipped step. Launch playbooks are `init`, `gather`, and `learn`. On-demand playbooks also live under `skills/<name>/SKILL.md` (today: [`pin-majors-with-reasons`](../skills/pin-majors-with-reasons/SKILL.md), [`assurance`](../skills/assurance/SKILL.md)). The frontmatter has `name` and `description`; the body has *When to use*, *Steps*, and *Stop*. |
 | Skill | A capability a playbook step invokes. Same `SKILL.md` shape. Keep it short. |

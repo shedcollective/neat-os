@@ -20,10 +20,11 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0008](0008-repo-is-source-of-truth.md) | The repository is the source of truth for docs, decisions and releases; Notion is a scratchpad | Accepted |
 | [0009](0009-writing-convention.md) | Reader-facing pages are written for a developer who has only the repository; the subset software can see is checked | Accepted |
 | [0010](0010-first-installable-tag.md) | `v0.1.0` is the first installable tag; `v0.0.1` is not | Accepted |
-| [0011](0011-principle-set-cap-twelve.md) | Principle set cap is twelve | Accepted |
+| [0011](0011-principle-set-cap-twelve.md) | Principle set cap is twelve | Superseded by 0018 |
 | [0012](0012-ticket-playbook-writes-jira-not-the-repo.md) | The `ticket` playbook creates or enhances a Jira Task and writes nothing to the repository | Accepted |
 | [0013](0013-stack-packs-in-shed-os.md) | Stack packs live in shed-os; init and gather point at them | Accepted |
 | [0014](0014-commit-shape-for-review.md) | Commits are one concern, explained, and ordered for review | Accepted |
 | [0015](0015-ticket-titles-name-a-capability-or-a-breakage.md) | Ticket titles name a new capability or a breakage | Accepted |
 | [0016](0016-neutral-reference.md) | The public tree is a neutral reference | Accepted |
 | [0017](0017-consume-via-github-packages.md) | Client repositories consume shed-os from GitHub Packages | Accepted |
+| [0018](0018-principle-set-cap-thirteen.md) | Principle set cap is thirteen | Accepted |

@@ -30,7 +30,7 @@ A product repository pins a neat-os release. `init` copies templates into `AGENT
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/concept-1-three-goals-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="docs/assets/readme/concept-1-three-goals-light.svg">
-    <img alt="Three goals, one cube per principle, 12 principles in all. Kaizen, improve from shipped work (4): Encode lessons; Smallest complete change; Propose, never promote; Keep the guide true. Determinism, same inputs, trusted results (6): Evidence before done; Never invent facts; Inspect before inventing; Red is a stop; Use the declared runtime; Enqueue side effects. Parallelism, independent workers at once (2): Keep human gates; Surface conflicts." src="docs/assets/readme/concept-1-three-goals-light.svg" width="100%">
+    <img alt="Three goals and 13 principles. Kaizen, improve from shipped work (4): Encode lessons; Smallest complete change; Propose, never promote; Keep the guide true. Determinism, same inputs, trusted results (7): Evidence before done; Never invent facts; Inspect before inventing; Red is a stop; Use the declared runtime; Enqueue side effects; Never store secrets. Parallelism, independent workers at once (2): Keep human gates; Surface conflicts." src="docs/assets/readme/concept-1-three-goals-light.svg" width="100%">
   </picture>
 </p>
 
@@ -40,7 +40,7 @@ A product repository pins a neat-os release. `init` copies templates into `AGENT
 | [Determinism](principles/determinism.md) | The same inputs give tested, trusted results |
 | [Parallelism](principles/parallelism.md) | Independent workers, including Cloud Agents, can run at once |
 
-Each goal has a few one-line principles beneath it. The index is [principles/README.md](principles/README.md). There are twelve.
+Each goal has a few one-line principles beneath it. The index is [principles/README.md](principles/README.md). There are thirteen.
 
 ## Building blocks
 

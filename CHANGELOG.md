@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1 Unreleased
+
+This repository does not store secrets, credentials, or project-specific information. The principle is [never-store-secrets](principles/never-store-secrets.md). A secret goes in an environment variable or another store outside the repository. A fact about one product repository goes in that repository's own docs.
+
+The principle set cap is thirteen ([ADR-0018](docs/decisions/0018-principle-set-cap-thirteen.md)).
+
 ## 0.4.0
 
 The product name is neat-os. The Node package is `@shedcollective/neat-os`. The Composer package is `shedcollective/neat-os`. Install with a git pin, `github:shedcollective/neat-os#vX.Y.Z`. Releases are tagged on `shedcollective/neat-os`.
