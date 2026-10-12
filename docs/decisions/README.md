@@ -27,4 +27,4 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0015](0015-ticket-titles-name-a-capability-or-a-breakage.md) | Ticket titles name a new capability or a breakage | Accepted |
 | [0016](0016-neutral-reference.md) | The public tree is a neutral reference | Accepted |
 | [0017](0017-consume-via-github-packages.md) | Client repositories consume shed-os from GitHub Packages | Accepted |
-| [0018](0018-principle-set-cap-thirteen.md) | Principle set cap is thirteen | Accepted |
+| [0018](0018-no-numeric-principle-cap.md) | The principle set has no numeric cap | Accepted |

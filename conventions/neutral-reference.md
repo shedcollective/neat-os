@@ -2,7 +2,7 @@
 
 **Locked:** this repository names roles, not people. It does not name clients, projects, products, or bots.
 
-A reader who has only this repository should not learn who works on it or which clients it has served. Those facts belong in the consuming repository, or in the agent's own configuration. This is a convention, not a principle. The principle set is capped at thirteen ([ADR-0018](../docs/decisions/0018-principle-set-cap-thirteen.md)).
+A reader who has only this repository should not learn who works on it or which clients it has served. Those facts belong in the consuming repository, or in the agent's own configuration. This is a convention, not a principle. The principle set has no numeric cap ([ADR-0018](../docs/decisions/0018-no-numeric-principle-cap.md)). Keep the set small. Delete a principle that stops changing behaviour.
 
 ## Roles
 

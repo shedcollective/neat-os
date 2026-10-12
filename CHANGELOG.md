@@ -2,9 +2,9 @@
 
 ## 0.4.1 Unreleased
 
-This repository does not store secrets, credentials, or project-specific information. The principle is [never-store-secrets](principles/never-store-secrets.md). A secret goes in an environment variable or another store outside the repository. A fact about one product repository goes in that repository's own docs.
+This repository does not store secrets, credentials, or project-specific information. The convention is [never-store-secrets](conventions/never-store-secrets.md). A secret goes in an environment variable or another store outside the repository. A fact about one product repository goes in that repository's own docs.
 
-The principle set cap is thirteen ([ADR-0018](docs/decisions/0018-principle-set-cap-thirteen.md)).
+The principle set has no numeric cap ([ADR-0018](docs/decisions/0018-no-numeric-principle-cap.md)). Keep the set small. Delete a principle that stops changing behaviour. The elevation bar enforces that rule.
 
 ## 0.4.0
 
