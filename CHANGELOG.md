@@ -6,6 +6,8 @@ This repository does not store secrets, credentials, or project-specific informa
 
 The principle set has no numeric cap ([ADR-0018](docs/decisions/0018-no-numeric-principle-cap.md)). Keep the set small. Delete a principle that stops changing behaviour. The elevation bar enforces that rule.
 
+`cloud-agent-environment` is a playbook for install and start scripts in a product repo whose Cloud Agent Environment already exists. The procedure, the helper scripts, and the templates are under `skills/cloud-agent-environment/`. [docs/cursor-environments.md](docs/cursor-environments.md) still owns the difference between the GitHub App and an Environment.
+
 ## 0.4.0
 
 The product name is neat-os. The Node package is `@shedcollective/neat-os`. The Composer package is `shedcollective/neat-os`. Install with a git pin, `github:shedcollective/neat-os#vX.Y.Z`. Releases are tagged on `shedcollective/neat-os`.

@@ -7,7 +7,7 @@ Each page does one job. If two pages seem to say the same thing, one of them is 
 | Page | Job |
 | --- | --- |
 | [consume.md](consume.md) | Install neat-os in a product repository, move an existing install, and move from shed-os. The only place the install recipes appear. |
-| [launch-skills.md](launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` each do, and where `assurance` and `pin-majors-with-reasons` live |
+| [launch-skills.md](launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` each do, and where `assurance`, `pin-majors-with-reasons`, and `cloud-agent-environment` live |
 | [cursor-environments.md](cursor-environments.md) | The Cursor GitHub App, Cloud Agent Environments, and the install, kept apart |
 | [team-setup.md](team-setup.md) | Cursor team and GitHub organisation settings, and the steps for a new or existing project |
 | [release.md](release.md) | How a change on `develop` becomes a tagged release on `main` |

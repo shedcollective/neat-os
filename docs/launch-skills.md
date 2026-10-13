@@ -1,6 +1,6 @@
 # The playbooks
 
-`init`, `gather`, and `learn` bring a repository into neat-os and keep it there. `ticket` puts work into Jira in a shape the client can read. Two more playbooks live beside them: `assurance` and `pin-majors-with-reasons`. Each is a playbook: an ordered list of steps with a stopping point, written in the `SKILL.md` format that Cursor discovers, and stored under [`skills/`](../skills/). The split between the first three is locked by [ADR-0002](decisions/0002-launch-skill-split.md), `ticket` by [ADR-0012](decisions/0012-ticket-playbook-writes-jira-not-the-repo.md), and the kinds of file are defined in [schema/README.md](../schema/README.md).
+`init`, `gather`, and `learn` bring a repository into neat-os and keep it there. `ticket` puts work into Jira in a shape the client can read. Three more playbooks live beside them: `assurance`, `pin-majors-with-reasons`, and `cloud-agent-environment`. Each is a playbook: an ordered list of steps with a stopping point, written in the `SKILL.md` format that Cursor discovers, and stored under [`skills/`](../skills/). The split between the first three is locked by [ADR-0002](decisions/0002-launch-skill-split.md), `ticket` by [ADR-0012](decisions/0012-ticket-playbook-writes-jira-not-the-repo.md), and the kinds of file are defined in [schema/README.md](../schema/README.md).
 
 | Playbook | Does | Refuses to |
 | --- | --- | --- |
@@ -65,9 +65,9 @@ The ticket describes the problem and the outcome, not the build. The developer w
 
 For an OS repository the same playbook writes a GitHub Issue with `gh issue create`, because that is where OS tickets live ([conventions/tickets.md](../conventions/tickets.md)). neat-os ships the playbook only, not a Jira client. The agent needs Jira or `gh` access from its own environment.
 
-## `assurance` and `pin-majors-with-reasons`
+## `assurance`, `pin-majors-with-reasons`, and `cloud-agent-environment`
 
-These two are playbooks, and they are not part of adoption. `assurance` reads one pull request on a product repository and posts an evidence pack. It does not implement the change. `pin-majors-with-reasons` upgrades dependencies and leaves a pinned major where it is. Their steps are in [`skills/assurance/SKILL.md`](../skills/assurance/SKILL.md) and [`skills/pin-majors-with-reasons/SKILL.md`](../skills/pin-majors-with-reasons/SKILL.md).
+These three are playbooks, and they are not part of adoption. `assurance` reads one pull request on a product repository and posts an evidence pack. It does not implement the change. `pin-majors-with-reasons` upgrades dependencies and leaves a pinned major where it is. `cloud-agent-environment` sets up install and start scripts for a Cloud Agent Environment that already exists. It discovers runtimes from the product repo, probes hosts, installs lockfiles as archives, starts backing services, and records secret names and endpoints. It does not create the Environment. How an Environment differs from the GitHub App is in [cursor-environments.md](cursor-environments.md). Their steps are in [`skills/assurance/SKILL.md`](../skills/assurance/SKILL.md), [`skills/pin-majors-with-reasons/SKILL.md`](../skills/pin-majors-with-reasons/SKILL.md), and [`skills/cloud-agent-environment/SKILL.md`](../skills/cloud-agent-environment/SKILL.md).
 
 ## Order on a product repository
 

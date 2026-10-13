@@ -112,8 +112,9 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 - `ticket` creates a Jira Task from a brief, or enhances an existing one, in the shape and tone the client can read ([conventions/ticket-content.md](conventions/ticket-content.md)). It writes to Jira only, never to the repository.
 - `assurance` reads one pull request against its ticket and posts an evidence pack. It does not implement, push, approve, or merge.
 - `pin-majors-with-reasons` upgrades dependencies by blast radius and does not take a pinned major on a routine bump.
+- `cloud-agent-environment` sets up install and start scripts for a Cloud Agent Environment that already exists. It does not create the Environment.
 
-`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). All six playbooks are under [skills/](skills/).
+`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). All seven playbooks are under [skills/](skills/).
 
 ## Releases and pinning
 
@@ -139,7 +140,7 @@ Work lands on `develop`. A person cuts `release/X.Y.Z` from `develop`, merges it
 | --- | --- |
 | [docs/README.md](docs/README.md) | Where documentation lives and the full map |
 | [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, moving an existing install, and moving from shed-os |
-| [docs/launch-skills.md](docs/launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` do, and where `assurance` and `pin-majors-with-reasons` live |
+| [docs/launch-skills.md](docs/launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` do, and where `assurance`, `pin-majors-with-reasons`, and `cloud-agent-environment` live |
 | [docs/cursor-environments.md](docs/cursor-environments.md) | The GitHub App, Cloud Agent Environments, and how they differ |
 | [docs/team-setup.md](docs/team-setup.md) | Cursor and GitHub administration for the team |
 | [docs/release.md](docs/release.md) | How neat-os is released on `shedcollective/neat-os` |
