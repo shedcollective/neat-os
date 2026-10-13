@@ -1,5 +1,5 @@
 # .agents
 
-This core repo’s launch skills live in [`../skills/`](../skills/) (`init`, `gather`, `learn`). The other playbooks there are `ticket`, `assurance`, and `pin-majors-with-reasons`. They are not duplicated here.
+This core repo’s launch skills live in [`../skills/`](../skills/) (`init`, `gather`, `learn`). The other playbooks there are `ticket`, `assurance`, `pin-majors-with-reasons`, and `cloud-agent-environment`. They are not duplicated here.
 
 `init` scaffolds the **IDE spread structure** into a product repo (`AGENTS.md` plus a gist-shaped `.agents/README.md` Agent Guide template and project slots). It does **not** fill those docs from the tree and does **not** copy company skills into that repo. `gather` writes the evidence passport / Agent Guide from a scan (may be non-interactive) plus a required interview. A scan is not done until Client and Product are filled. Product agents resolve skills with the locked order: `NEAT_OS_ROOT`, then `node_modules/@shedcollective/neat-os`, then Composer `vendor/` metadata, then sibling `../neat-os`. `SHED_OS_ROOT` and the shed-os paths still resolve and are deprecated. Do not search the public web for neat-os. In neat-os itself, follow [AGENTS.md](../AGENTS.md) and read `skills/` directly.

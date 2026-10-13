@@ -2330,7 +2330,7 @@ function buildAgentsGuide(facts, evidence) {
 
 Operational guide for agents in this repo. Filled by \`gather\` from **repo evidence** plus interview. Canonical cross-IDE rules: [AGENTS.md](../AGENTS.md). Structured slots: [project.md](project.md). \`gather\` is **not complete** until Client and Product are interviewed.
 
-Company playbooks (\`init\`, \`gather\`, \`learn\`, \`ticket\`, \`assurance\`, \`pin-majors-with-reasons\`) live in [shedcollective/neat-os](https://github.com/shedcollective/neat-os). Resolve in this order and stop at the first hit: \`NEAT_OS_ROOT\`, then \`require('@shedcollective/neat-os').skillsDir\` after \`file:\` / \`github:\` (\`node_modules/\`), then sibling \`../neat-os\`. \`SHED_OS_ROOT\` and the shed-os paths still resolve and are deprecated. Do **not** search the public web for neat-os. Do **not** copy them into \`.agents/skills/\`.
+Company playbooks (\`init\`, \`gather\`, \`learn\`, \`ticket\`, \`assurance\`, \`pin-majors-with-reasons\`, \`cloud-agent-environment\`) live in [shedcollective/neat-os](https://github.com/shedcollective/neat-os). Resolve in this order and stop at the first hit: \`NEAT_OS_ROOT\`, then \`require('@shedcollective/neat-os').skillsDir\` after \`file:\` / \`github:\` (\`node_modules/\`), then sibling \`../neat-os\`. \`SHED_OS_ROOT\` and the shed-os paths still resolve and are deprecated. Do **not** search the public web for neat-os. Do **not** copy them into \`.agents/skills/\`.
 
 ## Overview
 
