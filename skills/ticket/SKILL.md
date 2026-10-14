@@ -1,6 +1,6 @@
 ---
 name: ticket
-description: Create a new Jira Task, or enhance an existing one, from a brief or a ticket key. Applies conventions/ticket-content.md (sections, acceptance criteria, client-readable tone) plus the project's Tickets slot. When facts are missing after asking, the ticket still goes in and names what is needed from the client or the reporter. Writes to Jira (or GitHub Issues for an OS repo) only, never to the repository. No estimates, priority, status or assignee. Not init, gather or learn.
+description: Create a new Jira Task, or enhance an existing one, from a brief or a ticket key. Applies conventions/ticket-content.md (sections, acceptance criteria, client-readable tone) plus the project's Tickets slot. The ticket records only the final decided outcome, stated as fact. When facts are missing after asking, the ticket still goes in and names what is needed from the client or the reporter. Writes to Jira (or GitHub Issues for an OS repo) only, never to the repository. No estimates, priority, status or assignee. Not init, gather or learn.
 ---
 
 # ticket
@@ -14,9 +14,10 @@ The shape, the acceptance criteria rule, and the tone rules are locked in [conve
 - **Write to the ticket system only.** Do **not** write, stage or commit anything in the repository: no feature plan under `.agents/features/`, no notes, no draft file. The developer who picks the ticket up writes the plan then.
 - **Jira issue type is Task.** Never Story, Bug, Epic or Sub-task. A bug is a Task with How to replicate filled.
 - **Set nothing a person triages.** No estimate, no story points, no priority (leave the project default), no status transition, no assignee unless the person named one. A new ticket lands in the first column ("Reported" or the project's equivalent).
-- **Ask, never invent.** Original request, Why, What and Acceptance criteria are required. If one is unknown, ask the person once, in one batch. What still cannot be answered (nobody present, or the person does not know) does not stop the ticket: leave that section out and put the question under **More information needed**, addressed by name or role to the client contact or the reporter. Do not create a ticket with `TBC`, `to confirm` or a guessed section.
+- **Ask, never invent.** Why, What and Acceptance criteria are required. If one is unknown, ask the person once, in one batch. What still cannot be answered (nobody present, or the person does not know) does not stop the ticket: leave that section out and put the question under **More information needed**, addressed by role to the client contact or the reporter. Do not create a ticket with `TBC`, `to confirm` or a guessed section.
+- **Record only the decided outcome.** These three rules apply to every ticket, including one that is being enhanced. A ticket must make sense in isolation and record only the final decided outcome, stated as fact. It must not contain the original request text, meeting discussion, options considered, attributions, or a partial history of how the decision was reached. When a decision changes, rewrite the ticket body to the new decision instead of appending history. The convention page is the source of truth.
 - **The client reads it.** Nothing about the agent, the conversation, the codebase search, cost, margin, other clients, credentials or private URLs. Tone per the convention: British English, short active sentences, the client's own names for things, no filler words, no emoji.
-- **Enhance means add, not rewrite.** Existing text moves to Original request unchanged. Type, status, priority, assignee, estimate, labels and components stay as they are.
+- **Enhance rewrites the body.** Replace the description with the current decided outcome. Comments stay as they are. Type, status, priority, assignee, estimate, labels and components stay as they are.
 - **No adapter in neat-os.** Use whatever ticket tool the runner already has (a Jira MCP tool, a Jira CLI, `gh issue`). If none is available, stop and say so; do not install one or search the public web for a Jira client.
 - Company knowledge comes from the resolved neat-os tree. Locate it the same locked way `init` does (`resolve-consume.sh` or `require('@shedcollective/neat-os').resolveConsume()`): `NEAT_OS_ROOT`, then `node_modules/@shedcollective/neat-os`, then `vendor/shedcollective/neat-os`, then sibling `../neat-os`. `SHED_OS_ROOT` and the shed-os package paths still resolve and are deprecated (`docs/consume.md`). Do **not** search the public web for neat-os.
 
@@ -24,7 +25,7 @@ The shape, the acceptance criteria rule, and the tone rules are locked in [conve
 
 - A person or an agent has a brief ("customers cannot download invoices", "add a cookie banner") and wants it in Jira.
 - A ticket exists but is a one-liner, a pasted email, or missing acceptance criteria, and someone asks to enhance it.
-- A bug was found during development or QA and needs reporting in the client's words.
+- A bug was found during development or QA and needs a ticket that states what is wrong and the outcome.
 
 ## When not to use
 
@@ -47,13 +48,13 @@ The shape, the acceptance criteria rule, and the tone rules are locked in [conve
 
 1. **Confirm the repository and locate neat-os.** `git rev-parse --show-toplevel`. Resolve neat-os with the locked order (`resolve-consume.sh`). Read `conventions/ticket-content.md` and `conventions/tickets.md` from that tree. Read `.agents/project.md` in the product repo for the ticket prefix and the Tickets slot. If `.agents/project.md` is missing, ask for the Jira project key directly; do not run `init` or `gather` as a side effect.
 
-2. **Pick the mode.** If the person asked to update, tidy, improve or enhance a named key, the mode is `enhance`: fetch that ticket (summary, description, comments, attachments list) with the available tool. If it already has the sections, tidy in place; otherwise the whole existing description becomes the Original request. Any other request is `create`, and the brief is the Original request, with who said it and when. A key that is only context goes in Links.
+2. **Pick the mode.** If the person asked to update, tidy, improve or enhance a named key, the mode is `enhance`: fetch that ticket (summary, description, comments, attachments list) with the available tool. The existing description and comments are context for the writer. They are not copied into the ticket. Any other request is `create`. The brief is context the same way: it informs the sections, and its text does not go into the ticket. A key that is only context goes in Links.
 
    Before a `create`, search the project for an open ticket about the same problem (Jira: a JQL search on the project key and two or three words from the brief; GitHub: `gh issue list --search`). If one exists, show it and ask whether to enhance that ticket instead. When nobody is present, report the match and continue with `create` only if the request said to create.
 
-3. **Collect the required sections.** From the brief, fill Title, Original request, Why, What and Acceptance criteria. Add How to replicate when the brief describes something broken. Add Out of scope when the brief invites assumptions. For anything required that the brief does not say:
+3. **Collect the required sections.** From the brief, fill Title, Why, What and Acceptance criteria. State the decided outcome as fact. Add How to replicate when the brief describes something broken. Add Out of scope when the brief invites assumptions. For anything required that the brief does not say:
    - Person present: ask in one batch, in plain questions ("Who is affected when this happens?", "What should a customer see once this is done?"). Ask once; do not chase.
-   - Still unknown after asking, or nobody to ask: the ticket still goes in. Fill each section as far as the facts support and leave out what nothing supports. Add a **More information needed** section straight after Original request, one question per line, each addressed to the person who can answer it (client contact, reporter, whoever forwarded the request), in words that person can answer without technical knowledge. Write only the acceptance criteria the known facts support; when none do, leave the section out and ask for the expected outcome as a question. When the class is unclear, the title names the problem as reported. The convention's second Example shows the shape.
+   - Still unknown after asking, or nobody to ask: the ticket still goes in. Fill each section as far as the facts support and leave out what nothing supports. Add a **More information needed** section first in the description, before Why, one question per line, each addressed by role to the person who can answer it (client contact, reporter, whoever forwarded the request), in words that person can answer without technical knowledge. Write only the acceptance criteria the known facts support; when none do, leave the section out and ask for the expected outcome as a question. When the class is unclear, the title names the problem as reported. The convention's second Example shows the shape.
    - Do not put a question to the developer in that section. If the only open questions are technical, the ticket is clear enough.
 
 4. **Look for pointers, read-only.** When it helps the developer, find the page, template, route or module in the repository where the behaviour lives today and add it to Links as a path or URL. Do not paste code. Do not describe a fix. Do not write anything to the repository. Skip this step when the repository is not the one the ticket is about.
@@ -64,6 +65,7 @@ The shape, the acceptance criteria rule, and the tone rules are locked in [conve
    - Standing acceptance criteria from the Tickets slot appended.
    - Client vocabulary from the Tickets slot used (UAT, not staging, if that is what the client says).
    - No technical design, no agent process, no filler words from the convention's list, no emoji, no placeholder.
+   - The body is only the decided outcome: no original request text, meeting discussion, options considered, attributions, or history of how the decision was reached.
    - More information needed present only when a section could not be filled; every line in it is a question with a named person, and no other section carries a gap.
    - Read it aloud in your head as the project manager on a client call. Rewrite anything that would not be said that way.
 
@@ -75,7 +77,7 @@ The shape, the acceptance criteria rule, and the tone rules are locked in [conve
 7. **Write to the ticket system** with the tool the runner has.
    - `create`, Jira: project from the ticket prefix, issue type Task, summary is the Title, description is the sections in order with the section names as headings, in the format the tool accepts (Jira wiki markup or the tool's rich text, not Markdown `##`). Labels or components only if the Tickets slot lists defaults. Nothing else set.
    - `create`, GitHub Issues (OS repo): `gh issue create` with the Title and the same body in Markdown.
-   - `enhance`: update the summary only when the convention allows it, and replace the description with the new sections, the old description sitting under Original request unchanged. A section the ticket, its comments and the person asking cannot fill becomes a question under More information needed, addressed to the ticket's reporter or the client contact. Answers found in the comments or the request move into their sections and the answered question goes. Do not change any other field. Do not add a comment unless asked.
+   - `enhance`: update the summary when the decided outcome has changed or when the convention's title rules require it, and replace the description with the rewritten sections. The previous description does not stay in the body. A section the ticket, its comments and the person asking cannot fill becomes a question under More information needed, addressed by role to the ticket's reporter or the client contact. Answers found in the comments or the request move into their sections as fact and the answered question goes. Do not change any other field. Do not add a comment unless asked.
    - Attachments: upload when the tool can. When it cannot, keep the Attachments section naming each file and tell the person to attach them.
    - After writing, open or fetch the ticket once and check the headings and the checklist render. Fix formatting if they do not.
 
