@@ -28,3 +28,4 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0016](0016-neutral-reference.md) | The public tree is a neutral reference | Accepted |
 | [0017](0017-consume-via-github-packages.md) | Client repositories consume shed-os from GitHub Packages | Accepted |
 | [0018](0018-no-numeric-principle-cap.md) | The principle set has no numeric cap | Accepted |
+| [0019](0019-ticket-records-the-decided-outcome.md) | A ticket records only the decided outcome | Accepted |

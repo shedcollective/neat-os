@@ -6,6 +6,14 @@ This page says what goes in a ticket. Where a ticket lives (Jira or GitHub Issue
 
 The client can read every ticket in Jira. Write each one as if the client will read it today, because they will.
 
+## Decided outcome
+
+These three rules apply to every ticket, including one that is being enhanced.
+
+- A ticket must make sense in isolation and record only the final decided outcome, stated as fact.
+- It must not contain the original request text, meeting discussion, options considered, attributions, or a partial history of how the decision was reached.
+- When a decision changes, rewrite the ticket body to the new decision instead of appending history.
+
 ## Type and workflow
 
 - Jira issue type is **Task**. This OS does not use Story, Bug, Epic or Sub-task as issue types. A bug is a Task with the "How to replicate" section filled.
@@ -21,8 +29,7 @@ The description carries these sections as headings, in this order. A section wit
 | Section | Required | What it holds |
 | --- | --- | --- |
 | Title | yes | One line, under 70 characters, sentence case, no ticket key, no trailing full stop. A new capability names the outcome. A breakage names what is wrong now. When the class is not yet clear, the title names the problem as reported. See [Title](#title). |
-| Original request | yes | What the person asked for, in their words, with who said it and when. Quoted or lightly tidied for spelling. Never rewritten into agent wording. When enhancing an existing ticket, the text that was already there moves here untouched. When a developer or an agent found the problem during work, this is the finder's plain description of what they saw, named as such. |
-| More information needed | when the request is unclear | What the ticket still needs before a developer can start. One question per line, each addressed by name or role to the person who can answer it (the client contact or the reporter). Present only when a required section could not be filled after asking. |
+| More information needed | when the request is unclear | What the ticket still needs before a developer can start. One question per line, each addressed by role to the person who can answer it (the client contact or the reporter). Present only when a required section could not be filled after asking. |
 | Why | yes | The problem or opportunity, and who it affects. One or two short paragraphs. |
 | What | yes | The outcome the client should see when the ticket is done. Describe behaviour a user or client would notice. Do not describe the code change. |
 | How to replicate | bugs only | Numbered steps from a known starting point, what happens, and what should happen instead. Include the environment (production, UAT, local) and the browser or device when known. |
@@ -67,7 +74,7 @@ Some requests arrive as one line, a forwarded screenshot, or a sentence in a mee
 
 - Ask first. When the person who made the request is present, ask the missing questions once, in one batch, before writing the ticket. Only what they cannot answer goes into the ticket as a question.
 - Fill what is known, leave out what is not. Why, What and Acceptance criteria are filled as far as the request supports. A section with nothing solid behind it is left out and its gap becomes a question. Half a section is fine; a guessed one is not.
-- Add a More information needed section, straight after Original request. One question per line. Each question names who can answer it, by name where known, otherwise by role: the client contact, the reporter, the support person who forwarded the email. Questions are ones that person can answer without technical knowledge ("Which browsers have you seen this in?", not "Does the request reach the API?").
+- Add a More information needed section first in the description, before Why. One question per line. Each question names who can answer it by role: the client contact, the reporter, the support person who forwarded the email. Questions are ones that person can answer without technical knowledge ("Which browsers have you seen this in?", not "Does the request reach the API?").
 - Do not ask the developer in that section. If the only open questions are technical ones, the ticket is clear enough; the developer will find out.
 - Acceptance criteria stay honest. Write only the criteria the known facts support. If none do, leave the section out and ask for the expected outcome under More information needed. Do not write "Done when the client is happy".
 - Nothing in More information needed is a placeholder inside another section. Every other section reads as finished text.
@@ -104,15 +111,10 @@ Attachments are uploaded when the tool can upload. When it cannot, the Attachmen
 
 ## Example
 
-A bug reported by email, written up as a ticket. The email is the Original request; everything else follows the shape.
+A bug reported by email, written up as a ticket. The email is context for the writer. The ticket states the decided outcome.
 
 ```text
 Title: Customers cannot download past invoices
-
-Original request
-"Hi, a few customers have said they can't get their invoices this week.
-The download button on the orders page just spins. Started Tuesday I think."
-(the client contact, email 9 Sep)
 
 Why
 Customers who need an invoice for their accounts cannot get one without
@@ -146,27 +148,22 @@ Links
 - Where the button lives today: templates/account/orders.twig
 
 Attachments
-- spinner.mov, the client contact's screen recording from the email.
+- spinner.mov, a screen recording of the spinner on the orders page.
 ```
 
-The same ticket before enhancement had the title "Invoice bug" and the email pasted as the whole description. Enhancing it kept that email as the Original request, gave the ticket a title that names the breakage, and added the rest. Nothing was set on type, status, priority or assignee.
+The same ticket before enhancement had the title "Invoice bug" and a pasted email as the whole description. Enhancing it rewrote the body to the decided outcome above and gave the ticket a title that names the breakage. The email text is not in the ticket. Nothing was set on type, status, priority or assignee.
 
 The same request when it arrived as one line in a meeting, with nobody there to answer questions. The ticket goes in and says what it needs:
 
 ```text
 Title: Invoice download failing for some customers
 
-Original request
-"Invoices aren't downloading for some customers."
-(the client contact, weekly call 9 Sep, noted by the reporter)
-
 More information needed
 - Client contact: which page were the customers on, and what did they see
   when the download failed?
 - Client contact: roughly how many customers, and since when?
 - Client contact: do you know which browser or device any of them used?
-- Reporter: were any screenshots or emails from the customers shared
-  on the call?
+- Reporter: were any screenshots or emails from the customers shared?
 
 Why
 Customers who need an invoice for their accounts cannot get one.
@@ -182,13 +179,13 @@ How to replicate is left out because nobody knows the steps yet; the questions t
 
 ## Enhancing an existing ticket
 
-Enhancing means bringing a ticket up to this shape without losing what was there.
+Enhancing means bringing a ticket up to this shape as the current decided outcome.
 
-- The existing description moves into Original request, unchanged. Comments on the ticket are read for context and are not edited or deleted.
-- A ticket that already has the sections is tidied in place. Its Original request stays as it is; it is not wrapped in a second Original request.
-- Missing sections are added. Present sections are kept and tidied for tone only.
-- A section that cannot be filled from the ticket, its comments, or the person asking becomes a question under More information needed, addressed to the ticket's reporter or the client contact. When the answers to an existing More information needed section are in the comments or the request, they move into their sections and the answered question goes.
-- Title is changed only when a breakage title reads as already done. A feature title that already names the outcome is left as it is. The old title is kept as the first line of Original request.
+- Read the existing description and the comments for context. Do not edit or delete comments. Do not copy the request, the discussion, the options, or an earlier draft into the body.
+- Rewrite the body to the final decided outcome, stated as fact. When the decision has changed, replace the body with the new decision. The body holds that decision alone.
+- A ticket that already has the sections is rewritten in place to that outcome. Missing sections are added. Present sections are tidied so they state the outcome as fact.
+- A section that cannot be filled from the ticket, its comments, or the person asking becomes a question under More information needed, addressed by role to the ticket's reporter or the client contact. When the answers to an existing More information needed section are in the comments or the request, they move into their sections as fact and the answered question goes.
+- The title is rewritten when the decided outcome changes, and when a breakage title reads as already done. A feature title that already names the current outcome is left as it is.
 - Type, status, priority, assignee, estimate, labels and components are not changed.
 - The agent does not add a comment announcing the edit unless the person asked for one.
 
@@ -203,4 +200,4 @@ Enhancing means bringing a ticket up to this shape without losing what was there
 
 ## Source
 
-[ADR-0012](../docs/decisions/0012-ticket-playbook-writes-jira-not-the-repo.md). [ADR-0015](../docs/decisions/0015-ticket-titles-name-a-capability-or-a-breakage.md) locks that a new-capability title names the outcome and a breakage title names what is wrong now. The tone rules restate the part of [writing.md](writing.md) that matters when a client is the reader.
+[ADR-0012](../docs/decisions/0012-ticket-playbook-writes-jira-not-the-repo.md). [ADR-0015](../docs/decisions/0015-ticket-titles-name-a-capability-or-a-breakage.md) locks that a new-capability title names the outcome and a breakage title names what is wrong now. [ADR-0019](../docs/decisions/0019-ticket-records-the-decided-outcome.md) locks that the body is only the decided outcome. The tone rules restate the part of [writing.md](writing.md) that matters when a client is the reader.

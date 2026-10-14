@@ -6,6 +6,8 @@ This repository does not store secrets, credentials, or project-specific informa
 
 The principle set has no numeric cap ([ADR-0018](docs/decisions/0018-no-numeric-principle-cap.md)). Keep the set small. Delete a principle that stops changing behaviour. The elevation bar enforces that rule.
 
+A ticket records only the final decided outcome, stated as fact ([conventions/ticket-content.md](conventions/ticket-content.md), [ADR-0019](docs/decisions/0019-ticket-records-the-decided-outcome.md)). The body does not keep the request, the discussion, or a history of how the decision was reached. When a decision changes, the ticket body is rewritten.
+
 ## 0.4.0
 
 The product name is neat-os. The Node package is `@shedcollective/neat-os`. The Composer package is `shedcollective/neat-os`. Install with a git pin, `github:shedcollective/neat-os#vX.Y.Z`. Releases are tagged on `shedcollective/neat-os`.
