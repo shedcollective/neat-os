@@ -2,44 +2,51 @@
 
 Timezone: (team local IANA zone).
 
-## Overview
+Fill by **project**, not by source type. Put `### Agency state` first. Then one `###` heading per project that had work today. Under each project, use only the `####` activity headings that have content; omit empty ones. Flat `- ` bullets under each activity heading (do not nest bold labels inside bullets).
 
-### Ships and merges
+Private operations records may add a `Client:` line that links to their CRM folder for that project. Keep this public template free of real client names.
+
+There is **one shared body**. Later perspective runs (`enhance-daily-update`) append into the same `###` project sections; they do not own separate top-level wrappers.
+
+### Agency state
+
+#### People
 -
 
-### Meetings
+#### Notable
 -
 
-### Team channels (work only)
+### <Project>
+
+Client: (optional link to the private CRM folder; omit when there is none)
+
+#### Tickets
 -
 
-### Email (work only)
+#### Email
 -
 
-### Meeting notes
+#### Slack
 -
 
-### Tickets moved
+#### Meetings / notes
 -
 
-### Blocked or needs a decision
+#### Ships / merges
+-
+
+#### Blocked / next
+-
+
+### Agency
+
+Cross-cutting delivery that is not tied to one project (internal tooling, house process, shared infra). Same `####` activity headings as a project section; omit empty ones.
+
+#### Ships / merges
+-
+
+#### Blocked / next
 -
 
 ### Sources unavailable
--
-
----
-
-## Perspective A
-
-_(The enhance-daily-update run that owns this heading appends here only.)_
-
--
-
----
-
-## Perspective B
-
-_(The enhance-daily-update run that owns this heading appends here only.)_
-
 -

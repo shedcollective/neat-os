@@ -14,8 +14,8 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 
 | Playbook | Does | Refuses to |
 | --- | --- | --- |
-| [`daily-burndown`](../skills/daily-burndown/SKILL.md) | Writes the day's Overview into the private operations record and refreshes the in-flight board. | Log personal chatter, billing amounts, or secrets. Edit perspective sections. |
-| [`enhance-daily-update`](../skills/enhance-daily-update/SKILL.md) | Appends one perspective section from that person's own connectors. | Edit Overview or another perspective. Use another person's private connectors. |
+| [`daily-burndown`](../skills/daily-burndown/SKILL.md) | Writes the shared day body (Agency state first, then **by project**, Agency, Sources unavailable) into the private operations record and refreshes the in-flight board. | Log personal chatter, billing amounts, secrets, or invented leave. Invent missing sources. |
+| [`enhance-daily-update`](../skills/enhance-daily-update/SKILL.md) | Appends detail from one perspective into the **same** `###` project sections, using that person's own connectors. | Introduce Front end / Back end / Perspective silos. Use another person's private connectors. Duplicate overview points. |
 | [`project-update`](../skills/project-update/SKILL.md) | Produces a short project status from the operations record and live connectors. | Invent project facts. Post externally without approval. |
 | [`client-brief`](../skills/client-brief/SKILL.md) | Assembles a high-level client brief with no billing figures. | Write amounts, rates, or credentials into the brief. |
 
@@ -23,8 +23,8 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 
 | File | Job |
 | --- | --- |
-| [templates/ops/burndown-day.md](../templates/ops/burndown-day.md) | Day-file shape with Overview plus named perspective sections. Copy into the private operations record, or point the playbook at this path in the neat-os install. |
+| [templates/ops/burndown-day.md](../templates/ops/burndown-day.md) | Day-file shape: Agency state first, then project sections with `####` activity headings, Agency, Sources unavailable. One shared body; perspective runs append into those project sections. Copy into the private operations record, or point the playbook at this path in the neat-os install. |
 
 ## Order
 
-A weekday overview run follows `daily-burndown`. Perspective add-ons follow `enhance-daily-update` after the Overview exists. `project-update` and `client-brief` run on demand. Elevating further agency rules into this repository is a human pull request ([propose-never-promote](../principles/propose-never-promote.md)).
+A weekday overview run follows `daily-burndown`. Perspective add-ons follow `enhance-daily-update` after the shared body exists. `project-update` and `client-brief` run on demand. Elevating further agency rules into this repository is a human pull request ([propose-never-promote](../principles/propose-never-promote.md)).
