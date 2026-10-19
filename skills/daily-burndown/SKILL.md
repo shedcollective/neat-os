@@ -24,19 +24,30 @@ This is **not** a launch playbook. Do not run it from `init`, `gather`, or `lear
 
 ## Hard rules
 
-- **Work only.** Follow [agent-work-logging.md](../../conventions/agent-work-logging.md). Direct messages are logged only when clearly work, and only as a short summary.
+- **Work only.** Follow [agent-work-logging.md](../../conventions/agent-work-logging.md). Direct messages are logged only when clearly work, and only as a short summary. When the team uses Slack Connect or other external client channels, treat those as work sources the same way as agreed team channels.
 - **Asker's connectors only.** Never invent a source that is not connected. List missing sources under Sources unavailable ([never-invent-facts](../../principles/never-invent-facts.md)).
 - **No billing amounts** in the day file or the in-flight board.
 - **No secrets** ([never-store-secrets.md](../../conventions/never-store-secrets.md)).
-- Write the **Overview** section only. Leave named perspective sections for `enhance-daily-update`.
+- Write the **Overview** section only. Fill it **by project**, not by source type. Leave named perspective sections for `enhance-daily-update`.
 - Stay quiet when there is nothing work-related to report, unless the routine requires an explicit empty stub.
+
+## Day shape (Overview)
+
+Use [templates/ops/burndown-day.md](../../templates/ops/burndown-day.md) (or the record's own copy). Under Overview:
+
+1. One `### <Project>` per project that had work today. Optional `Client:` line when the private record has a CRM folder. Then only the `####` activity headings that have content: Tickets, Email, Slack, Meetings / notes, Ships / merges, Blocked / next. Flat `- ` bullets under each; omit empty headings.
+2. `### Agency` for cross-cutting delivery that is not one project (same activity headings; omit empty).
+3. `### Agency state` with `#### People` (holidays, OOO, absences, cover) and `#### Notable` (later-useful agency facts).
+4. `### Sources unavailable` for connectors that were missing or failed.
+
+Private records may rename Overview (for example to a role label). The shape stays the same.
 
 ## Steps
 
 1. **Resolve the date** in the team's local timezone (default: today). Build the day path the record uses, typically `burndown/YYYY/MM/YYYY-MM-DD.md`.
 2. **Confirm the operations record** (clone or remote) the routine names. Stop if it is missing.
-3. **Collect work activity** for that local day from connected sources the asker has: version control pushes and pull requests, team channels, the asker's work-related direct messages, calendar meetings, meeting notes, work email, and tickets that moved.
-4. **Draft the day file** from [templates/ops/burndown-day.md](../../templates/ops/burndown-day.md) (or the record's own copy of that template). Fill Overview only.
+3. **Collect work activity** for that local day from connected sources the asker has: version control pushes and pull requests, team channels, Slack Connect / external client channels when the team uses them, the asker's work-related direct messages, calendar meetings (including OOO), meeting notes, work email, and tickets that moved.
+4. **Draft the day file** from the template. Fill Overview only, by project, plus Agency, Agency state, and Sources unavailable.
 5. **Refresh the in-flight board** in that record: project, what is in flight, owner, done when, blocked.
 6. **Commit** the day file and the in-flight board per that record's write rules (often direct to its default branch for those two paths). Never rewrite history. Prefer merge commits on feature branches ([conventions/git.md](../../conventions/git.md)).
 7. **Voice:** British English, short active sentences. Lead with the decision, the owner, and the next move. Do not name bots ([conventions/writing.md](../../conventions/writing.md), [neutral-reference.md](../../conventions/neutral-reference.md)).

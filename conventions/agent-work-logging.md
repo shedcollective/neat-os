@@ -7,6 +7,7 @@ This convention applies to shared records and digests an agent keeps for a team.
 ## Include
 
 - Work discussed in public or agreed team channels.
+- Slack Connect and other external client channels when the team uses them for delivery with a client. Summarise the work point. Do not paste the thread.
 - Meetings, tickets, and merges about delivery.
 - Direct messages only when the content is clearly work (for example a client discussing a deliverable in a direct message). Summarise the work point. Do not paste the thread.
 
@@ -21,3 +22,5 @@ This convention applies to shared records and digests an agent keeps for a team.
 ## Placement
 
 Coding standards and company playbooks stay in neat-os. Living agency operational state (day files, in-flight boards, client folders) stays in a private operations repository. This public tree holds the rules and the playbooks only.
+
+Day files group work **by project** under Overview (and under each perspective section), with cross-cutting delivery under Agency and people or later-useful facts under Agency state. See [templates/ops/burndown-day.md](../templates/ops/burndown-day.md) and [docs/agency-ops.md](../docs/agency-ops.md).
