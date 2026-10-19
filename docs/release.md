@@ -8,14 +8,18 @@ Product repositories pin a release. The git pin is `github:shedcollective/neat-o
 
 ## Steps
 
-1. Feature work arrives on `develop` through reviewed pull requests, using git-flow and merge commits ([conventions/git.md](../conventions/git.md)). A stacked change lands as one merge of the feature branch.
-2. To ship a version, open a `release/X.Y.Z` branch from `develop` and merge it into `main` with a merge commit, not a squash. For the first installable release that branch is `release/0.1.0`.
-3. Publish a GitHub Release from the tip of `main`. The tag is `vX.Y.Z` and must match the `version` in the root `package.json`, `packages/npm/package.json`, and the root `composer.json`. Tag `v0.1.0` goes with version `0.1.0`. Composer ignores a tag whose `composer.json` declares a different version, so the version bump is part of the release, not an afterthought.
-4. Confirm the `release-smoke` workflow passed on that Release. It installs the published tag from git into a scratch project and asserts the skills folder exists and `resolveConsume().mode` is `node_modules`. Confirm `publish-npm` passed. It publishes that tag to GitHub Packages.
-5. Merge `main` back into `develop` so the release commit is not missing from the integration branch.
-6. Product repositories pin the tag: `git+ssh://git@github.com/shedcollective/neat-os.git#vX.Y.Z` for Node, or the version with no leading `v` for Composer. A repository that already pins neat-os changes the tag and refreshes the lockfile in the same commit. The steps are in [consume.md](consume.md#move-to-a-new-tagged-release). Moving from a shed-os pin is in [consume.md](consume.md#moving-from-shed-os).
+1. Open a release-prep pull request into `develop`. It sets the version in the root `package.json`, `packages/npm/package.json`, and the root `composer.json`, and it moves the matching section in [CHANGELOG.md](../CHANGELOG.md) off the unreleased heading. Merge that pull request. Feature work still arrives on `develop` through reviewed pull requests ([conventions/git.md](../conventions/git.md)).
+2. Run Prepare release (`.github/workflows/prepare-release.yml`) on `develop`. The input is the version `X.Y.Z`, with no leading `v`. The workflow checks that `develop` is already at that version. If it is not, the run fails. The release-prep pull request is still required. When the check passes, the workflow creates `release/X.Y.Z` from `develop`, opens a pull request into `main`, and creates a draft Release `vX.Y.Z` whose target is the branch `main`. It does not merge and it does not publish. The draft notes are the `X.Y.Z` section of [CHANGELOG.md](../CHANGELOG.md). Before it finishes, the workflow reads the draft back and fails unless the Release is still a draft and its target is the branch `main`.
+3. Merge that pull request into `main` with a merge commit, not a squash.
+4. Publish the draft Release only after that pull request is merged. GitHub creates the tag `vX.Y.Z` when the draft is published. The tag points at the tip of `main` at that moment. Publishing before the merge tags the previous tip of `main`, which does not contain the release commit. The tag must match the version in the three manifests from step 1. Composer ignores a tag whose `composer.json` declares a different version.
+5. Confirm `release-smoke` and `publish-npm` passed on that Release. `release-smoke` installs the tag from git into a scratch project and asserts the skills folder exists and `resolveConsume().mode` is `node_modules`. `publish-npm` publishes that tag to GitHub Packages. Both jobs fetch the full history and fail before that work when the tag commit is not reachable from `main`.
+6. Merge `main` back into `develop` so the release commit is not missing from the integration branch.
 
-A tag that exists only on `develop` is not a release. Pushing tags with `git push --tags` is not a release either. Publish the GitHub Release.
+Product repositories then pin the tag: `git+ssh://git@github.com/shedcollective/neat-os.git#vX.Y.Z` for Node, or the version with no leading `v` for Composer. A repository that already pins neat-os changes the tag and refreshes the lockfile in the same commit. The steps are in [consume.md](consume.md#move-to-a-new-tagged-release). Moving from a shed-os pin is in [consume.md](consume.md#moving-from-shed-os).
+
+A tag that exists only on `develop` is not a release. Pushing tags with `git push --tags` is not a release either. The default branch is `develop`. A Release published with no target uses that default and skips `main`. Publish the draft, which targets `main`.
+
+Prepare release opens a pull request with the workflow token. Turn on **Allow GitHub Actions to create and approve pull requests**. The setting is under Settings, then Actions, then General, then Workflow permissions. An organisation can set it for every repository. The workflow does not approve the pull request. A person merges it.
 
 ## First release under the name neat-os (`0.4.0`)
 
@@ -49,18 +53,15 @@ Before creating any tag:
 2. After publishing, `release-smoke.yml` repeats the install from `#vX.Y.Z` and checks that `resolveConsume().mode` is `node_modules`.
 3. If a published tag fails this test, do not delete it, because a consumer may already have seen it. Publish the next patch tag and say in its release notes that it replaces the broken one.
 
-## Publish from the GitHub website
+## Publish the draft
 
-1. If a wrong tag already exists on an older `main` commit, delete that tag, and any Release attached to it, in the GitHub interface first.
-2. Open Releases, choose Draft a new release, create the tag `vX.Y.Z` targeting the current `main`, and choose Publish release.
+After the pull request is merged into `main`, open the draft Release `vX.Y.Z` and confirm the target branch is `main`. Then publish it. GitHub creates the tag from the tip of `main` at that moment.
 
-## Publish from the command line
+Do not run `gh release create` without `--draft`, and do not omit `--target main`. Without that target the tag is cut from the default branch, which is `develop`.
 
-After `release/X.Y.Z` has been merged into `main`:
+## When a tag is on the wrong commit
 
-```bash
-gh release create vX.Y.Z --target main --title "vX.Y.Z" --notes "…"
-```
+If a wrong tag already exists on a commit that is not the release on `main`, delete that tag, and any Release attached to it, before publishing the correct one.
 
 If a tag or Release landed on the wrong commit:
 
@@ -75,7 +76,7 @@ gh release create vX.Y.Z --target main --title "vX.Y.Z" --notes "…"
 | Who | Does |
 | --- | --- |
 | Contributors and agents | Branch from `develop` and open pull requests into `develop`. Stacked pull requests follow [conventions/git.md](../conventions/git.md#stacked-prs). |
-| People | Merge those pull requests, open `release/X.Y.Z`, merge it into `main`, publish the Release, confirm `release-smoke` and `publish-npm`, and merge `main` back into `develop` |
+| People | Merge the release-prep pull request, run Prepare release, merge the `main` pull request with a merge commit, publish the draft Release, confirm `release-smoke` and `publish-npm`, and merge `main` back into `develop`. |
 | Product repositories | Pin a release tag. Moving an existing pin, including the lockfile, is in [consume.md](consume.md#move-to-a-new-tagged-release). |
 
 Branch protection on `main` is a decision for the team, not a step on this page. Publishing runs from `.github/workflows/publish-npm.yml` when the Release is published.
