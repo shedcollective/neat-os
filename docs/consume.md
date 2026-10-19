@@ -2,21 +2,58 @@
 
 "Consume" is the word this repository uses for installing neat-os so that an agent working in a product repository can find the playbooks, principles, and conventions. This page holds the install recipes. The root README and the package READMEs point here and do not repeat them.
 
-Access is GitHub read access to `shedcollective/neat-os`. The same SSH key or token that clones the product repository installs neat-os, for both Node and Composer. There is no package registry and no registry token.
+Access for the git pin is GitHub read access to `shedcollective/neat-os`. The same SSH key or token that clones the product repository installs neat-os from git, for both Node and Composer.
 
 The Node package is `@shedcollective/neat-os`, defined by the root [`package.json`](../package.json). The Composer package is `shedcollective/neat-os`, defined by the root [`composer.json`](../composer.json). One release tag versions both. See [release.md](release.md).
+
+A product repository installs the Node package from GitHub Packages. Agents and Cloud Agents keep the git pin. The token a Cloud Agent receives gets a 403 from the npm registry. Do not create a Packages token for an agent. Composer stays on a VCS repository entry. See [ADR-0019](decisions/0019-publish-github-packages.md).
 
 ## Pick the situation that matches yours
 
 | Situation | How neat-os is installed | Where it ends up |
 | --- | --- | --- |
-| Cloud Agent, in an Environment that clones the product repository and neat-os together | Nothing to install. neat-os is the sibling checkout `../neat-os`. Optionally run `npm install ../neat-os` so `require('@shedcollective/neat-os')` works. | `../neat-os` |
-| Local / IDE, one clone of the product repository in the Cursor IDE | A git dependency in the repository root `package.json`. A PHP project may also add the Composer package, which carries metadata only. | `node_modules/@shedcollective/neat-os` and, for PHP, `vendor/shedcollective/neat-os` |
-| CI, such as GitHub Actions | The same git dependency as Local / IDE. CI installs the committed lockfile. | `node_modules/@shedcollective/neat-os` |
+| Cloud Agent, in an Environment that clones the product repository and neat-os together | Nothing to install. neat-os is the sibling checkout `../neat-os`. Optionally run `npm install ../neat-os` so `require('@shedcollective/neat-os')` works. Do not use the registry. The agent token gets a 403. | `../neat-os` |
+| Local / IDE, a person installing the published package | GitHub Packages. The `.npmrc` and the token are in [GitHub Packages](#github-packages). | `node_modules/@shedcollective/neat-os` |
+| Local / IDE, an agent, or any install before that version is published | A git dependency in the repository root `package.json`. A PHP project may also add the Composer package, which carries metadata only. | `node_modules/@shedcollective/neat-os` and, for PHP, `vendor/shedcollective/neat-os` |
+| CI, such as GitHub Actions | The same choice as Local / IDE. The registry needs a `read:packages` token in the job. CI installs the committed lockfile. | `node_modules/@shedcollective/neat-os` |
 
 Installing into `node_modules/` or `vendor/` is vendoring. Copying skill files into a product repository's `.agents/skills/` is not, and is not a supported way to install.
 
+## GitHub Packages
+
+Use this when a person or CI installs a published version. Agents and Cloud Agents use the git pin in [Node](#node).
+
+Commit this `.npmrc` at the root of the product repository:
+
+```
+@shedcollective:registry=https://npm.pkg.github.com
+```
+
+Do not commit a token. The consuming repository needs a token with the `read:packages` scope. The auth line is the same locally and in CI:
+
+```
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+```
+
+Locally, put that line in the user `~/.npmrc` and set `NODE_AUTH_TOKEN` in the environment. In CI, write the same line from the job secret, or set `registry-url` to `https://npm.pkg.github.com` on `actions/setup-node` and pass the secret as `NODE_AUTH_TOKEN`. The npm registry on GitHub requires that token even when the package is public.
+
+Depend on the version, with no leading `v`:
+
+```json
+{
+  "dependencies": {
+    "@shedcollective/neat-os": "X.Y.Z"
+  }
+}
+```
+
+Replace `X.Y.Z` with the release you are pinning. Until a package of that version exists, this install fails. Use the git pin until then.
+
+To move an existing registry pin, set the new version, run `npm update @shedcollective/neat-os`, and commit `package.json` and `package-lock.json` together.
+
 ## Node
+
+Use this git pin for an agent, a Cloud Agent, and any install before a package of that version exists on GitHub Packages. A person may also keep this pin.
 
 Write the full git URL into `package.json`. Passing that URL as an argument to `npm install` saves npm's `github:` shorthand instead, which is a separate problem described in [faq.md](faq.md).
 
@@ -145,7 +182,7 @@ After the pin moves, update the product repository's guide only where [`template
 
 ## Access
 
-An agent needs GitHub read access to `shedcollective/neat-os`, through the organisation's team permissions, over HTTPS or SSH. Cloud Agents use the token of the Cursor GitHub App installation. That token cannot read GitHub Packages. Do not create a Packages token for an agent. The install is the git pin on this page. Publishing to GitHub Packages stays paused ([ADR-0017](decisions/0017-consume-via-github-packages.md)).
+An agent needs GitHub read access to `shedcollective/neat-os`, through the organisation's team permissions, over HTTPS or SSH. Cloud Agents use the token of the Cursor GitHub App installation. That token cannot read GitHub Packages (403). Do not create a Packages token for an agent. Agents install with the git pin on this page. A person or CI that installs from the registry uses a token with `read:packages`, as in [GitHub Packages](#github-packages) ([ADR-0019](decisions/0019-publish-github-packages.md)).
 
 ## Moving from shed-os
 

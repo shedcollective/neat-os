@@ -30,7 +30,7 @@ Decide which kind of mechanism it is before you create it. The six kinds are def
 
 | Kind | When to add one |
 | --- | --- |
-| Principle | One judgement rule that changed a real decision in shipped work and cannot be checked by software. Create `principles/<slug>.md` with the sections *Applies when*, *The decision it changes*, and *Source*, and add it under a goal in `principles/README.md`. Keep the set at twelve or fewer ([ADR-0011](decisions/0011-principle-set-cap-twelve.md)). Candidates usually arrive as `learn` proposals, and a person elevates them. |
+| Principle | One judgement rule that changed a real decision in shipped work and cannot be checked by software. Create `principles/<slug>.md` with the sections *Applies when*, *The decision it changes*, and *Source*, and add it under a goal in `principles/README.md`. Keep the set small, and delete a principle that stops changing behaviour ([ADR-0018](decisions/0018-no-numeric-principle-cap.md)). Candidates usually arrive as `learn` proposals, and a person elevates them. |
 | Convention | A fact every Shed repository shares, such as git-flow or which ticket system to use. Create `conventions/<topic>.md` and list it in `conventions/README.md`. Playbooks read it, and `gather` must not ask about it. |
 | Playbook | An ordered sequence whose failure mode is a skipped step. Launch playbooks are `init`, `gather`, and `learn`. On-demand playbooks also live under `skills/<name>/SKILL.md` (today: [`pin-majors-with-reasons`](../skills/pin-majors-with-reasons/SKILL.md), [`assurance`](../skills/assurance/SKILL.md)). The frontmatter has `name` and `description`; the body has *When to use*, *Steps*, and *Stop*. |
 | Skill | A capability a playbook step invokes. Same `SKILL.md` shape. Keep it short. |
@@ -51,5 +51,5 @@ Every page a person reads follows [conventions/writing.md](../conventions/writin
 
 - Do not create `neat-os-platform-*` or `neat-os-tool-*` repositories from this one. Stack guidance lives under `stacks/`.
 - `learn` proposes. It never pushes a skill to this repository or to a shared skill store.
-- Do not turn `publish-npm.yml` on ([ADR-0017](decisions/0017-consume-via-github-packages.md)). The licence is MIT, and publishing stays a later step. Do not add a registry auth line for agents.
+- Do not publish `@shedcollective/neat-os` to the public npm registry. `.github/workflows/publish-npm.yml` publishes to GitHub Packages when a Release is published ([ADR-0019](decisions/0019-publish-github-packages.md)). Do not add a registry auth line for agents. The agent install stays the git pin in [consume.md](consume.md).
 - Do not invent facts about a client or a project.

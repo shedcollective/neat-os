@@ -3,7 +3,7 @@
   "description": "Shed agency OS. Composer VCS package (PHP metadata only). Knowledge is not shipped via Composer. Use the git repo (Node: file: sibling or github:shedcollective/neat-os#tag) or NEAT_OS_ROOT. SHED_OS_ROOT is a deprecated fallback.",
   "type": "library",
   "license": "MIT",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "require": {
     "php": ">=8.1"
   },
@@ -14,8 +14,8 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-develop": "0.4.x-dev",
-      "dev-main": "0.4.x-dev"
+      "dev-develop": "0.5.x-dev",
+      "dev-main": "0.5.x-dev"
     }
   }
 }

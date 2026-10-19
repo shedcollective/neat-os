@@ -1,27 +1,49 @@
-# PAUSED. The licence is MIT. Publishing stays off (ADR-0017).
-# The install is a git pin:
-#   file: sibling or github:shedcollective/neat-os#vX.Y.Z
-# Cloud Agents still cannot read the registry. No Packages token for an agent.
-# Do not add a release trigger or an npm publish line while this stays paused.
+# Publishes @shedcollective/neat-os to GitHub Packages when a Release is published.
+# GitHub runs this file from the default branch. The job checks out the release tag
+# so the tarball matches that tag. Agents still install from git (ADR-0019).
+# The licence is MIT.
 #
-# Release flow stays: feature, then develop, then main, then a tagged GitHub Release
+# Release flow: feature, then develop, then main, then a tagged GitHub Release
 #   gh release create vX.Y.Z --target main
-# The tag is the installable git ref. Publishing is not a release step.
 
-name: Publish npm (paused)
+name: Publish npm
 
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
-  paused:
+  publish:
     runs-on: ubuntu-latest
     steps:
-      - name: GitHub Packages publish is paused
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: https://npm.pkg.github.com
+          scope: '@shedcollective'
+      - name: Verify the tag, the version, and the tarball
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          echo "Publishing stays paused. The licence is MIT (ADR-0017)."
-          echo "Do not npm publish. Until a package exists, consumers install the git ref."
-          exit 1
+          set -euo pipefail
+          version="$(node -p "require('./package.json').version")"
+          if [ "${RELEASE_TAG}" != "v${version}" ]; then
+            echo "release tag ${RELEASE_TAG} does not match package.json version ${version}" >&2
+            exit 1
+          fi
+          npm pack --dry-run > pack-list.txt 2>&1
+          grep -q 'skills/' pack-list.txt
+          grep -q 'stacks/' pack-list.txt
+          echo "tarball for ${RELEASE_TAG} includes skills/ and stacks/"
+      - name: Publish to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm publish

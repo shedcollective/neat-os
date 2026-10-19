@@ -12,6 +12,8 @@ neat-os is the shared knowledge that Shed's AI agents work from. It is an operat
 
 `init` leaves an empty stack-pack slot. `gather` points a product repo at the matching pack. Tool-specific knowledge will live in separate `neat-os-tool-*` repositories later. They are not part of this one. Together with neat-os they are the OS repos. Everything else at Shed is a product repo.
 
+It is also the agency rulebook for shared operations playbooks. Living operational state stays in a private operations repository; the rules and playbooks stay here ([docs/agency-ops.md](docs/agency-ops.md)).
+
 ## How it fits together
 
 A product repository pins a neat-os release. `init` copies templates into `AGENTS.md` and an `.agents/` folder. Agents read those files and follow them. The package itself stays in the install (`node_modules/` or a sibling checkout). It is not copied in as those files.
@@ -40,7 +42,7 @@ A product repository pins a neat-os release. `init` copies templates into `AGENT
 | [Determinism](principles/determinism.md) | The same inputs give tested, trusted results |
 | [Parallelism](principles/parallelism.md) | Independent workers, including Cloud Agents, can run at once |
 
-Each goal has a few one-line principles beneath it. The index is [principles/README.md](principles/README.md). There are twelve.
+Each goal has a few one-line principles beneath it. The index is [principles/README.md](principles/README.md).
 
 ## Building blocks
 
@@ -113,7 +115,7 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 - `assurance` reads one pull request against its ticket and posts an evidence pack. It does not implement, push, approve, or merge.
 - `pin-majors-with-reasons` upgrades dependencies by blast radius and does not take a pinned major on a routine bump.
 
-`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). All six playbooks are under [skills/](skills/).
+`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). All playbooks are under [skills/](skills/).
 
 ## Releases and pinning
 
@@ -152,7 +154,7 @@ Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of 
 
 ## What neat-os does not do
 
-- The install is a git pin to a release tag (`github:shedcollective/neat-os#vX.Y.Z`). Publishing to GitHub Packages stays paused ([ADR-0017](docs/decisions/0017-consume-via-github-packages.md)). The licence is MIT. Agents install from git and need no registry token.
+- Agents do not install from GitHub Packages. An agent token gets a 403 from the registry. Agents install from a git pin (`github:shedcollective/neat-os#vX.Y.Z`) and need no registry token. The registry install for a product repository is in [docs/consume.md](docs/consume.md) ([ADR-0019](docs/decisions/0019-publish-github-packages.md)). The licence is MIT.
 - `init` does not copy skills into a product repository's `.agents/skills/`. Agents read them from the installed package.
 - Agents do not search the public web for how to install neat-os. The resolve order in [docs/consume.md](docs/consume.md) is the only way an agent looks for it.
 - The archive tag `v0.0.1` predates a root `package.json` and cannot be installed. It is not a neat-os release. Do not pin it.

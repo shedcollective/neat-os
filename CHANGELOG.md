@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.0
+
+This repository does not store secrets, credentials, or project-specific information. The convention is [never-store-secrets](conventions/never-store-secrets.md). A secret goes in an environment variable or another store outside the repository. A fact about one product repository goes in that repository's own docs.
+
+The principle set has no numeric cap ([ADR-0018](docs/decisions/0018-no-numeric-principle-cap.md)). Keep the set small. Delete a principle that stops changing behaviour. The elevation bar enforces that rule.
+
+Agency operations playbooks are `daily-burndown`, `enhance-daily-update`, `project-update`, and `client-brief`. What a shared work digest may contain is [agent-work-logging](conventions/agent-work-logging.md). The map is [docs/agency-ops.md](docs/agency-ops.md). The day body is one shared record: Agency state first, then one section per project. Pull requests #9, #11, and #13.
+
+`.github/workflows/publish-npm.yml` publishes `@shedcollective/neat-os` to GitHub Packages when a Release is published. A product repository may install that package. The `.npmrc` and the `read:packages` token are in [docs/consume.md](docs/consume.md). Agents and Cloud Agents keep the git pin, because an agent token gets a 403 from the registry. [ADR-0019](docs/decisions/0019-publish-github-packages.md) partially supersedes the paused publishing in [ADR-0017](docs/decisions/0017-consume-via-github-packages.md). Pull request #14.
+
 ## 0.4.0
 
 The product name is neat-os. The Node package is `@shedcollective/neat-os`. The Composer package is `shedcollective/neat-os`. Install with a git pin, `github:shedcollective/neat-os#vX.Y.Z`. Releases are tagged on `shedcollective/neat-os`.

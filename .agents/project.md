@@ -15,13 +15,13 @@ Interview answers pre-supplied by a maintainer. Docker/Make evidence stays under
 - In scope / out of scope: In scope — everything company-wide and stack-agnostic listed above, the `scripts/check` pipeline, the npm/Composer consume metadata, and stack packs under `stacks/` (ADR-0013). Out of scope — any client or project fact (those live in each product repo's `.agents/`), tool wrappers (future `neat-os-tool-*`), and the Notion scratchpad (not a source of truth — ADR-0008).
 - Names or data that must not be renamed or exposed: package names `@shedcollective/neat-os` and `shedcollective/neat-os`; the env var `NEAT_OS_ROOT` (`SHED_OS_ROOT` is a deprecated fallback); the resolve order and mode names (`env`, `node_modules`, `vendor`, `sibling`, `checkout`, `missing`), ADR-0003; the slot paths `AGENTS.md`, `.agents/README.md`, `.agents/project.md`, `.agents/platforms/`, `.agents/features/`, `.agents/proposals/`, `stacks/`. No client names appear in this repo.
 
-Tree hint (package description, **not** a client brief): From `package.json`: Shed agency OS. Principles, playbooks, and project templates. Install from git (file: sibling or github:shedcollective/neat-os#vX.Y.Z).
+Tree hint (package description, **not** a client brief): From `package.json`: Shed agency OS. Principles, playbooks, and project templates. Install from GitHub Packages, or from git (file: sibling or github:shedcollective/neat-os#vX.Y.Z).
 
 ## Stack
 
 - Languages / frameworks / versions: PHP >=8.1, JavaScript
 - Package manager / lockfiles: composer.json (Composer), package.json (npm)
-- Hosting / CI / deploy: GitHub Actions: `publish-npm.yml` (name: Publish npm (paused), jobs: paused — tests, deploy); `validate.yml` (name: Validate neat-os, jobs: validate — tests). No hosting: this is a knowledge repo. "Deploy" is a GitHub Release tag `vX.Y.Z` on `main` that consumers pin (`github:shedcollective/neat-os#vX.Y.Z`); the npm publish workflow stays paused (ADR-0017). The licence is MIT. No DeployHQ.
+- Hosting / CI / deploy: GitHub Actions: `publish-npm.yml` (name: Publish npm, jobs: publish — deploy); `validate.yml` (name: Validate neat-os, jobs: validate — tests). No hosting: this is a knowledge repo. "Deploy" is a GitHub Release tag `vX.Y.Z` on `main` that consumers pin (`github:shedcollective/neat-os#vX.Y.Z`); that Release publishes the package to GitHub Packages (ADR-0019). The licence is MIT. No DeployHQ.
 
 ## Layout & start (repo evidence)
 
