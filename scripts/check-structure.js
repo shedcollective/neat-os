@@ -336,12 +336,15 @@ for (const file of adrFiles) {
     fail(`docs/decisions/README.md does not list ${file}`);
   }
   const body = read(`docs/decisions/${file}`);
-  if (!/^\*\*Status:\*\*\s+(Proposed|Accepted|Superseded by \d{4}|Deprecated)/m.test(body)) {
+  if (!/^\*\*Status:\*\*\s+(Proposed|Accepted|Partially superseded by \d{4}|Superseded by \d{4}|Deprecated)/m.test(body)) {
     fail(`docs/decisions/${file} must declare a Status line from the template`);
   }
   if (!/^\*\*Date:\*\*\s+\d{4}-\d{2}-\d{2}/m.test(body)) {
     fail(`docs/decisions/${file} must declare a Date line`);
   }
+}
+if (!/^\*\*Status:\*\*\s+Partially superseded by 0019\s*$/m.test(read('docs/decisions/0017-consume-via-github-packages.md'))) {
+  fail('docs/decisions/0017 must stay Partially superseded by 0019 (ADR-0019 replaces only the pause)');
 }
 for (const link of adrIndex.matchAll(/\((\d{4}-[^)]+\.md)\)/g)) {
   if (!fs.existsSync(path.join(adrDir, link[1]))) {

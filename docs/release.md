@@ -4,14 +4,14 @@ Releases of neat-os happen on `shedcollective/neat-os`. `develop` is the integra
 
 People merge and people release ([keep-human-gates](../principles/keep-human-gates.md)). Agents prepare the pull request. They do not tag `main`.
 
-Product repositories pin `github:shedcollective/neat-os#vX.Y.Z`. [ADR-0001](decisions/0001-consume-via-git-not-packages.md) is superseded by [ADR-0017](decisions/0017-consume-via-github-packages.md), which records an intent to publish to GitHub Packages later. The workflow at `.github/workflows/publish-npm.yml` stays paused, so publishing is not a release step. The licence is MIT. The install is the git pin.
+Product repositories pin a release. The git pin is `github:shedcollective/neat-os#vX.Y.Z`. A product repository may instead install the same version from GitHub Packages. Both recipes are in [consume.md](consume.md). [ADR-0017](decisions/0017-consume-via-github-packages.md) is partially superseded by [ADR-0019](decisions/0019-publish-github-packages.md): publishing is on, and agents still install from git. `.github/workflows/publish-npm.yml` publishes the Release tag to GitHub Packages. The licence is MIT.
 
 ## Steps
 
 1. Feature work arrives on `develop` through reviewed pull requests, using git-flow and merge commits ([conventions/git.md](../conventions/git.md)). A stacked change lands as one merge of the feature branch.
 2. To ship a version, open a `release/X.Y.Z` branch from `develop` and merge it into `main` with a merge commit, not a squash. For the first installable release that branch is `release/0.1.0`.
 3. Publish a GitHub Release from the tip of `main`. The tag is `vX.Y.Z` and must match the `version` in the root `package.json`, `packages/npm/package.json`, and the root `composer.json`. Tag `v0.1.0` goes with version `0.1.0`. Composer ignores a tag whose `composer.json` declares a different version, so the version bump is part of the release, not an afterthought.
-4. Confirm the `release-smoke` workflow passed on that Release. It installs the published tag into a scratch project and asserts the skills folder exists and `resolveConsume().mode` is `node_modules`.
+4. Confirm the `release-smoke` workflow passed on that Release. It installs the published tag from git into a scratch project and asserts the skills folder exists and `resolveConsume().mode` is `node_modules`. Confirm `publish-npm` passed. It publishes that tag to GitHub Packages.
 5. Merge `main` back into `develop` so the release commit is not missing from the integration branch.
 6. Product repositories pin the tag: `git+ssh://git@github.com/shedcollective/neat-os.git#vX.Y.Z` for Node, or the version with no leading `v` for Composer. A repository that already pins neat-os changes the tag and refreshes the lockfile in the same commit. The steps are in [consume.md](consume.md#move-to-a-new-tagged-release). Moving from a shed-os pin is in [consume.md](consume.md#moving-from-shed-os).
 
@@ -75,7 +75,7 @@ gh release create vX.Y.Z --target main --title "vX.Y.Z" --notes "…"
 | Who | Does |
 | --- | --- |
 | Contributors and agents | Branch from `develop` and open pull requests into `develop`. Stacked pull requests follow [conventions/git.md](../conventions/git.md#stacked-prs). |
-| People | Merge those pull requests, open `release/X.Y.Z`, merge it into `main`, publish the Release, confirm `release-smoke`, and merge `main` back into `develop` |
+| People | Merge those pull requests, open `release/X.Y.Z`, merge it into `main`, publish the Release, confirm `release-smoke` and `publish-npm`, and merge `main` back into `develop` |
 | Product repositories | Pin a release tag. Moving an existing pin, including the lockfile, is in [consume.md](consume.md#move-to-a-new-tagged-release). |
 
-Branch protection on `main` and re-enabling `publish-npm.yml` are decisions for the team, not steps on this page.
+Branch protection on `main` is a decision for the team, not a step on this page. Publishing runs from `.github/workflows/publish-npm.yml` when the Release is published.

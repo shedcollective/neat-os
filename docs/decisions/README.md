@@ -1,6 +1,6 @@
 # Decisions
 
-Architecture decision records for neat-os. One file per decision, numbered, never edited after acceptance except to change **Status** (superseded by / deprecated). A new decision that reverses an old one gets a new number and links back.
+Architecture decision records for neat-os. One file per decision, numbered, never edited after acceptance except to change **Status** (superseded by / partially superseded by / deprecated). A new decision that reverses an old one gets a new number and links back. A decision that reverses only part of an old one sets that record's status to `Partially superseded by NNNN`. The new record says which part it replaces. The rest of the earlier record still holds.
 
 Decisions below keep the product name that was true when they were accepted. From 0.4.0 that name is neat-os. Current package names, the git pin, and the resolve order, including the deprecated `SHED_OS_ROOT` fallback, are in [consume.md](../consume.md). The filename `0013-stack-packs-in-shed-os.md` is unchanged.
 
@@ -26,5 +26,6 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0014](0014-commit-shape-for-review.md) | Commits are one concern, explained, and ordered for review | Accepted |
 | [0015](0015-ticket-titles-name-a-capability-or-a-breakage.md) | Ticket titles name a new capability or a breakage | Accepted |
 | [0016](0016-neutral-reference.md) | The public tree is a neutral reference | Accepted |
-| [0017](0017-consume-via-github-packages.md) | Client repositories consume shed-os from GitHub Packages | Accepted |
+| [0017](0017-consume-via-github-packages.md) | Client repositories consume shed-os from GitHub Packages | Partially superseded by 0019 |
 | [0018](0018-no-numeric-principle-cap.md) | The principle set has no numeric cap | Accepted |
+| [0019](0019-publish-github-packages.md) | Publish neat-os to GitHub Packages on a release | Accepted |

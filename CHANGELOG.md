@@ -6,6 +6,8 @@ This repository does not store secrets, credentials, or project-specific informa
 
 The principle set has no numeric cap ([ADR-0018](docs/decisions/0018-no-numeric-principle-cap.md)). Keep the set small. Delete a principle that stops changing behaviour. The elevation bar enforces that rule.
 
+`.github/workflows/publish-npm.yml` publishes `@shedcollective/neat-os` to GitHub Packages when a Release is published. A product repository may install that package. The `.npmrc` and the `read:packages` token are in [docs/consume.md](docs/consume.md). Agents and Cloud Agents keep the git pin, because an agent token gets a 403 from the registry. [ADR-0019](docs/decisions/0019-publish-github-packages.md) partially supersedes the paused publishing in [ADR-0017](docs/decisions/0017-consume-via-github-packages.md).
+
 ## 0.4.0
 
 The product name is neat-os. The Node package is `@shedcollective/neat-os`. The Composer package is `shedcollective/neat-os`. Install with a git pin, `github:shedcollective/neat-os#vX.Y.Z`. Releases are tagged on `shedcollective/neat-os`.
