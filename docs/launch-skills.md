@@ -69,6 +69,11 @@ For an OS repository the same playbook writes a GitHub Issue with `gh issue crea
 
 These two are playbooks, and they are not part of adoption. `assurance` reads one pull request on a product repository and posts an evidence pack. It does not implement the change. `pin-majors-with-reasons` upgrades dependencies and leaves a pinned major where it is. Their steps are in [`skills/assurance/SKILL.md`](../skills/assurance/SKILL.md) and [`skills/pin-majors-with-reasons/SKILL.md`](../skills/pin-majors-with-reasons/SKILL.md).
 
+
+## Agency operations playbooks
+
+`daily-burndown`, `enhance-daily-update`, `project-update`, and `client-brief` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
+
 ## Order on a product repository
 
 For a new repository: install neat-os ([consume.md](consume.md)), run `init`, run `gather`, then start feature work on `develop`. Run `ticket` whenever work needs to reach Jira. Run `learn` after a stretch of work when you want to know what could be shared.
