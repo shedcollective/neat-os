@@ -127,7 +127,7 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
   </picture>
 </p>
 
-Work lands on `develop`. A person cuts `release/X.Y.Z` from `develop`, merges it into `main`, and publishes the GitHub Release `vX.Y.Z`. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
+Work lands on `develop`. A release-prep pull request sets the version. Prepare release opens `release/X.Y.Z` into `main` and a draft Release. A person merges that pull request with a merge commit and publishes the draft. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
 
 ### Working on neat-os itself
 

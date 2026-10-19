@@ -89,6 +89,7 @@ const required = [
   '.github/workflows/validate.yml',
   '.github/workflows/release-smoke.yml',
   '.github/workflows/publish-npm.yml',
+  '.github/workflows/prepare-release.yml',
 ];
 
 const missing = required.filter((rel) => !fs.existsSync(path.join(root, rel)));
@@ -303,6 +304,18 @@ if (!/^\s+npm publish\s*$/m.test(publishYml)) {
 if (!/npm pack --dry-run/.test(publishYml) || !publishYml.includes('skills/') || !publishYml.includes('stacks/')) {
   fail('publish-npm.yml must verify the tarball includes skills/ and stacks/ (ADR-0019)');
 }
+const mainGuard = 'git merge-base --is-ancestor';
+const mainGuardError = 'Publish the Release targeting main after merging release/X.Y.Z.';
+if (!publishYml.includes('fetch-depth: 0') || !publishYml.includes(mainGuard) || !publishYml.includes('origin/main') || !publishYml.includes(mainGuardError)) {
+  fail('publish-npm.yml must refuse a release tag that is not reachable from origin/main, after a full fetch');
+}
+if (!publishYml.includes('does not match package.json version')) {
+  fail('publish-npm.yml must fail when the tag does not match package.json version');
+}
+const publishAt = publishYml.indexOf('npm publish');
+if (publishAt === -1 || publishYml.indexOf(mainGuard) > publishAt) {
+  fail('publish-npm.yml must check the tag is on main before npm publish');
+}
 
 // SHA and tag install smokes (ADR-0010). Do not weaken these.
 // pull_request github.sha is the ephemeral merge commit. npm cannot check it out.
@@ -329,6 +342,28 @@ if (!/skillsDir/.test(releaseSmokeYml) || !/node_modules/.test(releaseSmokeYml))
 }
 if (/^\s+npm publish\s*$/m.test(releaseSmokeYml) || /registry\.npmjs\.org/.test(releaseSmokeYml)) {
   fail('release-smoke.yml must not npm publish or use the public npm registry (ADR-0019)');
+}
+if (!releaseSmokeYml.includes('fetch-depth: 0') || !releaseSmokeYml.includes(mainGuard) || !releaseSmokeYml.includes('origin/main') || !releaseSmokeYml.includes(mainGuardError)) {
+  fail('release-smoke.yml must refuse a release tag that is not reachable from origin/main, after a full fetch');
+}
+const prepareYml = read('.github/workflows/prepare-release.yml');
+if (!/workflow_dispatch:/.test(prepareYml) || !/inputs:/.test(prepareYml)) {
+  fail('prepare-release.yml must be workflow_dispatch with a version input');
+}
+if (!/contents:\s*write/.test(prepareYml) || !/pull-requests:\s*write/.test(prepareYml)) {
+  fail('prepare-release.yml must set contents: write and pull-requests: write');
+}
+if (!prepareYml.includes('--draft') || !prepareYml.includes('--target main')) {
+  fail('prepare-release.yml must create a draft Release targeting main');
+}
+if (/gh pr merge/.test(prepareYml) || /--draft=false/.test(prepareYml)) {
+  fail('prepare-release.yml must not merge or publish the Release');
+}
+if (!prepareYml.includes('docs/release.md') || !prepareYml.includes('release-prep')) {
+  fail('prepare-release.yml must point at the release-prep pull request when develop is not at that version');
+}
+if (!prepareYml.includes('isDraft') || !prepareYml.includes('targetCommitish')) {
+  fail('prepare-release.yml must confirm the Release stays a draft targeted at the branch main');
 }
 
 // Workflow YAML: an unquoted colon inside a `name:` value is a parse error that
