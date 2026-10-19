@@ -13,7 +13,7 @@ namespace Neat\Os;
  */
 final class NeatOs
 {
-    public const VERSION = '0.4.0';
+    public const VERSION = '0.5.0';
 
     public static function version(): string
     {
