@@ -18,9 +18,10 @@ This convention applies to shared records and digests an agent keeps for a team.
 - Billing amounts, rates, totals, and VAT figures in any shared file that staff who are not directors can read.
 - Another client's confidential detail in a note or ticket that client can read.
 - Names of bots in the shared record.
+- Invented leave, absence, or holiday facts. Verify against the holiday calendar or an explicit message before writing People lines.
 
 ## Placement
 
 Coding standards and company playbooks stay in neat-os. Living agency operational state (day files, in-flight boards, client folders) stays in a private operations repository. This public tree holds the rules and the playbooks only.
 
-Day files group work **by project** under Overview (and under each perspective section), with cross-cutting delivery under Agency and people or later-useful facts under Agency state. See [templates/ops/burndown-day.md](../templates/ops/burndown-day.md) and [docs/agency-ops.md](../docs/agency-ops.md).
+Day files put **Agency state first**, then group work **by project** in one shared body (optional CRM `Client:` links in private records). Cross-cutting delivery sits under Agency. Perspective add-ons append into the same project sections; they do not own separate top-level wrappers. See [templates/ops/burndown-day.md](../templates/ops/burndown-day.md) and [docs/agency-ops.md](../docs/agency-ops.md).
