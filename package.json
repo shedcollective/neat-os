@@ -1,7 +1,7 @@
 {
   "name": "@shedcollective/neat-os",
   "version": "0.4.0",
-  "description": "Shed agency OS. Principles, playbooks, and project templates. Install from git (file: sibling or github:shedcollective/neat-os#vX.Y.Z).",
+  "description": "Shed agency OS. Principles, playbooks, and project templates. Install from GitHub Packages, or from git (file: sibling or github:shedcollective/neat-os#vX.Y.Z).",
   "license": "MIT",
   "main": "index.js",
   "types": "index.d.ts",
@@ -24,6 +24,9 @@
     "conventions",
     "stacks"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shedcollective/neat-os.git"

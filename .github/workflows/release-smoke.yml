@@ -1,6 +1,6 @@
 # Runs after a person publishes a GitHub Release.
 # Installs the tag the way a product repository will, and asserts consume.
-# Does not publish to npm. publish-npm.yml stays paused (ADR-0017, ADR-0010). The licence is MIT.
+# Does not publish. publish-npm.yml publishes the tag to GitHub Packages (ADR-0019). The licence is MIT.
 
 name: Release smoke
 
