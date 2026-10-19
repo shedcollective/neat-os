@@ -51,5 +51,5 @@ Every page a person reads follows [conventions/writing.md](../conventions/writin
 
 - Do not create `neat-os-platform-*` or `neat-os-tool-*` repositories from this one. Stack guidance lives under `stacks/`.
 - `learn` proposes. It never pushes a skill to this repository or to a shared skill store.
-- Do not turn `publish-npm.yml` on ([ADR-0017](decisions/0017-consume-via-github-packages.md)). The licence is MIT, and publishing stays a later step. Do not add a registry auth line for agents.
+- Do not publish `@shedcollective/neat-os` to the public npm registry. `.github/workflows/publish-npm.yml` publishes to GitHub Packages when a Release is published ([ADR-0019](decisions/0019-publish-github-packages.md)). Do not add a registry auth line for agents. The agent install stays the git pin in [consume.md](consume.md).
 - Do not invent facts about a client or a project.

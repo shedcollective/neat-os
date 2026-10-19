@@ -22,6 +22,9 @@
     "conventions",
     "stacks"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shedcollective/neat-os.git",
