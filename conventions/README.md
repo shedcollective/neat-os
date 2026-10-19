@@ -10,6 +10,7 @@ Locked engineering defaults for Shed. These are company knowledge: `gather` must
 | Writing: pages are written for a reader who has only the repository | [writing.md](writing.md) |
 | Neutral reference: name roles, not people, clients, projects, products, or bots | [neutral-reference.md](neutral-reference.md) |
 | Never store secrets, credentials, or project-specific information in this repository | [never-store-secrets.md](never-store-secrets.md) |
+| Agent work logging: shared digests log work only; no personal chatter, billing amounts, or secrets | [agent-work-logging.md](agent-work-logging.md) |
 | The lockfile beside a manifest names the installer for that directory | [lockfile.md](lockfile.md) |
 
 ## Where a fact belongs
