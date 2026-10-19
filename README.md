@@ -12,6 +12,8 @@ neat-os is the shared knowledge that Shed's AI agents work from. It is an operat
 
 `init` leaves an empty stack-pack slot. `gather` points a product repo at the matching pack. Tool-specific knowledge will live in separate `neat-os-tool-*` repositories later. They are not part of this one. Together with neat-os they are the OS repos. Everything else at Shed is a product repo.
 
+It is also the agency rulebook for shared operations playbooks. Living operational state stays in a private operations repository; the rules and playbooks stay here ([docs/agency-ops.md](docs/agency-ops.md)).
+
 ## How it fits together
 
 A product repository pins a neat-os release. `init` copies templates into `AGENTS.md` and an `.agents/` folder. Agents read those files and follow them. The package itself stays in the install (`node_modules/` or a sibling checkout). It is not copied in as those files.
@@ -113,7 +115,7 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 - `assurance` reads one pull request against its ticket and posts an evidence pack. It does not implement, push, approve, or merge.
 - `pin-majors-with-reasons` upgrades dependencies by blast radius and does not take a pinned major on a routine bump.
 
-`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). All six playbooks are under [skills/](skills/).
+`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). All playbooks are under [skills/](skills/).
 
 ## Releases and pinning
 
