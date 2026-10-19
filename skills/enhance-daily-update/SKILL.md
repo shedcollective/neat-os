@@ -33,15 +33,16 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 
 - **Own section only.** Append or replace the matched heading. Never edit Overview or another perspective's section.
 - **Own connectors only.** Do not use another person's private mail, calendar, or direct messages.
+- **By project.** Fill the owned section the same way Overview is filled: one `### <Project>` per project that had work from this perspective, optional `Client:` line when the private record has a CRM folder, then only the `####` activity headings that have content (Tickets, Email, Slack, Meetings / notes, Ships / merges, Blocked / next) with flat `- ` bullets. Prefer the same project names Overview used. Omit empty `####` headings.
 - **No duplicates.** Skip points already covered in Overview.
-- Work only; no personal chatter; no billing amounts; no secrets; do not name bots.
+- Work only; Slack Connect / external client channels are work sources when the team uses them; no personal chatter; no billing amounts; no secrets; do not name bots.
 
 ## Steps
 
 1. Resolve the date (default: today in the team's local timezone).
 2. Open today's day file in the operations record. If it is missing, wait per the routine, or create it from [templates/ops/burndown-day.md](../../templates/ops/burndown-day.md) with an empty Overview and a note that the overview run had not finished.
 3. Gather work-only signals from this person's connectors for that day.
-4. Write only the owned section. Keep summaries short; do not quote direct messages or mail when a one-line work point will do.
+4. Write only the owned section, by project, with `####` activity headings. Keep summaries short; do not quote direct messages or mail when a one-line work point will do.
 5. Commit with a clear message that names the date and the perspective. Never rewrite history.
 6. Stay quiet if there is nothing new from this perspective.
 

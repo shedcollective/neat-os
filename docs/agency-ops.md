@@ -14,8 +14,8 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 
 | Playbook | Does | Refuses to |
 | --- | --- | --- |
-| [`daily-burndown`](../skills/daily-burndown/SKILL.md) | Writes the day's Overview into the private operations record and refreshes the in-flight board. | Log personal chatter, billing amounts, or secrets. Edit perspective sections. |
-| [`enhance-daily-update`](../skills/enhance-daily-update/SKILL.md) | Appends one perspective section from that person's own connectors. | Edit Overview or another perspective. Use another person's private connectors. |
+| [`daily-burndown`](../skills/daily-burndown/SKILL.md) | Writes the day's Overview **by project** (plus Agency, Agency state, and Sources unavailable) into the private operations record and refreshes the in-flight board. | Log personal chatter, billing amounts, or secrets. Edit perspective sections. Invent missing sources. |
+| [`enhance-daily-update`](../skills/enhance-daily-update/SKILL.md) | Appends one perspective section **by project** from that person's own connectors. | Edit Overview or another perspective. Use another person's private connectors. |
 | [`project-update`](../skills/project-update/SKILL.md) | Produces a short project status from the operations record and live connectors. | Invent project facts. Post externally without approval. |
 | [`client-brief`](../skills/client-brief/SKILL.md) | Assembles a high-level client brief with no billing figures. | Write amounts, rates, or credentials into the brief. |
 
@@ -23,7 +23,7 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 
 | File | Job |
 | --- | --- |
-| [templates/ops/burndown-day.md](../templates/ops/burndown-day.md) | Day-file shape with Overview plus named perspective sections. Copy into the private operations record, or point the playbook at this path in the neat-os install. |
+| [templates/ops/burndown-day.md](../templates/ops/burndown-day.md) | Day-file shape: Overview filled by project with `####` activity headings, Agency, Agency state (People / Notable), Sources unavailable, plus named perspective sections that also fill by project. Copy into the private operations record, or point the playbook at this path in the neat-os install. Private records may rename Overview to a role label; the shape stays the same. |
 
 ## Order
 
