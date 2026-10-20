@@ -19,12 +19,13 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 
 - Visual diffs against Figma frames (that is [`design-qa`](../design-qa/SKILL.md)).
 - Synthesising interview notes (that is [`research-synthesis`](../research-synthesis/SKILL.md)).
+- Building an IA package or clickable wireframe (that is [`wireframes`](../wireframes/SKILL.md)).
 - Fixing the site.
 
 ## Steps
 
 1. Take the URL or flow from the asker. Stop if it needs a login the asker has not granted on their own connectors.
-2. Review against common heuristics and accessibility basics (keyboard, labels, contrast, names and roles) from what you can see. Rank findings. Each finding has evidence (screenshot or step) and, when it applies, a WCAG reference. Flag unknowns. Do not invent a failure.
+2. Review against common heuristics and accessibility basics (keyboard, labels, contrast, names and roles) from what you can see. Check at desktop and phone widths. Check unit identity: buttons do actions and links go places, filters do not look like tags, and a static box does not look like a card. Rank findings. Each finding has evidence (screenshot or step) and, when it applies, a WCAG reference. Flag unknowns. Do not invent a failure.
 3. Write a new draft report, or a comment on the ticket. Do not edit the site, a Figma file, or a ticket's status. Do not send the report to a client.
 
 ## Stop
