@@ -7,7 +7,7 @@
 | [`init`](../skills/init/SKILL.md) | Copies the template files into the product repository: `AGENTS.md`, the Agent Guide at `.agents/README.md`, and the empty folders for docs, features, platforms, and proposals. Checks that neat-os can be found. Leaves **Stack packs** as "None yet". | Scan the repository. Ask for a ticket prefix. Fill in any fact about the client or the stack. Copy skill files into `.agents/skills/`. Copy `stacks/` into the product repo. |
 | [`gather`](../skills/gather/SKILL.md) | Scans the repository for evidence, then interviews you. Fills the Agent Guide and `.agents/project.md`. Writes one guide per platform under `.agents/platforms/` when the tree shows more than one, for example a separate frontend and backend. Fills **Stack packs** when the tree matches a `stacks/<name>/` pack in neat-os. | Declare itself finished after the scan. Ask about company conventions such as git-flow. Copy skill files. Copy `stacks/`. Do the job of `learn`. |
 | [`learn`](../skills/learn/SKILL.md) | Reads recent commits and merges and drafts proposals for what could become a shared principle or playbook, under `.agents/proposals/`. | Fill project facts. Push anything to neat-os, a platform repository, or any shared skill store. Open the pull request that would elevate a proposal. A person does that. |
-| [`ticket`](../skills/ticket/SKILL.md) | Creates a Jira Task from a brief, or enhances an existing ticket, in the sections and tone locked by [conventions/ticket-content.md](../conventions/ticket-content.md). Reads the project's Tickets slot for the client's vocabulary and standing acceptance criteria. May read the repository for pointers. | Write anything to the repository. Set an estimate, priority, status or assignee. Use an issue type other than Task. Describe how to implement the change. Create a ticket with a guessed or placeholder section. |
+| [`ticket`](../skills/ticket/SKILL.md) | Creates a Jira Task from a brief, or enhances an existing ticket, in the sections and tone locked by [conventions/ticket-content.md](../conventions/ticket-content.md). The body is the decided outcome. Reads the project's Tickets slot for the client's vocabulary and standing acceptance criteria. May read the repository for pointers. | Write anything to the repository. Set an estimate, priority, status or assignee. Use an issue type other than Task. Describe how to implement the change. Create a ticket with a guessed or placeholder section. Copy the request, the discussion, or an earlier draft into the ticket. |
 
 ## `init` creates the files
 
@@ -59,7 +59,7 @@ Follow node_modules/@shedcollective/neat-os/skills/ticket/SKILL.md.
 Customers cannot download invoices from the order history page since Tuesday. Create it.
 ```
 
-The agent reads [conventions/ticket-content.md](../conventions/ticket-content.md) and the Tickets section of `.agents/project.md`, drafts the ticket in the locked sections (Title, Original request, More information needed when the request is unclear, Why, What, How to replicate for a bug, Out of scope, Acceptance criteria, Links, Attachments), checks the tone, and creates a Jira Task with the tool the agent already has. If you have said "create it", it creates without waiting. If you have not, it shows the draft and waits. If a required section is still unknown after asking, the ticket goes in anyway with a More information needed section that lists the open questions and who can answer each one, the client contact or the reporter. Nothing is guessed.
+The agent reads [conventions/ticket-content.md](../conventions/ticket-content.md) and the Tickets section of `.agents/project.md`, drafts the ticket in the locked sections (Title, More information needed when the request is unclear, Why, What, How to replicate for a bug, Out of scope, Acceptance criteria, Links, Attachments), and writes only the final decided outcome, stated as fact. It checks the tone, and creates a Jira Task with the tool the agent already has. If you have said "create it", it creates without waiting. If you have not, it shows the draft and waits. If a required section is still unknown after asking, the ticket goes in anyway with a More information needed section that lists the open questions and who can answer each one, the client contact or the reporter. Nothing is guessed.
 
 The ticket describes the problem and the outcome, not the build. The developer who picks it up decides how, and writes the feature plan under `.agents/features/` then. `ticket` writes nothing to the repository. It sets no estimate, priority, status or assignee; a person triages the ticket from the first column.
 
@@ -72,7 +72,9 @@ These two are playbooks, and they are not part of adoption. `assurance` reads on
 
 ## Agency operations playbooks
 
-`daily-burndown`, `enhance-daily-update`, `project-update`, and `client-brief` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
+`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, and `meeting-prep` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
+
+`daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post.
 
 ## Order on a product repository
 

@@ -16,7 +16,7 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 | Input | Meaning |
 | --- | --- |
 | Perspective | A short label such as `front-end` or `back-end-devops`. Used in the commit message and to filter what to add; it is **not** a top-level day-file heading. |
-| Operations record | Private repository path or remote named by the routine. |
+| `<ops-record>`, `<timezone>`, `<connectors>`, `<write-rule>`, `<quiet-when-empty>` | As defined in [conventions/routine-settings.md](../../conventions/routine-settings.md). `<connectors>` are this person's own. |
 
 ## Perspective notes
 
@@ -40,12 +40,12 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 
 ## Steps
 
-1. Resolve the date (default: today in the team's local timezone).
-2. Open today's day file in the operations record. If it is missing, wait per the routine, or create it from [templates/ops/burndown-day.md](../../templates/ops/burndown-day.md) with Agency state / empty project stubs and a note that the overview run had not finished.
-3. Gather work-only signals from this person's connectors for that day, filtered to the named perspective.
+1. Resolve the date (default: today in `<timezone>`).
+2. Open today's day file in `<ops-record>`. If it is missing, wait per the routine, or create it from [templates/ops/burndown-day.md](../../templates/ops/burndown-day.md) with Agency state / empty project stubs and a note that the overview run had not finished.
+3. Gather work-only signals from `<connectors>` for that day, filtered to the named perspective.
 4. Append into the matching `###` project sections (and Agency if needed). Keep summaries short; do not quote direct messages or mail when a one-line work point will do.
-5. Commit with a clear message that names the date and the perspective. Never rewrite history.
-6. Stay quiet if there is nothing new from this perspective.
+5. Commit per `<write-rule>` with a clear message that names the date and the perspective. Never rewrite history.
+6. If there is nothing new from this perspective, follow `<quiet-when-empty>`.
 
 ## Stop
 

@@ -2,7 +2,13 @@
 
 ## Unreleased
 
+`meeting-prep` is an agency operations playbook with two modes. `brief` prepares one person for the day's external or tagged meetings, reading the private operations record when one is set. `proposals` drafts numbered ticket proposals from the transcript afterwards, reading the same sources as `brief` and the open tickets. Any person's agent can propose by default (`<proposer>` is `any`). Before proposing and before applying, the run searches the tracker for a matching ticket created since the meeting and checks a shared processed marker when the operations record has one, so a proposal is never applied twice. Each proposal can be approved, changed, held until a named condition, or dropped. Nothing is applied until the person approves it. A meeting the person names skips qualification, the log path is optional, and the run finds the client's tracker project from the operations record or the product repository. Shared settings come from [conventions/routine-settings.md](conventions/routine-settings.md). The map is [docs/agency-ops.md](docs/agency-ops.md).
+
 `publish-npm` and `release-smoke` fail when the release tag is not reachable from `main`. Prepare release opens the pull request into `main` and a draft Release. A person merges with a merge commit, then publishes the draft, which creates the tag at the tip of `main`. The steps are in [docs/release.md](docs/release.md).
+
+`daily-digest` is an agency operations playbook. It distils the day file into a short end-of-day post and delivers it to the routine's destination. Agency operations playbooks now name their inputs with the settings in [conventions/routine-settings.md](conventions/routine-settings.md), and [templates/ops/bot-skill.md](templates/ops/bot-skill.md) is the thin wrapper a person's agent uses to run one. The map is [docs/agency-ops.md](docs/agency-ops.md).
+
+A ticket records only the final decided outcome, stated as fact ([conventions/ticket-content.md](conventions/ticket-content.md), [ADR-0020](docs/decisions/0020-ticket-records-the-decided-outcome.md)). The body does not keep the request, the discussion, or a history of how the decision was reached. When a decision changes, the ticket body is rewritten.
 
 ## 0.5.0
 
