@@ -16,20 +16,22 @@ A teammate may already have a version of this playbook. If they point at one, us
 
 ## When to use
 
-- The asker wants a first-pass brand file from a public site, before a designer takes over.
+- The intake card is filled and the asker wants a first-pass brand file from a public site, before a designer takes over.
 
 ## When not to use
 
+- The intake card is missing (that is [`design-brief`](../design-brief/SKILL.md)).
 - The site needs a login, or is not public.
 - Updating an existing Figma file or publishing a library (a director approves that; this playbook does not do it).
-- Checking a built page against frames (that is [`design-qa`](../design-qa/SKILL.md)).
+- Extracting from PDF or AI assets (that is [`brand-board-from-assets`](../brand-board-from-assets/SKILL.md)).
+- Checking a built page against frames (that is [`design-qa`](../design-qa/SKILL.md), run by the assurance agent).
 
 ## Steps
 
 1. Take the public URL from the asker. Stop if it needs a login.
 2. Ask whether a teammate already captured this brand. If a file exists and the asker does not want a fresh draft, stop and point at it.
-3. Read the live site from the asker's own connectors. Capture colour, type, spacing, logo and imagery notes, and key UI components as a snapshot. Flag unknowns. Do not invent tokens ([never-invent-facts](../../principles/never-invent-facts.md)).
-4. Create a **new** Figma file. Never edit an existing file. Never publish a library.
+3. Read the live site from the asker's own connectors. Capture colour, type, spacing, logo and imagery notes, and key UI components as a snapshot. Connector screenshots cap at 1024px; do not treat those as full-resolution proof. Flag unknowns. Do not invent tokens ([never-invent-facts](../../principles/never-invent-facts.md)).
+4. Create a **new** Figma file. Set the file name at creation. The Figma connector cannot rename a file. Never edit an existing file. Never publish a library. A view or guest seat cannot build libraries; stop if that is the asker's seat.
 5. Deliver the file link to the asker. Do not send it to a client.
 
 ## Stop
