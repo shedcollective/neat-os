@@ -49,6 +49,19 @@ Read by the `ticket` playbook when it creates or enhances a ticket. The shape an
 - Client vocabulary (the client's names for environments, features, roles; e.g. "UAT" not "staging"): awaiting interview
 - Standing acceptance criteria every ticket carries (each starting "Done when"): awaiting interview
 
+## Release
+
+Read by the `release` playbook ([neat-os skills/release/SKILL.md](https://github.com/shedcollective/neat-os/blob/develop/skills/release/SKILL.md)). These bullets are what differs per project. Leave a bullet as `awaiting interview` until a person answers. The playbook asks once and does not invent a value. `none` and `empty` are answers, defined in that playbook.
+
+- Version files: awaiting interview
+- Lock refresh: awaiting interview
+- Tag prefix: awaiting interview
+- Production branch: awaiting interview
+- Release branch prefix: awaiting interview
+- Finish hook: awaiting interview
+- Hook install: awaiting interview
+- Notes surface: awaiting interview
+
 ## Company knowledge
 
 How this project consumes neat-os (resolve and stop at the first hit: `NEAT_OS_ROOT`, then `github:shedcollective/neat-os#vX.Y.Z` or `file:../neat-os` → `node_modules/`, then Composer `shedcollective/neat-os` → `vendor/` which is PHP metadata only and does not ship skills/templates, then sibling `../neat-os`). Do not search the public web for neat-os. Do not copy skills into this repo. {{to confirm}}

@@ -10,6 +10,8 @@
 - Release branches from `develop` → `main` (and back to `develop`)
 - Hotfixes from `main`
 
+A release tag is reachable from the production branch. In this repository that branch is `main`. A product repository that uses another name, such as `master`, records it in the Release slot of `.agents/project.md`. A tag that exists only on the integration branch is not a release. The default branch is often the integration branch, so a tag or a published release that does not name the production branch lands there instead. The `release` playbook checks this before it stops ([../skills/release/SKILL.md](../skills/release/SKILL.md)). How this repository is tagged is [../docs/release.md](../docs/release.md).
+
 Agents branch from `develop` and open PRs **into `develop` only**. Humans merge. When the ticket is a GitHub Issue, the pull request that targets `develop` includes `Closes #<n>` in its body ([tickets.md](tickets.md)).
 
 ### PR titles
@@ -79,6 +81,7 @@ Why this shape is locked: [ADR-0014](../docs/decisions/0014-commit-shape-for-rev
 | --- | --- |
 | Workflow is git-flow | Here (do not ask in `gather`) |
 | This repo’s integration branch is actually named `develop` | Project `.agents/`. Confirm only if it might differ |
+| This repo’s production branch is `main`. A product repo may use another name | Project `.agents/project.md` Release slot |
 | Ticket prefix (Jira key, or `GH` for OS repos) | Project `.agents/` ([tickets.md](tickets.md) says which system) |
 | Feature branch / plan-file naming for *this* ticket scheme | Project `AGENTS.md` (template already has the pattern) |
 

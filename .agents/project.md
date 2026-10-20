@@ -11,7 +11,7 @@ Operational Agent Guide: [README.md](README.md). Canonical cross-IDE rules: [../
 Interview answers pre-supplied by a maintainer. Docker/Make evidence stays under Layout & start.
 
 - Client: none. This repository is the reference, so it has no external client.
-- Product (one paragraph): The agency AI operating system. A git-bound knowledge tree that every Shed repo consumes: three goals (Kaizen, Determinism, Parallelism) and the principles beneath them, locked engineering conventions, six playbooks (`init` scaffolds an IDE spread, `gather` fills it from evidence plus interview, `learn` proposes skill elevations, `ticket` writes a ticket, `assurance` posts an evidence pack on a pull request, `pin-majors-with-reasons` upgrades dependencies without moving a pinned major), the templates `init` copies, a mechanism taxonomy, and the ADRs recording why locked behaviour exists. `init`, `gather`, and `learn` are the launch playbooks. Consumed by Local/IDE agents as a git-pinned npm package and by Cloud Agents as a sibling checkout.
+- Product (one paragraph): The agency AI operating system. A git-bound knowledge tree that every Shed repo consumes: three goals (Kaizen, Determinism, Parallelism) and the principles beneath them, locked engineering conventions, playbooks (`init` scaffolds an IDE spread, `gather` fills it from evidence plus interview, `learn` proposes skill elevations, `ticket` writes a ticket, `assurance` posts an evidence pack on a pull request, `pin-majors-with-reasons` upgrades dependencies without moving a pinned major, `release` cuts a git-flow release from the Release slot and stops before deploy), the templates `init` copies, a mechanism taxonomy, and the ADRs recording why locked behaviour exists. `init`, `gather`, and `learn` are the launch playbooks. Consumed by Local/IDE agents as a git-pinned npm package and by Cloud Agents as a sibling checkout.
 - In scope / out of scope: In scope — everything company-wide and stack-agnostic listed above, the `scripts/check` pipeline, the npm/Composer consume metadata, and stack packs under `stacks/` (ADR-0013). Out of scope — any client or project fact (those live in each product repo's `.agents/`), tool wrappers (future `neat-os-tool-*`), and the Notion scratchpad (not a source of truth — ADR-0008).
 - Names or data that must not be renamed or exposed: package names `@shedcollective/neat-os` and `shedcollective/neat-os`; the env var `NEAT_OS_ROOT` (`SHED_OS_ROOT` is a deprecated fallback); the resolve order and mode names (`env`, `node_modules`, `vendor`, `sibling`, `checkout`, `missing`), ADR-0003; the slot paths `AGENTS.md`, `.agents/README.md`, `.agents/project.md`, `.agents/platforms/`, `.agents/features/`, `.agents/proposals/`, `stacks/`. No client names appear in this repo.
 
@@ -50,6 +50,19 @@ Read by the `ticket` playbook. Shape and tone: [../conventions/ticket-content.md
 - Default labels or components on a new ticket: none
 - Client vocabulary: none (no client; the readers are maintainers and agents)
 - Standing acceptance criteria every ticket carries: "Done when `bash scripts/check` passes on the pull request that closes this issue."
+
+## Release
+
+This repository is shipped by a person, following [../docs/release.md](../docs/release.md). The `release` playbook does not cut that release. Version files is `none`, so the playbook stops.
+
+- Version files: none
+- Lock refresh: none
+- Tag prefix: none
+- Production branch: `main`
+- Release branch prefix: `release/`
+- Finish hook: none
+- Hook install: none
+- Notes surface: none
 
 ## Company knowledge
 
