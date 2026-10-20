@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+`meeting-prep` is an agency operations playbook with two modes. `brief` prepares one person for the day's external or tagged meetings, reading the private operations record when one is set. `proposals` drafts numbered ticket proposals from the transcript afterwards. By default only one run drafts proposals: the internal organiser's, or the client's internal account owner's when the organiser is external. When no account owner is recorded, the meeting is logged and skipped. Nothing is applied until the person approves it. Internal domains, the prep tag, the ticket system host, the destination, the log path, and the account owner lookup are settings in each person's routine. The map is [docs/agency-ops.md](docs/agency-ops.md).
+
 `publish-npm` and `release-smoke` fail when the release tag is not reachable from `main`. Prepare release opens the pull request into `main` and a draft Release. A person merges with a merge commit, then publishes the draft, which creates the tag at the tip of `main`. The steps are in [docs/release.md](docs/release.md).
 
 A ticket records only the final decided outcome, stated as fact ([conventions/ticket-content.md](conventions/ticket-content.md), [ADR-0020](docs/decisions/0020-ticket-records-the-decided-outcome.md)). The body does not keep the request, the discussion, or a history of how the decision was reached. When a decision changes, the ticket body is rewritten.
