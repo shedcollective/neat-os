@@ -18,7 +18,7 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 | [`enhance-daily-update`](../skills/enhance-daily-update/SKILL.md) | Appends detail from one perspective into the **same** `###` project sections, using that person's own connectors. | Introduce Front end / Back end / Perspective silos. Use another person's private connectors. Duplicate overview points. |
 | [`project-update`](../skills/project-update/SKILL.md) | Produces a short project status from the operations record and live connectors. | Invent project facts. Post externally without approval. |
 | [`client-brief`](../skills/client-brief/SKILL.md) | Assembles a high-level client brief with no billing figures. | Write amounts, rates, or credentials into the brief. |
-| [`meeting-prep`](../skills/meeting-prep/SKILL.md) | Briefs one person before each external or tagged meeting (modes `scan`, `recheck`, `brief`), then drafts numbered ticket proposals from the transcript (mode `proposals`, organiser only). All company and account facts come from the person's routine settings. | Apply a ticket change the person has not approved in their own chat. Send anything outside that chat. Name the person in their own brief. List an owed action without checking its ticket. |
+| [`meeting-prep`](../skills/meeting-prep/SKILL.md) | Briefs one person before each external or tagged meeting (mode `brief`), then drafts numbered ticket proposals from the transcript (mode `proposals`, organiser only by default). All company and account facts come from the person's routine settings. | Apply a ticket change the person has not approved. Send anything outside `<destination>`. Name the person in their own brief. List an owed action without checking its ticket. |
 
 ## Template
 
@@ -28,4 +28,4 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 
 ## Order
 
-A weekday overview run follows `daily-burndown`. Perspective add-ons follow `enhance-daily-update` after the shared body exists. `project-update` and `client-brief` run on demand. Each person who wants meeting preparation runs `meeting-prep` from their own routines: `scan` the evening before, `recheck` and `brief` on the morning, and `proposals` through the working day. Elevating further agency rules into this repository is a human pull request ([propose-never-promote](../principles/propose-never-promote.md)).
+A weekday overview run follows `daily-burndown`. Perspective add-ons follow `enhance-daily-update` after the shared body exists. `project-update` and `client-brief` run on demand. Each person who wants meeting preparation runs `meeting-prep` from their own routine: `brief` before the day's meetings, `proposals` through the working day. Elevating further agency rules into this repository is a human pull request ([propose-never-promote](../principles/propose-never-promote.md)).

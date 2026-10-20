@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-`meeting-prep` is an agency operations playbook. It briefs one person before each external or tagged meeting and drafts numbered ticket proposals from the transcript afterwards. Only the meeting organiser's run drafts proposals, and nothing is applied until the person approves it in their own chat. Internal domains, the prep tag, the brief deadline, the ticket system host, and the state folder are settings in each person's routine. The map is [docs/agency-ops.md](docs/agency-ops.md).
+`meeting-prep` is an agency operations playbook with two modes. `brief` prepares one person for the day's external or tagged meetings, reading the private operations record when one is set. `proposals` drafts numbered ticket proposals from the transcript afterwards. By default only the meeting organiser's run drafts proposals, and nothing is applied until the person approves it. Internal domains, the prep tag, the ticket system host, the destination, and the log path are settings in each person's routine. The map is [docs/agency-ops.md](docs/agency-ops.md).
 
 `publish-npm` and `release-smoke` fail when the release tag is not reachable from `main`. Prepare release opens the pull request into `main` and a draft Release. A person merges with a merge commit, then publishes the draft, which creates the tag at the tip of `main`. The steps are in [docs/release.md](docs/release.md).
 
