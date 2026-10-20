@@ -603,6 +603,15 @@ for (const sentence of [
   'Do not change a ticket\'s status',
   'Do not send anything to a client',
   'Links only',
+  '2 to 3 Figma options',
+  'lock owner named on the brief',
+  'EXAMPLE DATA',
+  'design/<brand>/',
+  'tokens.json',
+  'belongs to the assurance role',
+  'Do not write code, open a code pull request, or merge',
+  'Never use a team secret',
+  'Set the file name at creation',
 ]) {
   if (!designUxConvention.includes(sentence)) {
     fail(`conventions/design-ux-agents.md must lock design and UX agent rules: missing "${sentence}"`);
@@ -626,6 +635,17 @@ for (const rel of ['templates/agent/passport-design.md', 'templates/agent/passpo
   if (!text.includes('Passport owner | director')) {
     fail(`${rel} must name director as the passport owner role`);
   }
+  if (!text.includes('<YYYY-MM-DD>')) {
+    fail(`${rel} Review date must stay a placeholder`);
+  }
+}
+
+const designPassport = read('templates/agent/passport-design.md');
+if (designPassport.includes('Canva')) {
+  fail('templates/agent/passport-design.md must not list Canva');
+}
+if (!designPassport.includes('2 to 3 Figma options')) {
+  fail('templates/agent/passport-design.md Job must be 2 to 3 Figma options a lock owner picks');
 }
 
 for (const [rel, refuse] of [
@@ -633,6 +653,11 @@ for (const [rel, refuse] of [
   ['skills/design-qa/SKILL.md', 'Comment on the ticket or pull request'],
   ['skills/ux-audit/SKILL.md', 'Do not edit the site'],
   ['skills/research-synthesis/SKILL.md', 'Strip personal data'],
+  ['skills/design-brief/SKILL.md', 'Check the asker\'s Figma seat first'],
+  ['skills/mockup/SKILL.md', 'EXAMPLE DATA'],
+  ['skills/design-handoff/SKILL.md', 'conventions/ticket-content.md'],
+  ['skills/brand-board-from-assets/SKILL.md', 'open-decisions'],
+  ['skills/naming-and-voice/SKILL.md', 'locked.md'],
 ]) {
   const text = read(rel);
   if (!text.includes(refuse)) {
