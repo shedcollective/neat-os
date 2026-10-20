@@ -181,12 +181,33 @@ for (const banned of ['copy-templates.sh', 'light-scan']) {
 if (!/ticket-content\.md/.test(ticketSkill)) {
   fail('skills/ticket/SKILL.md must read conventions/ticket-content.md');
 }
-// The section list and its order are the locked shape (ADR-0012).
+// The section list and its order are the locked shape (ADR-0012, ADR-0020).
 const ticketConvention = read('conventions/ticket-content.md');
-const ticketSections = ['Title', 'Original request', 'More information needed', 'Why', 'What', 'How to replicate', 'Out of scope', 'Acceptance criteria', 'Links', 'Attachments'];
+const ticketSections = ['Title', 'More information needed', 'Why', 'What', 'How to replicate', 'Out of scope', 'Acceptance criteria', 'Links', 'Attachments'];
 const sectionRows = [...ticketConvention.matchAll(/^\| ([A-Z][a-z ]+) \| (yes|bugs only|when useful|when the request is unclear) \|/gm)].map((m) => m[1]);
 if (sectionRows.join('|') !== ticketSections.join('|')) {
   fail(`conventions/ticket-content.md sections must be, in order: ${ticketSections.join(', ')}; got ${sectionRows.join(', ') || 'none'}`);
+}
+// A ticket records only the decided outcome (ADR-0020). The three sentences
+// live in the convention and the playbook. The old section name must not return.
+const decidedOutcomeSentences = [
+  'final decided outcome, stated as fact',
+  'original request text, meeting discussion, options considered, attributions',
+  'rewrite the ticket body to the new decision instead of appending history',
+];
+for (const rel of ['conventions/ticket-content.md', 'skills/ticket/SKILL.md']) {
+  const text = rel === 'conventions/ticket-content.md' ? ticketConvention : ticketSkill;
+  for (const sentence of decidedOutcomeSentences) {
+    if (!text.includes(sentence)) {
+      fail(`${rel} must lock the decided-outcome rule (ADR-0020): missing "${sentence}"`);
+    }
+  }
+  if (text.includes('Original request')) {
+    fail(`${rel} must not tell writers to keep an Original request section (ADR-0020)`);
+  }
+}
+if (read('docs/launch-skills.md').includes('Original request')) {
+  fail('docs/launch-skills.md must not list an Original request section (ADR-0020)');
 }
 if (!ticketConvention.includes('Done when')) {
   fail('conventions/ticket-content.md must lock the "Done when" acceptance criteria shape');
