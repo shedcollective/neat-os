@@ -1,6 +1,6 @@
 # Install neat-os in a product repository
 
-"Consume" is the word this repository uses for installing neat-os so that an agent working in a product repository can find the playbooks, principles, and conventions. This page holds the install recipes. The root README and the package READMEs point here and do not repeat them.
+"Consume" is the word this repository uses for installing neat-os so that an agent working in a product repository can find the playbooks, principles, and conventions. This page holds the install recipes, and the recipe for moving a wrapper pin. The root README and the package READMEs point here and do not repeat them.
 
 Access for the git pin is GitHub read access to `shedcollective/neat-os`. The same SSH key or token that clones the product repository installs neat-os from git, for both Node and Composer.
 
@@ -179,6 +179,17 @@ Pin an exact tag. `npm ci` and `composer install` install the locked commit, so 
 ### Update copied guide sentences
 
 After the pin moves, update the product repository's guide only where [`templates/AGENTS.md`](../templates/AGENTS.md) or a [convention](../conventions/README.md) changed a sentence that the guide copied. Do not write the release version into that repository's `AGENTS.md` or `.agents/project.md`. The pin is `package.json`. The [Company knowledge](../templates/.agents/project.md#company-knowledge) slot records the consume mode, not the tag.
+
+## Move a wrapper pin
+
+A wrapper is not a product repository. It reads playbooks through a git ref in [templates/ops/bot-skill.md](../templates/ops/bot-skill.md). The pin rule is in [routine-settings.md](../conventions/routine-settings.md) ([ADR-0021](decisions/0021-wrapper-release-tag-pins.md)). After a release, bump that tag.
+
+1. Pick one wrapper as the canary. Change its pin from the old tag to the new tag (`vX.Y.Z`).
+2. Open one pull request for that wrapper. A person reviews and merges.
+3. Watch one run. If it fails, revert that pull request to roll back.
+4. Repeat for each remaining wrapper, one pull request each.
+
+Do not pin `develop`. Do not pin `main` except as a stopgap until the next tag. Filled wrappers live outside this repository. This page does not list them.
 
 ## Access
 
