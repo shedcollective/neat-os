@@ -21,6 +21,7 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 
 - Writing or extending the day file (that is `daily-burndown` or `enhance-daily-update`).
 - A status for one named project (that is [`project-update`](../project-update/SKILL.md)).
+- One person's morning message (that is [`morning-brief`](../morning-brief/SKILL.md)). `daily-digest` is the end-of-day team post. The composition rule is on [docs/agency-ops.md](../../docs/agency-ops.md).
 
 ## Settings
 
