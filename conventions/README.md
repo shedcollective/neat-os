@@ -11,6 +11,7 @@ Locked engineering defaults for Shed. These are company knowledge: `gather` must
 | Neutral reference: name roles, not people, clients, projects, products, or bots | [neutral-reference.md](neutral-reference.md) |
 | Never store secrets, credentials, or project-specific information in this repository | [never-store-secrets.md](never-store-secrets.md) |
 | Agent work logging: shared digests log work only; no personal chatter, billing amounts, or secrets | [agent-work-logging.md](agent-work-logging.md) |
+| Routine settings: the fixed names a routine supplies to an agency operations playbook | [routine-settings.md](routine-settings.md) |
 | The lockfile beside a manifest names the installer for that directory | [lockfile.md](lockfile.md) |
 | Improvement record: a baseline before the change, the same measure after, a summary a person approves | [improvement-record.md](improvement-record.md) |
 

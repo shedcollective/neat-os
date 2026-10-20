@@ -118,6 +118,8 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 
 `init`, `gather`, `learn`, `ticket`, and `improve` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). All playbooks are under [skills/](skills/).
 
+`daily-digest` turns the day file into a short end-of-day post for a team channel. Agency operations playbooks take their inputs from the settings in [conventions/routine-settings.md](conventions/routine-settings.md).
+
 ## Releases and pinning
 
 <p align="center">

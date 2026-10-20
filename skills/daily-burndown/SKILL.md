@@ -7,9 +7,13 @@ description: >-
 
 # daily-burndown
 
-Collect the day's work activity from the asker's connected sources and write one day file plus a refreshed in-flight board into the **private operations record** the routine or asker names. Apply [conventions/agent-work-logging.md](../../conventions/agent-work-logging.md).
+Collect the day's work activity from the asker's connected sources and write one day file plus a refreshed in-flight board into `<ops-record>`. Apply [conventions/agent-work-logging.md](../../conventions/agent-work-logging.md).
 
 This is **not** a launch playbook. Do not run it from `init`, `gather`, or `learn`. Locate neat-os the same way those playbooks do (`resolve-consume.sh` / `require('@shedcollective/neat-os').resolveConsume()`). **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
+
+## Settings
+
+The routine supplies these values, named as in [conventions/routine-settings.md](../../conventions/routine-settings.md): `<ops-record>`, `<timezone>`, `<connectors>`, `<write-rule>`, and `<quiet-when-empty>`. If a required setting is missing, ask once and stop.
 
 ## When to use
 
@@ -25,11 +29,11 @@ This is **not** a launch playbook. Do not run it from `init`, `gather`, or `lear
 ## Hard rules
 
 - **Work only.** Follow [agent-work-logging.md](../../conventions/agent-work-logging.md). Direct messages are logged only when clearly work, and only as a short summary. When the team uses Slack Connect or other external client channels, treat those as work sources the same way as agreed team channels.
-- **Asker's connectors only.** Never invent a source that is not connected. List missing sources under Sources unavailable ([never-invent-facts](../../principles/never-invent-facts.md)).
+- **`<connectors>` only.** Never invent a source that is not connected. List missing sources under Sources unavailable ([never-invent-facts](../../principles/never-invent-facts.md)).
 - **No billing amounts** in the day file or the in-flight board.
 - **No secrets** ([never-store-secrets.md](../../conventions/never-store-secrets.md)).
 - Write the **shared day body** only: Agency state, project sections, Agency, Sources unavailable. Fill **by project**, not by source type. Leave later perspective detail for `enhance-daily-update`, which appends into the same `###` project sections.
-- Stay quiet when there is nothing work-related to report, unless the routine requires an explicit empty stub.
+- When there is nothing work-related to report, follow `<quiet-when-empty>`: stay quiet, or write an explicit empty stub.
 - One line per fact. Do not invent holidays, absences, or leave from a misread message.
 
 ## Day shape
@@ -45,12 +49,12 @@ There are no separate top-level perspective wrappers in the day file.
 
 ## Steps
 
-1. **Resolve the date** in the team's local timezone (default: today). Build the day path the record uses, typically `burndown/YYYY/MM/YYYY-MM-DD.md`.
-2. **Confirm the operations record** (clone or remote) the routine names. Stop if it is missing.
-3. **Collect work activity** for that local day from connected sources the asker has: version control pushes and pull requests, team channels, Slack Connect / external client channels when the team uses them, the asker's work-related direct messages, calendar meetings (including OOO / holiday calendars), meeting notes, work email, and tickets that moved.
+1. **Resolve the date** in `<timezone>` (default: today). Build the day path the record uses, typically `burndown/YYYY/MM/YYYY-MM-DD.md`.
+2. **Confirm `<ops-record>`** (clone or remote). Stop if it is missing.
+3. **Collect work activity** for that local day from `<connectors>`: version control pushes and pull requests, team channels, Slack Connect / external client channels when the team uses them, the asker's work-related direct messages, calendar meetings (including OOO / holiday calendars), meeting notes, work email, and tickets that moved.
 4. **Draft the day file** from the template. Agency state first, then projects, Agency, and Sources unavailable.
 5. **Refresh the in-flight board** in that record: project, what is in flight, owner, done when, blocked.
-6. **Commit** the day file and the in-flight board per that record's write rules (often direct to its default branch for those two paths). Never rewrite history. Prefer merge commits on feature branches ([conventions/git.md](../../conventions/git.md)).
+6. **Commit** the day file and the in-flight board per `<write-rule>` (normally direct to the default branch for those two paths). Never rewrite history. Prefer merge commits on feature branches ([conventions/git.md](../../conventions/git.md)).
 7. **Voice:** British English, short active sentences. Lead with the decision, the owner, and the next move. Do not name bots ([conventions/writing.md](../../conventions/writing.md), [neutral-reference.md](../../conventions/neutral-reference.md)).
 
 ## Stop
