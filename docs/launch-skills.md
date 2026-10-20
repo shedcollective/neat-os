@@ -72,7 +72,7 @@ These two are playbooks, and they are not part of adoption. `assurance` reads on
 
 ## Agency operations playbooks
 
-`daily-burndown`, `enhance-daily-update`, `project-update`, and `client-brief` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
+`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, and `meeting-prep` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
 
 ## Order on a product repository
 
