@@ -258,7 +258,7 @@ const categoryRows = [...improveConvention.matchAll(/^\| (Measured|Counted|Obser
 if (categoryRows.join('|') !== improveCategories.join('|')) {
   fail(`conventions/improvement-record.md categories must be, in order: ${improveCategories.join(', ')}; got ${categoryRows.join(', ') || 'none'}`);
 }
-const improveKeys = ['ticket', 'title', 'category', 'area', 'measure', 'baseline', 'result', 'summary', 'status', 'approved_by', 'approved_on'];
+const improveKeys = ['ticket', 'title', 'category', 'area', 'audience', 'measure', 'unit', 'better', 'baseline', 'result', 'summary', 'status', 'approved_by', 'approved_on'];
 const keyRows = [...improveConvention.matchAll(/^\| ([a-z_]+) \| (yes|once the change is live|once the result is in|when approved) \|/gm)].map((m) => m[1]);
 if (keyRows.join('|') !== improveKeys.join('|')) {
   fail(`conventions/improvement-record.md keys must be, in order: ${improveKeys.join(', ')}; got ${keyRows.join(', ') || 'none'}`);
@@ -266,6 +266,9 @@ if (keyRows.join('|') !== improveKeys.join('|')) {
 for (const [rel, text] of [['conventions/improvement-record.md', improveConvention], ['skills/improve/SKILL.md', improveSkill]]) {
   if (!text.includes('A person sets status to approved')) {
     fail(`${rel} must lock the sign-off rule (ADR-0021): missing "A person sets status to approved"`);
+  }
+  if (!/audience: internal/.test(text)) {
+    fail(`${rel} must write audience: internal so a person raises it (ADR-0021)`);
   }
 }
 if (!/^## Example/m.test(improveConvention)) {

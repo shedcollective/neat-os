@@ -56,6 +56,7 @@ Read by the `improve` playbook when it records an improvement on the live produc
 - Summary approver (the role that sets a record to approved; the account owner when empty): awaiting interview
 - Measuring tools and where their reports are kept (for example a Lighthouse run in CI, an accessibility scanner): awaiting interview
 - Analytics source for observed changes (the tool and who has access): awaiting interview
+- Public use of improvement results (whether the client agreed, who agreed, and when; empty means not agreed): awaiting interview
 
 ## Company knowledge
 
