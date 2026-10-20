@@ -9,6 +9,7 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 | Convention | File |
 | --- | --- |
 | What may be written into a shared work digest | [agent-work-logging.md](../conventions/agent-work-logging.md) |
+| The setting names a routine supplies to every playbook on this page | [routine-settings.md](../conventions/routine-settings.md) |
 
 ## Playbooks
 
