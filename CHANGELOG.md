@@ -4,6 +4,8 @@
 
 `publish-npm` and `release-smoke` fail when the release tag is not reachable from `main`. Prepare release opens the pull request into `main` and a draft Release. A person merges with a merge commit, then publishes the draft, which creates the tag at the tip of `main`. The steps are in [docs/release.md](docs/release.md).
 
+`daily-digest` is an agency operations playbook. It distils the day file into a short end-of-day post and delivers it to the routine's destination. Agency operations playbooks now name their inputs with the settings in [conventions/routine-settings.md](conventions/routine-settings.md), and [templates/ops/bot-skill.md](templates/ops/bot-skill.md) is the thin wrapper a person's agent uses to run one. The map is [docs/agency-ops.md](docs/agency-ops.md).
+
 A ticket records only the final decided outcome, stated as fact ([conventions/ticket-content.md](conventions/ticket-content.md), [ADR-0020](docs/decisions/0020-ticket-records-the-decided-outcome.md)). The body does not keep the request, the discussion, or a history of how the decision was reached. When a decision changes, the ticket body is rewritten.
 
 ## 0.5.0

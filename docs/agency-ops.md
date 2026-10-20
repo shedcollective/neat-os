@@ -17,6 +17,7 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 | --- | --- | --- |
 | [`daily-burndown`](../skills/daily-burndown/SKILL.md) | Writes the shared day body (Agency state first, then **by project**, Agency, Sources unavailable) into the private operations record and refreshes the in-flight board. | Log personal chatter, billing amounts, secrets, or invented leave. Invent missing sources. |
 | [`enhance-daily-update`](../skills/enhance-daily-update/SKILL.md) | Appends detail from one perspective into the **same** `###` project sections, using that person's own connectors. | Introduce Front end / Back end / Perspective silos. Use another person's private connectors. Duplicate overview points. |
+| [`daily-digest`](../skills/daily-digest/SKILL.md) | Distils the day file into a short end-of-day post (notable projects, People, Tomorrow) and delivers it to `<destination>`. | Post a code block. Write a bare deadline with no context. List unverified leave. Include amounts. |
 | [`project-update`](../skills/project-update/SKILL.md) | Produces a short project status from the operations record and live connectors. | Invent project facts. Post externally without approval. |
 | [`client-brief`](../skills/client-brief/SKILL.md) | Assembles a high-level client brief with no billing figures. | Write amounts, rates, or credentials into the brief. |
 
@@ -26,6 +27,10 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 | --- | --- |
 | [templates/ops/burndown-day.md](../templates/ops/burndown-day.md) | Day-file shape: Agency state first, then project sections with `####` activity headings, Agency, Sources unavailable. One shared body; perspective runs append into those project sections. Copy into the private operations record, or point the playbook at this path in the neat-os install. |
 | [templates/ops/bot-skill.md](../templates/ops/bot-skill.md) | Thin wrapper a person's agent uses to run one playbook: trigger, the playbook at a pinned ref, a settings table ([routine-settings.md](../conventions/routine-settings.md)), and at most five local rules. |
+
+## Routines
+
+Each person runs these playbooks from their own agent through a thin wrapper ([templates/ops/bot-skill.md](../templates/ops/bot-skill.md)) that supplies the settings in [routine-settings.md](../conventions/routine-settings.md). A wrapper pins `main` or a release tag. `daily-digest` runs after the day's `daily-burndown` and `enhance-daily-update` runs have written the day file.
 
 ## Order
 
