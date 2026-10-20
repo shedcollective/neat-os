@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+`meeting-prep` is an agency operations playbook with two modes. `brief` prepares one person for the day's external or tagged meetings, reading the private operations record when one is set. `proposals` drafts numbered ticket proposals from the transcript afterwards. By default only one run drafts proposals: the internal organiser's, or the client's internal account owner's when the organiser is external. When no account owner is recorded, the meeting is logged and skipped. Nothing is applied until the person approves it. Internal domains, the prep tag, the ticket system host, the destination, the log path, and the account owner lookup are settings in each person's routine. The map is [docs/agency-ops.md](docs/agency-ops.md).
+
 `publish-npm` and `release-smoke` fail when the release tag is not reachable from `main`. Prepare release opens the pull request into `main` and a draft Release. A person merges with a merge commit, then publishes the draft, which creates the tag at the tip of `main`. The steps are in [docs/release.md](docs/release.md).
 
 `daily-digest` is an agency operations playbook. It distils the day file into a short end-of-day post and delivers it to the routine's destination. Agency operations playbooks now name their inputs with the settings in [conventions/routine-settings.md](conventions/routine-settings.md), and [templates/ops/bot-skill.md](templates/ops/bot-skill.md) is the thin wrapper a person's agent uses to run one. The map is [docs/agency-ops.md](docs/agency-ops.md).
