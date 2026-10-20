@@ -12,6 +12,7 @@ Locked engineering defaults for Shed. These are company knowledge: `gather` must
 | Never store secrets, credentials, or project-specific information in this repository | [never-store-secrets.md](never-store-secrets.md) |
 | Agent work logging: shared digests log work only; no personal chatter, billing amounts, or secrets | [agent-work-logging.md](agent-work-logging.md) |
 | The lockfile beside a manifest names the installer for that directory | [lockfile.md](lockfile.md) |
+| Improvement record: a baseline before the change, the same measure after, a summary a person approves | [improvement-record.md](improvement-record.md) |
 
 ## Where a fact belongs
 
