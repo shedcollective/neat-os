@@ -58,6 +58,9 @@ const required = [
   'skills/gather/scripts/light-scan.js',
   'skills/learn/SKILL.md',
   'skills/ticket/SKILL.md',
+  'skills/improve/SKILL.md',
+  'conventions/improvement-record.md',
+  'templates/.agents/improvements/README.md',
   'templates/AGENTS.md',
   'templates/.agents/README.md',
   'templates/.agents/project.md',
@@ -232,6 +235,50 @@ if (!/^## Example$/m.test(ticketConvention)) {
 const ticketsSlotTemplate = read('templates/.agents/project.md');
 if (!/^## Tickets$/m.test(ticketsSlotTemplate)) {
   fail('templates/.agents/project.md must carry a Tickets slot for the ticket playbook to read');
+}
+
+// improve writes one record in the locked shape and never approves it (ADR-0021).
+// The categories, the key order, and the sign-off sentence live in the
+// convention; the playbook reads the convention instead of restating it.
+if (fs.existsSync(path.join(root, 'skills/improve/scripts'))) {
+  fail('skills/improve/ must not carry scripts: the playbook uses the measuring tool the project already has (ADR-0021)');
+}
+const improveSkill = read('skills/improve/SKILL.md');
+const improveConvention = read('conventions/improvement-record.md');
+if (!/improvement-record\.md/.test(improveSkill)) {
+  fail('skills/improve/SKILL.md must read conventions/improvement-record.md');
+}
+for (const banned of ['copy-templates.sh', 'light-scan']) {
+  if (improveSkill.includes(banned)) {
+    fail(`skills/improve/SKILL.md must not invoke ${banned}`);
+  }
+}
+const improveCategories = ['Measured', 'Counted', 'Observed'];
+const categoryRows = [...improveConvention.matchAll(/^\| (Measured|Counted|Observed) \| /gm)].map((m) => m[1]);
+if (categoryRows.join('|') !== improveCategories.join('|')) {
+  fail(`conventions/improvement-record.md categories must be, in order: ${improveCategories.join(', ')}; got ${categoryRows.join(', ') || 'none'}`);
+}
+const improveKeys = ['ticket', 'title', 'category', 'area', 'measure', 'baseline', 'result', 'summary', 'status', 'approved_by', 'approved_on'];
+const keyRows = [...improveConvention.matchAll(/^\| ([a-z_]+) \| (yes|once the change is live|once the result is in|when approved) \|/gm)].map((m) => m[1]);
+if (keyRows.join('|') !== improveKeys.join('|')) {
+  fail(`conventions/improvement-record.md keys must be, in order: ${improveKeys.join(', ')}; got ${keyRows.join(', ') || 'none'}`);
+}
+for (const [rel, text] of [['conventions/improvement-record.md', improveConvention], ['skills/improve/SKILL.md', improveSkill]]) {
+  if (!text.includes('A person sets status to approved')) {
+    fail(`${rel} must lock the sign-off rule (ADR-0021): missing "A person sets status to approved"`);
+  }
+}
+if (!/^## Example/m.test(improveConvention)) {
+  fail('conventions/improvement-record.md must carry an Examples section with one record per category');
+}
+for (const category of ['measured', 'counted', 'observed']) {
+  if (!new RegExp(`^category: ${category}$`, 'm').test(improveConvention)) {
+    fail(`conventions/improvement-record.md examples must include a ${category} record`);
+  }
+}
+const improvementsSlotTemplate = read('templates/.agents/project.md');
+if (!/^## Improvements$/m.test(improvementsSlotTemplate)) {
+  fail('templates/.agents/project.md must carry an Improvements slot for the improve playbook to read');
 }
 
 // Package identity and version agreement.
