@@ -612,6 +612,9 @@ for (const sentence of [
   'Do not write code, open a code pull request, or merge',
   'Never use a team secret',
   'Set the file name at creation',
+  'dedicated throwaway',
+  'Self-merge stays forbidden everywhere else',
+  'Keyword volumes cite',
 ]) {
   if (!designUxConvention.includes(sentence)) {
     fail(`conventions/design-ux-agents.md must lock design and UX agent rules: missing "${sentence}"`);
@@ -653,6 +656,7 @@ for (const [rel, refuse] of [
   ['skills/design-qa/SKILL.md', 'Comment on the ticket or pull request'],
   ['skills/ux-audit/SKILL.md', 'Do not edit the site'],
   ['skills/research-synthesis/SKILL.md', 'Strip personal data'],
+  ['skills/wireframes/SKILL.md', 'Do not merge'],
   ['skills/design-brief/SKILL.md', 'Check the asker\'s Figma seat first'],
   ['skills/mockup/SKILL.md', 'EXAMPLE DATA'],
   ['skills/design-handoff/SKILL.md', 'conventions/ticket-content.md'],
