@@ -59,6 +59,7 @@ const required = [
   'skills/learn/SKILL.md',
   'skills/ticket/SKILL.md',
   'templates/AGENTS.md',
+  'templates/ops/bot-skill.md',
   'templates/.agents/README.md',
   'templates/.agents/project.md',
   'templates/.agents/docs/.gitkeep',
@@ -505,6 +506,87 @@ const docsIndex = read('docs/README.md');
 for (const name of fs.readdirSync(path.join(root, 'docs')).filter((n) => n.endsWith('.md') && n !== 'README.md')) {
   if (!docsIndex.includes(`(${name})`)) {
     fail(`docs/README.md does not list ${name}`);
+  }
+}
+
+// Wrapper templates pin a release tag, never a branch (ADR-0021).
+// check-policy.js is at its cap of ten, so this lives here with the
+// release-tag-on-main guard rather than as a prose policy.
+function wrapperPinRefAllowed(ref) {
+  if (ref === 'vX.Y.Z') return true;
+  return /^v\d+\.\d+\.\d+$/.test(ref);
+}
+
+function githubBlobRefs(text) {
+  const refs = [];
+  const re = /github\.com\/shedcollective\/neat-os\/(?:blob|raw|tree)\/([^/#?\s)]+)/g;
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    refs.push(match[1]);
+  }
+  return refs;
+}
+
+for (const [ref, allowed] of [
+  ['v0.5.0', true],
+  ['vX.Y.Z', true],
+  ['v1.2.3', true],
+  ['develop', false],
+  ['main', false],
+  ['master', false],
+  ['HEAD', false],
+  ['release/0.5.0', false],
+]) {
+  if (wrapperPinRefAllowed(ref) !== allowed) {
+    fail(`wrapper pin classifier (ADR-0021): ${ref} should be ${allowed ? 'allowed' : 'forbidden'}`);
+  }
+}
+
+const wrapperTemplate = read('templates/ops/bot-skill.md');
+if (!wrapperTemplate.includes('say so and stop')) {
+  fail('templates/ops/bot-skill.md must stop when the pin is a branch (ADR-0021)');
+}
+if (!wrapperTemplate.includes('blob/vX.Y.Z/')) {
+  fail('templates/ops/bot-skill.md must pin GitHub playbook links to vX.Y.Z (ADR-0021)');
+}
+if (/Pin `main` or a release tag/.test(wrapperTemplate)) {
+  fail('templates/ops/bot-skill.md must not treat main as a first-class pin (ADR-0021)');
+}
+const wrapperRefs = githubBlobRefs(wrapperTemplate);
+if (!wrapperRefs.length) {
+  fail('templates/ops/bot-skill.md must contain a GitHub blob pin (ADR-0021)');
+}
+for (const ref of wrapperRefs) {
+  if (!wrapperPinRefAllowed(ref)) {
+    fail(`templates/ops/bot-skill.md pins a branch or non-tag ref "${ref}"; pin a release tag (ADR-0021)`);
+  }
+}
+
+const routineSettings = read('conventions/routine-settings.md');
+for (const sentence of [
+  'Pin a release tag',
+  '`main` is a stopgap only',
+  '`develop` and other branches never',
+]) {
+  if (!routineSettings.includes(sentence)) {
+    fail(`conventions/routine-settings.md must lock wrapper pins (ADR-0021): missing "${sentence}"`);
+  }
+}
+if (/Pin `main` or a release tag/.test(routineSettings)) {
+  fail('conventions/routine-settings.md must not treat main as a first-class pin (ADR-0021)');
+}
+
+const consumeDocs = read('docs/consume.md');
+if (!/^## Move a wrapper pin$/m.test(consumeDocs)) {
+  fail('docs/consume.md must document how to bump a wrapper pin (ADR-0021)');
+}
+for (const sentence of [
+  'one pull request for that wrapper',
+  'Pick one wrapper as the canary',
+  'revert that pull request to roll back',
+]) {
+  if (!consumeDocs.includes(sentence)) {
+    fail(`docs/consume.md must lock the wrapper upgrade path (ADR-0021): missing "${sentence}"`);
   }
 }
 
