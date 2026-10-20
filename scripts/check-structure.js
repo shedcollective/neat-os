@@ -58,6 +58,7 @@ const required = [
   'skills/gather/scripts/light-scan.js',
   'skills/learn/SKILL.md',
   'skills/ticket/SKILL.md',
+  'skills/release/SKILL.md',
   'templates/AGENTS.md',
   'templates/.agents/README.md',
   'templates/.agents/project.md',
@@ -232,6 +233,18 @@ if (!/^## Example$/m.test(ticketConvention)) {
 const ticketsSlotTemplate = read('templates/.agents/project.md');
 if (!/^## Tickets$/m.test(ticketsSlotTemplate)) {
   fail('templates/.agents/project.md must carry a Tickets slot for the ticket playbook to read');
+}
+if (!/^## Release$/m.test(ticketsSlotTemplate)) {
+  fail('templates/.agents/project.md must carry a Release slot for the release playbook to read');
+}
+const releaseSkill = read('skills/release/SKILL.md');
+if (!/^disable-model-invocation:\s*true\s*$/m.test(releaseSkill)) {
+  fail('skills/release/SKILL.md must set disable-model-invocation: true so it runs only when named');
+}
+for (const needle of ['.agents/project.md', 'git flow release finish', '--no-verify', 'force-push', 'merge-base --is-ancestor']) {
+  if (!releaseSkill.includes(needle)) {
+    fail(`skills/release/SKILL.md must keep the release guard (${needle})`);
+  }
 }
 
 // Package identity and version agreement.

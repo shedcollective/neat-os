@@ -10,7 +10,7 @@ This is the Shed agency OS core: shared principles, launch skills, and the proje
 
 - [principles/](principles/README.md) — three goals (Kaizen, Determinism, Parallelism) and the short principle leaves under them; read the index at task start
 - [conventions/](conventions/README.md) — locked engineering defaults (git-flow, ticket systems, ticket content)
-- [skills/](skills/) — launch and on-demand playbooks in `SKILL.md` format (`init`, `gather`, `learn`, `ticket`, `assurance`, `pin-majors-with-reasons`, plus agency ops: `daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `daily-digest`, `meeting-prep`). `ticket` writes to Jira or GitHub Issues only, never to a repository. Agency ops map: [docs/agency-ops.md](docs/agency-ops.md)
+- [skills/](skills/) — launch and on-demand playbooks in `SKILL.md` format (`init`, `gather`, `learn`, `ticket`, `assurance`, `pin-majors-with-reasons`, `release`, plus agency ops: `daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `daily-digest`, `meeting-prep`). `ticket` writes to Jira or GitHub Issues only, never to a repository. Agency ops map: [docs/agency-ops.md](docs/agency-ops.md)
 - [templates/](templates/) — Agent Guide + project slots `init` copies into a target project (not company skills)
 - [stacks/](stacks/) — stack packs (`nails/`, later Laravel and WordPress). `gather` points a product repo at the matching pack; they are not copied ([ADR-0013](docs/decisions/0013-stack-packs-in-shed-os.md))
 - [schema/](schema/README.md) — mechanism taxonomy: principle / convention / playbook / skill / script / agent

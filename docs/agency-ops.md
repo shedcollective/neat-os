@@ -1,6 +1,6 @@
 # Agency operations
 
-neat-os is the agency rulebook for Shed agents, not only the coding-agent install. Coding playbooks (`init`, `gather`, `learn`, `ticket`, `assurance`, `pin-majors-with-reasons`) adopt and run product repositories. The playbooks on this page cover shared **operations** work: day digests, perspective add-ons, project status, client briefs, and meeting preparation.
+neat-os is the agency rulebook for Shed agents, not only the coding-agent install. Coding playbooks (`init`, `gather`, `learn`, `ticket`, `assurance`, `pin-majors-with-reasons`, `release`) adopt and run product repositories. The playbooks on this page cover shared **operations** work: day digests, perspective add-ons, project status, client briefs, and meeting preparation.
 
 Living operational state (day files, in-flight boards, client folders) stays in a **private** operations repository. This public repository holds the locked rules and the playbooks only. Nothing sensitive belongs here: no client names, no people, no internal project state, no billing figures, and no credentials ([neutral-reference.md](../conventions/neutral-reference.md), [never-store-secrets.md](../conventions/never-store-secrets.md), [agent-work-logging.md](../conventions/agent-work-logging.md)).
 

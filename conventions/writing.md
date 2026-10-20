@@ -23,7 +23,7 @@ This applies to every file a person reads in a Shed repository: READMEs, `docs/`
 | Term | Meaning | Do not write |
 | --- | --- | --- |
 | neat-os | This repository and the package it publishes | "the OS core", "the skeleton" |
-| playbook | A `SKILL.md` under `skills/` with When to use, Steps, and Stop. The six are `init`, `gather`, `learn`, `ticket`, `assurance`, and `pin-majors-with-reasons`. | "launch skill" |
+| playbook | A `SKILL.md` under `skills/` with When to use, Steps, and Stop. Coding playbooks include `init`, `gather`, `learn`, `ticket`, `assurance`, `pin-majors-with-reasons`, and `release`. Agency operations playbooks are listed in [docs/agency-ops.md](../docs/agency-ops.md). | "launch skill" |
 | ticket | One Jira Task in a product repo, or one GitHub Issue in an OS repo | "task", "issue" or "story" as a second name for the same thing |
 | Agent Guide | The `.agents/README.md` file in a product repo | "the gist", "IDE spread" |
 | project slots | The files under `.agents/` that `init` creates and `gather` fills | "IDE spread slots" |
