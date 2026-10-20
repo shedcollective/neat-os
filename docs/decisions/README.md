@@ -29,3 +29,4 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0017](0017-consume-via-github-packages.md) | Client repositories consume shed-os from GitHub Packages | Partially superseded by 0019 |
 | [0018](0018-no-numeric-principle-cap.md) | The principle set has no numeric cap | Accepted |
 | [0019](0019-publish-github-packages.md) | Publish neat-os to GitHub Packages on a release | Accepted |
+| [0020](0020-ticket-records-the-decided-outcome.md) | A ticket records only the decided outcome | Accepted |
