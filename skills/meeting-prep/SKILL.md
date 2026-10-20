@@ -39,6 +39,7 @@ The routine or the person supplies every setting. Nothing here is a default comp
 | `<timezone>` | yes | The person's local timezone. Every time shown to the person uses it. |
 | `<ops-record>` | no | The private operations record to read the in-flight board, recent day files, and the client folder from. |
 | `<proposer>` | no | Whose run drafts proposals: `organiser` or `any`. Default `organiser`. |
+| `<account-owners>` | with `organiser` | Where to look up each client's internal account owner, for example an owners register in `<ops-record>`. Used when the organiser is external. |
 | `<transcript-grace>` | no | How long after a meeting ends to wait for a transcript before asking for notes. Default 90 minutes. |
 
 When the brief arrives is set by the routine's schedule, not by a setting.
@@ -94,10 +95,14 @@ Run before the day's meetings, on the schedule the routine sets. When there are 
 
 Run through the working day. Each run handles meetings that have ended and are not in the processed log.
 
-1. **One proposer per meeting.** With `<proposer>` set to `organiser` (the default), produce proposals only when the person is the meeting's organiser. Otherwise record the meeting as skipped in the processed log and move on. With `any`, every run proposes.
+1. **One proposer per meeting.** With `<proposer>` set to `any`, every run proposes. With `organiser` (the default), work out who owns the follow-up and produce proposals only when that is the person:
+   - The organiser's email domain is in `<internal-domains>`: the organiser owns it.
+   - The organiser is external: the client's internal account owner, as recorded in `<account-owners>`, owns it.
+   - No account owner is recorded for that client: nobody owns it. Log "no account owner recorded" in the processed log and skip. Never guess an owner.
+   - The person does not own it: record the meeting as skipped in the processed log and move on.
 2. **Get the record.** Read the transcript from the meeting transcript tool. When there is none after `<transcript-grace>`, ask the person once for their notes or a short summary, record that you asked, and wait for their reply before going further.
 3. **Draft numbered proposals.** Each proposal is one change to one ticket: create a ticket, enhance a ticket, add a comment that records a decided outcome, or change one named field. Draft created and enhanced tickets in the shape [conventions/ticket-content.md](../../conventions/ticket-content.md) locks, and follow the [`ticket`](../ticket/SKILL.md) playbook's rules. Each proposal carries:
-   - The evidence: a short quote or paraphrase from the transcript with its local time.
+   - The evidence: a short quote or paraphrase from the transcript with its local time. Evidence is for the person approving. It never goes into the ticket, which records only the decided outcome.
    - The ticket key linked under `<tracker-host>`, or the project for a new ticket.
 4. **Add the rest** after the numbered proposals:
    - Actions that are not tickets, with owner.
@@ -105,7 +110,7 @@ Run through the working day. Each run handles meetings that have ended and are n
    - Anything ambiguous, as a question to the person.
 5. **Ask for approval** at `<destination>`, with a way to approve each number, change it, or drop it.
 6. **Apply only what was approved.** Use the ticket tool the runner already has. A field a person triages (status, assignee, priority) changes only when the approved proposal names that exact change. Fetch each ticket once afterwards and check it rendered. Report the keys and what changed.
-7. **Log it.** Add one line per meeting to the processed log at `<log-path>`: date, local start time, title, and outcome (proposed, approved and applied, skipped as not the proposer, notes requested).
+7. **Log it.** Add one line per meeting to the processed log at `<log-path>`: date, local start time, title, and outcome (proposed, approved and applied, skipped as not the proposer, skipped as no account owner recorded, notes requested).
 
 ## Stop
 
