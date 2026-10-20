@@ -1,6 +1,6 @@
 # The playbooks
 
-`init`, `gather`, and `learn` bring a repository into neat-os and keep it there. `ticket` puts work into Jira in a shape the client can read. Two more playbooks live beside them: `assurance` and `pin-majors-with-reasons`. Each is a playbook: an ordered list of steps with a stopping point, written in the `SKILL.md` format that Cursor discovers, and stored under [`skills/`](../skills/). The split between the first three is locked by [ADR-0002](decisions/0002-launch-skill-split.md), `ticket` by [ADR-0012](decisions/0012-ticket-playbook-writes-jira-not-the-repo.md), and the kinds of file are defined in [schema/README.md](../schema/README.md).
+`init`, `gather`, and `learn` bring a repository into neat-os and keep it there. `ticket` puts work into Jira in a shape the client can read. Three more playbooks live beside them: `improve`, `assurance`, and `pin-majors-with-reasons`. Each is a playbook: an ordered list of steps with a stopping point, written in the `SKILL.md` format that Cursor discovers, and stored under [`skills/`](../skills/). The split between the first three is locked by [ADR-0002](decisions/0002-launch-skill-split.md), `ticket` by [ADR-0012](decisions/0012-ticket-playbook-writes-jira-not-the-repo.md), and the kinds of file are defined in [schema/README.md](../schema/README.md).
 
 | Playbook | Does | Refuses to |
 | --- | --- | --- |
@@ -64,6 +64,12 @@ The agent reads [conventions/ticket-content.md](../conventions/ticket-content.md
 The ticket describes the problem and the outcome, not the build. The developer who picks it up decides how, and writes the feature plan under `.agents/features/` then. `ticket` writes nothing to the repository. It sets no estimate, priority, status or assignee; a person triages the ticket from the first column.
 
 For an OS repository the same playbook writes a GitHub Issue with `gh issue create`, because that is where OS tickets live ([conventions/tickets.md](../conventions/tickets.md)). neat-os ships the playbook only, not a Jira client. The agent needs Jira or `gh` access from its own environment.
+
+## `improve` records a result
+
+`improve` has no script. An agent follows `skills/improve/SKILL.md` when a ticket asks to make a live product faster, more accessible, found more often, less error-prone, or better at converting, and the gain should be reported. Before any part of the change ships, the agent takes a baseline and writes one record under `.agents/improvements/` in the shape locked by [conventions/improvement-record.md](../conventions/improvement-record.md): a category by the kind of evidence (Measured, Counted, or Observed), the measure, the baseline with its evidence, and `status: draft`. When the change is live it takes the same measure again, fills the result, and writes a summary a client can read. The record travels in the same pull request as the change.
+
+The agent never sets the record to approved. A person does, and the summary reaches a project page or a client report only after that. Who that person is lives in the project's `.agents/project.md` under Improvements, and is the account owner when the slot is empty ([ADR-0021](decisions/0021-improvement-records-live-in-the-product-repo.md)).
 
 ## `assurance` and `pin-majors-with-reasons`
 
