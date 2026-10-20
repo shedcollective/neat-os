@@ -89,6 +89,7 @@ const required = [
   '.github/workflows/validate.yml',
   '.github/workflows/release-smoke.yml',
   '.github/workflows/publish-npm.yml',
+  '.github/workflows/prepare-release.yml',
 ];
 
 const missing = required.filter((rel) => !fs.existsSync(path.join(root, rel)));
@@ -180,14 +181,14 @@ for (const banned of ['copy-templates.sh', 'light-scan']) {
 if (!/ticket-content\.md/.test(ticketSkill)) {
   fail('skills/ticket/SKILL.md must read conventions/ticket-content.md');
 }
-// The section list and its order are the locked shape (ADR-0012, ADR-0019).
+// The section list and its order are the locked shape (ADR-0012, ADR-0020).
 const ticketConvention = read('conventions/ticket-content.md');
 const ticketSections = ['Title', 'More information needed', 'Why', 'What', 'How to replicate', 'Out of scope', 'Acceptance criteria', 'Links', 'Attachments'];
 const sectionRows = [...ticketConvention.matchAll(/^\| ([A-Z][a-z ]+) \| (yes|bugs only|when useful|when the request is unclear) \|/gm)].map((m) => m[1]);
 if (sectionRows.join('|') !== ticketSections.join('|')) {
   fail(`conventions/ticket-content.md sections must be, in order: ${ticketSections.join(', ')}; got ${sectionRows.join(', ') || 'none'}`);
 }
-// A ticket records only the decided outcome (ADR-0019). The three sentences
+// A ticket records only the decided outcome (ADR-0020). The three sentences
 // live in the convention and the playbook. The old section name must not return.
 const decidedOutcomeSentences = [
   'final decided outcome, stated as fact',
@@ -198,15 +199,15 @@ for (const rel of ['conventions/ticket-content.md', 'skills/ticket/SKILL.md']) {
   const text = rel === 'conventions/ticket-content.md' ? ticketConvention : ticketSkill;
   for (const sentence of decidedOutcomeSentences) {
     if (!text.includes(sentence)) {
-      fail(`${rel} must lock the decided-outcome rule (ADR-0019): missing "${sentence}"`);
+      fail(`${rel} must lock the decided-outcome rule (ADR-0020): missing "${sentence}"`);
     }
   }
   if (text.includes('Original request')) {
-    fail(`${rel} must not tell writers to keep an Original request section (ADR-0019)`);
+    fail(`${rel} must not tell writers to keep an Original request section (ADR-0020)`);
   }
 }
 if (read('docs/launch-skills.md').includes('Original request')) {
-  fail('docs/launch-skills.md must not list an Original request section (ADR-0019)');
+  fail('docs/launch-skills.md must not list an Original request section (ADR-0020)');
 }
 if (!ticketConvention.includes('Done when')) {
   fail('conventions/ticket-content.md must lock the "Done when" acceptance criteria shape');
@@ -255,9 +256,11 @@ for (const [label, manifest] of [['composer.json', composer], ['packages/compose
     fail(`${label} version ${manifest.version} must match package.json ${rootPkg.version} (one release tag versions both)`);
   }
 }
+const githubPackagesRegistry = 'https://npm.pkg.github.com';
 for (const [label, pkg] of [['root', rootPkg], ['packages/npm', npm]]) {
-  if (pkg.publishConfig && /npm\.pkg\.github\.com/.test(pkg.publishConfig.registry || '')) {
-    fail(`${label} package.json must not publishConfig to GitHub Packages while publish is paused (ADR-0017)`);
+  const registry = String((pkg.publishConfig && pkg.publishConfig.registry) || '').replace(/\/$/, '');
+  if (registry !== githubPackagesRegistry) {
+    fail(`${label} package.json publishConfig.registry must be ${githubPackagesRegistry} (ADR-0019)`);
   }
 }
 if (!rootPkg.scripts || !/scripts\/check/.test(rootPkg.scripts.test || '')) {
@@ -288,21 +291,51 @@ if (typeof fromRoot.resolveConsume !== 'function') {
   fail('@shedcollective/neat-os must export resolveConsume()');
 }
 for (const [label, pkg] of [['root', rootPkg], ['packages/npm', npm]]) {
-  if (!Array.isArray(pkg.files) || !pkg.files.includes('stacks')) {
-    fail(`${label} package.json files must include stacks so a published package ships stack packs (ADR-0017)`);
+  if (!Array.isArray(pkg.files) || !pkg.files.includes('stacks') || !pkg.files.includes('skills')) {
+    fail(`${label} package.json files must include stacks and skills so a published package ships them (ADR-0017)`);
   }
 }
 if (!/['"]stacks['"]/.test(read('scripts/stage-npm.js'))) {
   fail('scripts/stage-npm.js must stage stacks into packages/npm (ADR-0017)');
 }
 
-// publish-npm.yml stays paused. The licence is MIT (ADR-0017).
-const publishPath = path.join(root, '.github/workflows/publish-npm.yml');
-if (fs.existsSync(publishPath)) {
-  const publishYml = fs.readFileSync(publishPath, 'utf8');
-  if (!/paused/i.test(publishYml) || publishYml.includes('types: [published]') || /^\s+npm publish\s*$/m.test(publishYml)) {
-    fail('publish-npm.yml must stay paused: no release trigger, no npm publish (ADR-0017)');
-  }
+// publish-npm.yml publishes to GitHub Packages on a Release. Nothing else may (ADR-0019).
+const publishYml = read('.github/workflows/publish-npm.yml');
+if (/paused/i.test(publishYml)) {
+  fail('publish-npm.yml must not stay paused (ADR-0019)');
+}
+if (!/types:\s*\[published\]/.test(publishYml)) {
+  fail('publish-npm.yml must run when a Release is published (ADR-0019)');
+}
+if (!/packages:\s*write/.test(publishYml)) {
+  fail('publish-npm.yml must set packages: write for GITHUB_TOKEN (ADR-0019)');
+}
+if (!/npm\.pkg\.github\.com/.test(publishYml)) {
+  fail('publish-npm.yml must publish to https://npm.pkg.github.com (ADR-0019)');
+}
+if (/registry\.npmjs\.org/.test(publishYml)) {
+  fail('publish-npm.yml must not publish to the public npm registry (ADR-0019)');
+}
+if (!/secrets\.GITHUB_TOKEN/.test(publishYml)) {
+  fail('publish-npm.yml must authenticate npm with GITHUB_TOKEN (ADR-0019)');
+}
+if (!/^\s+npm publish\s*$/m.test(publishYml)) {
+  fail('publish-npm.yml must run npm publish (ADR-0019)');
+}
+if (!/npm pack --dry-run/.test(publishYml) || !publishYml.includes('skills/') || !publishYml.includes('stacks/')) {
+  fail('publish-npm.yml must verify the tarball includes skills/ and stacks/ (ADR-0019)');
+}
+const mainGuard = 'git merge-base --is-ancestor';
+const mainGuardError = 'Publish the Release targeting main after merging release/X.Y.Z.';
+if (!publishYml.includes('fetch-depth: 0') || !publishYml.includes(mainGuard) || !publishYml.includes('origin/main') || !publishYml.includes(mainGuardError)) {
+  fail('publish-npm.yml must refuse a release tag that is not reachable from origin/main, after a full fetch');
+}
+if (!publishYml.includes('does not match package.json version')) {
+  fail('publish-npm.yml must fail when the tag does not match package.json version');
+}
+const publishAt = publishYml.indexOf('npm publish');
+if (publishAt === -1 || publishYml.indexOf(mainGuard) > publishAt) {
+  fail('publish-npm.yml must check the tag is on main before npm publish');
 }
 
 // SHA and tag install smokes (ADR-0010). Do not weaken these.
@@ -328,8 +361,30 @@ if (!/^\s*release:\s*$/m.test(releaseSmokeYml) || !/published/.test(releaseSmoke
 if (!/skillsDir/.test(releaseSmokeYml) || !/node_modules/.test(releaseSmokeYml)) {
   fail('release-smoke.yml must assert skillsDir exists and resolveConsume mode is node_modules (ADR-0010)');
 }
-if (/^\s+npm publish\s*$/m.test(releaseSmokeYml)) {
-  fail('release-smoke.yml must not npm publish (ADR-0017)');
+if (/^\s+npm publish\s*$/m.test(releaseSmokeYml) || /registry\.npmjs\.org/.test(releaseSmokeYml)) {
+  fail('release-smoke.yml must not npm publish or use the public npm registry (ADR-0019)');
+}
+if (!releaseSmokeYml.includes('fetch-depth: 0') || !releaseSmokeYml.includes(mainGuard) || !releaseSmokeYml.includes('origin/main') || !releaseSmokeYml.includes(mainGuardError)) {
+  fail('release-smoke.yml must refuse a release tag that is not reachable from origin/main, after a full fetch');
+}
+const prepareYml = read('.github/workflows/prepare-release.yml');
+if (!/workflow_dispatch:/.test(prepareYml) || !/inputs:/.test(prepareYml)) {
+  fail('prepare-release.yml must be workflow_dispatch with a version input');
+}
+if (!/contents:\s*write/.test(prepareYml) || !/pull-requests:\s*write/.test(prepareYml)) {
+  fail('prepare-release.yml must set contents: write and pull-requests: write');
+}
+if (!prepareYml.includes('--draft') || !prepareYml.includes('--target main')) {
+  fail('prepare-release.yml must create a draft Release targeting main');
+}
+if (/gh pr merge/.test(prepareYml) || /--draft=false/.test(prepareYml)) {
+  fail('prepare-release.yml must not merge or publish the Release');
+}
+if (!prepareYml.includes('docs/release.md') || !prepareYml.includes('release-prep')) {
+  fail('prepare-release.yml must point at the release-prep pull request when develop is not at that version');
+}
+if (!prepareYml.includes('isDraft') || !prepareYml.includes('targetCommitish')) {
+  fail('prepare-release.yml must confirm the Release stays a draft targeted at the branch main');
 }
 
 // Workflow YAML: an unquoted colon inside a `name:` value is a parse error that
@@ -337,6 +392,12 @@ if (/^\s+npm publish\s*$/m.test(releaseSmokeYml)) {
 const workflowsDir = path.join(root, '.github/workflows');
 for (const file of fs.readdirSync(workflowsDir).filter((name) => /\.ya?ml$/.test(name))) {
   const lines = fs.readFileSync(path.join(workflowsDir, file), 'utf8').split('\n');
+  if (file !== 'publish-npm.yml') {
+    const yml = lines.join('\n');
+    if (/npm publish/.test(yml) || /registry\.npmjs\.org/.test(yml)) {
+      fail(`.github/workflows/${file} must not npm publish or use the public npm registry (ADR-0019)`);
+    }
+  }
   lines.forEach((line, i) => {
     const match = /^\s*(?:-\s+)?name:\s+(.+)$/.exec(line);
     if (match && !/^['"]/.test(match[1]) && /:(\s|$)/.test(match[1])) {
@@ -357,12 +418,15 @@ for (const file of adrFiles) {
     fail(`docs/decisions/README.md does not list ${file}`);
   }
   const body = read(`docs/decisions/${file}`);
-  if (!/^\*\*Status:\*\*\s+(Proposed|Accepted|Superseded by \d{4}|Deprecated)/m.test(body)) {
+  if (!/^\*\*Status:\*\*\s+(Proposed|Accepted|Partially superseded by \d{4}|Superseded by \d{4}|Deprecated)/m.test(body)) {
     fail(`docs/decisions/${file} must declare a Status line from the template`);
   }
   if (!/^\*\*Date:\*\*\s+\d{4}-\d{2}-\d{2}/m.test(body)) {
     fail(`docs/decisions/${file} must declare a Date line`);
   }
+}
+if (!/^\*\*Status:\*\*\s+Partially superseded by 0019\s*$/m.test(read('docs/decisions/0017-consume-via-github-packages.md'))) {
+  fail('docs/decisions/0017 must stay Partially superseded by 0019 (ADR-0019 replaces only the pause)');
 }
 for (const link of adrIndex.matchAll(/\((\d{4}-[^)]+\.md)\)/g)) {
   if (!fs.existsSync(path.join(adrDir, link[1]))) {

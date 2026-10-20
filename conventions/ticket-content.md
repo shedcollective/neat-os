@@ -200,4 +200,4 @@ Enhancing means bringing a ticket up to this shape as the current decided outcom
 
 ## Source
 
-[ADR-0012](../docs/decisions/0012-ticket-playbook-writes-jira-not-the-repo.md). [ADR-0015](../docs/decisions/0015-ticket-titles-name-a-capability-or-a-breakage.md) locks that a new-capability title names the outcome and a breakage title names what is wrong now. [ADR-0019](../docs/decisions/0019-ticket-records-the-decided-outcome.md) locks that the body is only the decided outcome. The tone rules restate the part of [writing.md](writing.md) that matters when a client is the reader.
+[ADR-0012](../docs/decisions/0012-ticket-playbook-writes-jira-not-the-repo.md). [ADR-0015](../docs/decisions/0015-ticket-titles-name-a-capability-or-a-breakage.md) locks that a new-capability title names the outcome and a breakage title names what is wrong now. [ADR-0020](../docs/decisions/0020-ticket-records-the-decided-outcome.md) locks that the body is only the decided outcome. The tone rules restate the part of [writing.md](writing.md) that matters when a client is the reader.

@@ -1,4 +1,4 @@
-# 0019 — A ticket records only the decided outcome
+# 0020 — A ticket records only the decided outcome
 
 **Status:** Accepted
 **Date:** 2026-10-14

@@ -127,7 +127,7 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
   </picture>
 </p>
 
-Work lands on `develop`. A person cuts `release/X.Y.Z` from `develop`, merges it into `main`, and publishes the GitHub Release `vX.Y.Z`. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
+Work lands on `develop`. A release-prep pull request sets the version. Prepare release opens `release/X.Y.Z` into `main` and a draft Release. A person merges that pull request with a merge commit and publishes the draft. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
 
 ### Working on neat-os itself
 
@@ -154,7 +154,7 @@ Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of 
 
 ## What neat-os does not do
 
-- The install is a git pin to a release tag (`github:shedcollective/neat-os#vX.Y.Z`). Publishing to GitHub Packages stays paused ([ADR-0017](docs/decisions/0017-consume-via-github-packages.md)). The licence is MIT. Agents install from git and need no registry token.
+- Agents do not install from GitHub Packages. An agent token gets a 403 from the registry. Agents install from a git pin (`github:shedcollective/neat-os#vX.Y.Z`) and need no registry token. The registry install for a product repository is in [docs/consume.md](docs/consume.md) ([ADR-0019](docs/decisions/0019-publish-github-packages.md)). The licence is MIT.
 - `init` does not copy skills into a product repository's `.agents/skills/`. Agents read them from the installed package.
 - Agents do not search the public web for how to install neat-os. The resolve order in [docs/consume.md](docs/consume.md) is the only way an agent looks for it.
 - The archive tag `v0.0.1` predates a root `package.json` and cannot be installed. It is not a neat-os release. Do not pin it.
