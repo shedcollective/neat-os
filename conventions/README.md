@@ -13,6 +13,7 @@ Locked engineering defaults for Shed. These are company knowledge: `gather` must
 | Agent work logging: shared digests log work only; no personal chatter, billing amounts, or secrets | [agent-work-logging.md](agent-work-logging.md) |
 | Routine settings: the fixed names a routine supplies to an agency operations playbook | [routine-settings.md](routine-settings.md) |
 | The lockfile beside a manifest names the installer for that directory | [lockfile.md](lockfile.md) |
+| Design and UX team agents: drafts and comments only, asker's connectors, human gates | [design-ux-agents.md](design-ux-agents.md) |
 
 ## Where a fact belongs
 

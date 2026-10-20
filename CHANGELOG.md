@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+A design agent and a UX agent follow [conventions/design-ux-agents.md](conventions/design-ux-agents.md): they read only the asker's connectors, write new drafts or comments, and never edit a live library, live site, or ticket status, or send to a client. Role-neutral example passports are [templates/agent/passport-design.md](templates/agent/passport-design.md) and [templates/agent/passport-ux.md](templates/agent/passport-ux.md). Filled passports stay private. The playbooks are `brand-from-site`, `design-qa`, `ux-audit`, and `research-synthesis`. Design system links live in `.agents/project.md` only ([issue #27](https://github.com/shedcollective/neat-os/issues/27) keeps `design-system-sync`).
+
 Wrappers that run agency operations playbooks pin a **release tag**. `main` is a stopgap only. `develop` and other branches never. `scripts/check-structure.js` fails when a wrapper template pins a branch. After a release, bump the tag by pull request: one wrapper at a time, canary first, revert to roll back. The rule is [conventions/routine-settings.md](conventions/routine-settings.md). The upgrade path is [docs/consume.md](docs/consume.md#move-a-wrapper-pin). [ADR-0021](docs/decisions/0021-wrapper-release-tag-pins.md).
 
 Every team bot has a **bot passport** before it runs a routine. The template is [templates/agent/passport.md](templates/agent/passport.md): Job, Never, Human gates, Sources, Routines, Pin, Review date and owner. Filled passports live in the private operations record, never in this repository. `scripts/check-structure.js` requires the template. The rule is in [docs/team-setup.md](docs/team-setup.md).

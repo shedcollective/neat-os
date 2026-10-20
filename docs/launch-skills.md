@@ -76,6 +76,10 @@ These two are playbooks, and they are not part of adoption. `assurance` reads on
 
 `daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post.
 
+## Design and UX playbooks
+
+`brand-from-site`, `design-qa`, `ux-audit`, and `research-synthesis` are on-demand playbooks for the design agent and the UX agent. They are not part of product-repo adoption. The rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md).
+
 ## Order on a product repository
 
 For a new repository: install neat-os ([consume.md](consume.md)), run `init`, run `gather`, then start feature work on `develop`. Run `ticket` whenever work needs to reach Jira. Run `learn` after a stretch of work when you want to know what could be shared.

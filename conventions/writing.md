@@ -40,6 +40,8 @@ This applies to every file a person reads in a Shed repository: READMEs, `docs/`
 | source of truth | Spell it out | "SoT" outside agent-facing files |
 | wrapper | The short file in a person's agent that names one playbook and fills the settings in [routine-settings.md](routine-settings.md) | "bot skill" as a second name for the same file |
 | bot passport | The one-screen record of a team bot's job, refusals, human gates, sources, routines, pin, and owner | "profile" |
+| design agent | The team agent whose job is brand capture and visual QA | a bot name |
+| UX agent | The team agent whose job is UX audit and research synthesis | a bot name |
 
 ## What the check enforces
 
