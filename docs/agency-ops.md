@@ -25,6 +25,7 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 | File | Job |
 | --- | --- |
 | [templates/ops/burndown-day.md](../templates/ops/burndown-day.md) | Day-file shape: Agency state first, then project sections with `####` activity headings, Agency, Sources unavailable. One shared body; perspective runs append into those project sections. Copy into the private operations record, or point the playbook at this path in the neat-os install. |
+| [templates/ops/bot-skill.md](../templates/ops/bot-skill.md) | Thin wrapper a person's agent uses to run one playbook: trigger, the playbook at a pinned ref, a settings table ([routine-settings.md](../conventions/routine-settings.md)), and at most five local rules. |
 
 ## Order
 
