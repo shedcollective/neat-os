@@ -596,7 +596,7 @@ if (!read('skills/meeting-prep/SKILL.md').includes('morning-brief')) {
   fail('skills/meeting-prep/SKILL.md must point scheduled briefs at morning-brief');
 }
 
-// Wrapper templates pin a release tag, never a branch (ADR-0023).
+// Wrapper templates pin a release tag, never a branch (ADR-0021).
 // check-policy.js is at its cap of ten, so this lives here with the
 // release-tag-on-main guard rather than as a prose policy.
 function wrapperPinRefAllowed(ref) {
@@ -625,31 +625,31 @@ for (const [ref, allowed] of [
   ['release/0.5.0', false],
 ]) {
   if (wrapperPinRefAllowed(ref) !== allowed) {
-    fail(`wrapper pin classifier (ADR-0023): ${ref} should be ${allowed ? 'allowed' : 'forbidden'}`);
+    fail(`wrapper pin classifier (ADR-0021): ${ref} should be ${allowed ? 'allowed' : 'forbidden'}`);
   }
 }
 
 const wrapperTemplate = read('templates/ops/bot-skill.md');
 if (!wrapperTemplate.includes('say so and stop')) {
-  fail('templates/ops/bot-skill.md must stop when the pin is a branch (ADR-0023)');
+  fail('templates/ops/bot-skill.md must stop when the pin is a branch (ADR-0021)');
 }
 if (!wrapperTemplate.includes('blob/vX.Y.Z/')) {
-  fail('templates/ops/bot-skill.md must pin GitHub playbook links to vX.Y.Z (ADR-0023)');
+  fail('templates/ops/bot-skill.md must pin GitHub playbook links to vX.Y.Z (ADR-0021)');
 }
 if (/Pin `main` or a release tag/.test(wrapperTemplate)) {
-  fail('templates/ops/bot-skill.md must not treat main as a first-class pin (ADR-0023)');
+  fail('templates/ops/bot-skill.md must not treat main as a first-class pin (ADR-0021)');
 }
 if (!wrapperTemplate.includes('<neat-os-path>')) {
-  fail('templates/ops/bot-skill.md must read playbooks from <neat-os-path> (ADR-0023)');
+  fail('templates/ops/bot-skill.md must read playbooks from <neat-os-path> (ADR-0022)');
 }
 if (!wrapperTemplate.includes('neat-os is not at <neat-os-path>. Stop.')) {
-  fail('templates/ops/bot-skill.md must stop when <neat-os-path> is missing (ADR-0023)');
+  fail('templates/ops/bot-skill.md must stop when <neat-os-path> is missing (ADR-0022)');
 }
 if (!wrapperTemplate.includes('is not at vX.Y.Z. Stop.')) {
-  fail('templates/ops/bot-skill.md must stop when the checkout is not the pin (ADR-0023)');
+  fail('templates/ops/bot-skill.md must stop when the checkout is not the pin (ADR-0022)');
 }
 if (!wrapperTemplate.includes('issue #15')) {
-  fail('templates/ops/bot-skill.md must leave how the shared path is populated to issue #15 (ADR-0023)');
+  fail('templates/ops/bot-skill.md must leave how the shared path is populated to issue #15 (ADR-0022)');
 }
 
 const wrapperPinFiles = [
@@ -663,12 +663,12 @@ for (const rel of wrapperPinFiles) {
   const refs = githubBlobRefs(text);
   for (const ref of refs) {
     if (!wrapperPinRefAllowed(ref)) {
-      fail(`${rel} pins a branch or non-tag ref "${ref}"; pin a release tag (ADR-0023)`);
+      fail(`${rel} pins a branch or non-tag ref "${ref}"; pin a release tag (ADR-0021)`);
     }
   }
 }
 if (!githubBlobRefs(wrapperTemplate).length) {
-  fail('templates/ops/bot-skill.md must contain a GitHub blob pin (ADR-0023)');
+  fail('templates/ops/bot-skill.md must contain a GitHub blob pin (ADR-0021)');
 }
 
 const passportTemplate = read('templates/agent/passport.md');
@@ -692,7 +692,7 @@ if (!/private operations record/.test(passportTemplate) || !/never in neat-os/.t
   fail('templates/agent/passport.md must say filled passports live in the private operations record, never in neat-os');
 }
 if (!passportTemplate.includes('Pin a release tag')) {
-  fail('templates/agent/passport.md Pin must require a release tag (ADR-0023)');
+  fail('templates/agent/passport.md Pin must require a release tag (ADR-0021)');
 }
 if (!/^## Team bots$/m.test(read('docs/team-setup.md'))) {
   fail('docs/team-setup.md must say every team bot has a bot passport before it runs a routine');
@@ -785,23 +785,23 @@ for (const sentence of [
   '`develop` and other branches never',
 ]) {
   if (!routineSettings.includes(sentence)) {
-    fail(`conventions/routine-settings.md must lock wrapper pins (ADR-0023): missing "${sentence}"`);
+    fail(`conventions/routine-settings.md must lock wrapper pins (ADR-0021): missing "${sentence}"`);
   }
 }
 if (/Pin `main` or a release tag/.test(routineSettings)) {
-  fail('conventions/routine-settings.md must not treat main as a first-class pin (ADR-0023)');
+  fail('conventions/routine-settings.md must not treat main as a first-class pin (ADR-0021)');
 }
 
 if (!routineSettings.includes('<neat-os-path>')) {
-  fail('conventions/routine-settings.md must name <neat-os-path> (ADR-0023)');
+  fail('conventions/routine-settings.md must name <neat-os-path> (ADR-0022)');
 }
 if (!routineSettings.includes('issue #15')) {
-  fail('conventions/routine-settings.md must leave how the shared path is populated to issue #15 (ADR-0023)');
+  fail('conventions/routine-settings.md must leave how the shared path is populated to issue #15 (ADR-0022)');
 }
 
 const consumeDocs = read('docs/consume.md');
 if (!/^## Move a wrapper pin$/m.test(consumeDocs)) {
-  fail('docs/consume.md must document how to bump a wrapper pin (ADR-0023)');
+  fail('docs/consume.md must document how to bump a wrapper pin (ADR-0021)');
 }
 for (const sentence of [
   'one pull request for that wrapper',
@@ -809,11 +809,11 @@ for (const sentence of [
   'revert that pull request to roll back',
 ]) {
   if (!consumeDocs.includes(sentence)) {
-    fail(`docs/consume.md must lock the wrapper upgrade path (ADR-0023): missing "${sentence}"`);
+    fail(`docs/consume.md must lock the wrapper upgrade path (ADR-0021): missing "${sentence}"`);
   }
 }
 if (!consumeDocs.includes('<neat-os-path>')) {
-  fail('docs/consume.md must say wrappers read from <neat-os-path> (ADR-0023)');
+  fail('docs/consume.md must say wrappers read from <neat-os-path> (ADR-0022)');
 }
 
 const burndownSkill = read('skills/daily-burndown/SKILL.md');
