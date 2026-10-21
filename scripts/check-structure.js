@@ -60,6 +60,7 @@ const required = [
   'skills/ticket/SKILL.md',
   'templates/AGENTS.md',
   'templates/ops/bot-skill.md',
+  'templates/agent/passport.md',
   'templates/.agents/README.md',
   'templates/.agents/project.md',
   'templates/.agents/docs/.gitkeep',
@@ -552,14 +553,38 @@ if (!wrapperTemplate.includes('blob/vX.Y.Z/')) {
 if (/Pin `main` or a release tag/.test(wrapperTemplate)) {
   fail('templates/ops/bot-skill.md must not treat main as a first-class pin (ADR-0021)');
 }
-const wrapperRefs = githubBlobRefs(wrapperTemplate);
-if (!wrapperRefs.length) {
+
+const wrapperPinFiles = ['templates/ops/bot-skill.md', 'templates/agent/passport.md'];
+for (const rel of wrapperPinFiles) {
+  const text = rel === 'templates/ops/bot-skill.md' ? wrapperTemplate : read(rel);
+  const refs = githubBlobRefs(text);
+  for (const ref of refs) {
+    if (!wrapperPinRefAllowed(ref)) {
+      fail(`${rel} pins a branch or non-tag ref "${ref}"; pin a release tag (ADR-0021)`);
+    }
+  }
+}
+if (!githubBlobRefs(wrapperTemplate).length) {
   fail('templates/ops/bot-skill.md must contain a GitHub blob pin (ADR-0021)');
 }
-for (const ref of wrapperRefs) {
-  if (!wrapperPinRefAllowed(ref)) {
-    fail(`templates/ops/bot-skill.md pins a branch or non-tag ref "${ref}"; pin a release tag (ADR-0021)`);
+
+const passportTemplate = read('templates/agent/passport.md');
+for (const heading of ['## Job', '## Never', '## Human gates', '## Sources', '## Routines', '## Pin', '## Review']) {
+  if (!passportTemplate.includes(heading)) {
+    fail(`templates/agent/passport.md missing ${heading}`);
   }
+}
+if (!/private operations record/.test(passportTemplate) || !/never in neat-os/.test(passportTemplate)) {
+  fail('templates/agent/passport.md must say filled passports live in the private operations record, never in neat-os');
+}
+if (!passportTemplate.includes('Pin a release tag')) {
+  fail('templates/agent/passport.md Pin must require a release tag (ADR-0021)');
+}
+if (!/^## Team bots$/m.test(read('docs/team-setup.md'))) {
+  fail('docs/team-setup.md must say every team bot has a bot passport before it runs a routine');
+}
+if (!read('docs/team-setup.md').includes('before it runs a routine')) {
+  fail('docs/team-setup.md must require a bot passport before a team bot runs a routine');
 }
 
 const routineSettings = read('conventions/routine-settings.md');
