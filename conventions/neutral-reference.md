@@ -6,7 +6,7 @@ A reader who has only this repository should not learn who works on it or which 
 
 ## Roles
 
-Name the role. The roles in this repository are maintainer, PR author, reviewer, code agent, and assurance agent.
+Name the role. The roles in this repository are maintainer, PR author, reviewer, director, asker, operations lead, code agent, and assurance agent.
 
 ## Placeholders
 

@@ -85,4 +85,6 @@ A team bot is a scheduled or on-demand agent that runs an agency operations play
 
 Every team bot has a **bot passport** before it runs a routine. Copy [templates/agent/passport.md](../templates/agent/passport.md) into the private operations record and fill it. Do not commit a filled passport in neat-os. Change a passport by pull request. A director merges.
 
-The pin on that passport is a neat-os release tag. The wrapper that runs the routine uses the same pin ([routine-settings.md](../conventions/routine-settings.md)).
+The passport lists every skill (OS playbook, passport enhancement, or bot-only) and every routine. Install only the routines whose Owner is this passport's owner. Skip a routine when a wrapper for that owner, name, and schedule already exists. Two passports never share a wrapper path.
+
+The pin on that passport is a neat-os release tag. The wrapper that runs the routine uses the same pin and reads playbooks from `<neat-os-path>` at that tag ([routine-settings.md](../conventions/routine-settings.md), [ADR-0022](decisions/0022-wrapper-shared-path.md)). If the path or the tag is missing, the wrapper stops. How that path is populated is [issue #15](https://github.com/shedcollective/neat-os/issues/15).
