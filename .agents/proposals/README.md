@@ -6,4 +6,4 @@ A draft destined for neat-os or a stack pack is **project-agnostic** company gui
 
 Elevation into neat-os (including `stacks/<name>/`) or a `neat-os-tool-*` leaf is a human PR. Do not auto-promote.
 
-This folder starts empty. Drafts written before this tree was named neat-os are in the archive repository.
+A draft stays here after it is elevated, and the playbook or principle links back to it. Drafts written before this tree was named neat-os are in the archive repository.

@@ -4,6 +4,8 @@ Releases of neat-os happen on `shedcollective/neat-os`. `develop` is the integra
 
 People merge and people release ([keep-human-gates](../principles/keep-human-gates.md)). Agents prepare the pull request. They do not tag `main`.
 
+A product repository cuts its own git-flow release with [skills/release/SKILL.md](../skills/release/SKILL.md). That playbook reads the product repository's Release slot in `.agents/project.md`. It stops before the production deploy. The tag must be reachable from the production branch (`main` or `master`, as that slot records). This page is how neat-os itself is released, and here that branch is `main`.
+
 Product repositories pin a release. The git pin is `github:shedcollective/neat-os#vX.Y.Z`. A product repository may instead install the same version from GitHub Packages. Both recipes are in [consume.md](consume.md). [ADR-0017](decisions/0017-consume-via-github-packages.md) is partially superseded by [ADR-0019](decisions/0019-publish-github-packages.md): publishing is on, and agents still install from git. `.github/workflows/publish-npm.yml` publishes the Release tag to GitHub Packages. The licence is MIT.
 
 ## Steps
