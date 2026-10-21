@@ -69,7 +69,7 @@ For an OS repository the same playbook writes a GitHub Issue with `gh issue crea
 
 `improve` has no script. An agent follows `skills/improve/SKILL.md` when a ticket asks to make a live product faster, more accessible, found more often, less error-prone, or better at converting, and the gain should be reported. Before any part of the change ships, the agent takes a baseline and writes one record under `.agents/improvements/` in the shape locked by [conventions/improvement-record.md](../conventions/improvement-record.md): a category by the kind of evidence (Measured, Counted, or Observed), the measure, the baseline with its evidence, and `status: draft`. When the change is live it takes the same measure again, fills the result, and writes a summary a client can read. The record travels in the same pull request as the change.
 
-The agent never sets the record to approved. A person does, and the summary reaches a project page or a client report only after that. Who that person is lives in the project's `.agents/project.md` under Improvements, and is the account owner when the slot is empty ([ADR-0021](decisions/0021-improvement-records-live-in-the-product-repo.md)).
+The agent never sets the record to approved. A person does, and the summary reaches a project page or a client report only after that. Who that person is lives in the project's `.agents/project.md` under Improvements, and is the account owner when the slot is empty ([ADR-0022](decisions/0022-improvement-records-live-in-the-product-repo.md)).
 
 ## `assurance` and `pin-majors-with-reasons`
 
@@ -80,7 +80,7 @@ These two are playbooks, and they are not part of adoption. `assurance` reads on
 
 `daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, and `meeting-prep` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
 
-`daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post.
+`daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post. `morning-brief` is the weekday morning message for one person (Needs you, Today, Health, Pipeline on Mondays). It does not replace `daily-digest`. The composition rule is in [agency-ops.md](agency-ops.md).
 
 ## Order on a product repository
 
