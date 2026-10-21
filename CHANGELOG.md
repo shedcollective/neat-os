@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+`improve` is a playbook for a product repository. It turns an improvement on a live product into a result that can be reported: a baseline taken before the change, the same measure taken after, a category by the kind of evidence (Measured, Counted, Observed), and a summary a client can read. The record is one file under `.agents/improvements/` in the shape locked by [conventions/improvement-record.md](conventions/improvement-record.md); `init` scaffolds that folder and `.agents/project.md` gains an Improvements slot for the approver and the measuring tools. Values are numbers with a unit and a direction, so a roll-up such as the stats page in #7 can read them. The playbook writes the record as draft for an internal audience. A person sets it to approved and raises the audience before the summary is shared ([ADR-0023](docs/decisions/0023-improvement-records-live-in-the-product-repo.md)). Issue #6.
+
 ## 0.6.0
 
 The bot passport template gains a **Skills** table (OS playbook, passport enhancement, or bot-only), owner-only routine install with duplicate skip rules, and an optional **Day file** table so a passport may name its own top-level burndown sections. The default day shape stays by project. Wrappers read playbooks from `<neat-os-path>` at the pinned tag and stop if the path or tag is missing ([ADR-0022](docs/decisions/0022-wrapper-shared-path.md)). How that path is populated is [issue #15](https://github.com/shedcollective/neat-os/issues/15).

@@ -43,6 +43,7 @@ Company playbooks (`init`, `gather`, `learn`, `ticket`, `assurance`, `pin-majors
 - Platform leaves: [platforms/](platforms/) (`gather` creates frontend/backend/… leaves when a split helps; start from [platforms/TEMPLATE.md](platforms/TEMPLATE.md))
 - Stack packs: listed in [AGENTS.md](../AGENTS.md) when gather matches a pack in neat-os (`stacks/<name>/`; never copied here)
 - Proposals: [proposals/](proposals/) (`learn` drafts — not org skills)
+- Improvement records: [improvements/](improvements/) (`improve` writes one per improvement; shape in neat-os `conventions/improvement-record.md`)
 
 ## Gather next
 

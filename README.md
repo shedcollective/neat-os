@@ -112,10 +112,11 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 - `gather` fills those files from evidence in the repository, then interviews you for what the tree cannot show, starting with the client and the product. It is not finished until those two are real answers.
 - `learn` reads recent commits and merges and drafts proposals for what could become a shared principle or playbook. It never publishes them. A person opens that pull request.
 - `ticket` creates a Jira Task from a brief, or enhances an existing one, in the shape and tone the client can read ([conventions/ticket-content.md](conventions/ticket-content.md)). It writes to Jira only, never to the repository.
+- `improve` records an improvement on a live product: a baseline before the change, the same measure after, and a summary a client can read, in one file under `.agents/improvements/` ([conventions/improvement-record.md](conventions/improvement-record.md)). It writes the record as draft. A person approves it.
 - `assurance` reads one pull request against its ticket and posts an evidence pack. It does not implement, push, approve, or merge.
 - `pin-majors-with-reasons` upgrades dependencies by blast radius and does not take a pinned major on a routine bump.
 
-`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`, `daily-digest`, `morning-brief`, `bids-register`, `finance-client-backfill`, `finance-client-sync`, `finance-lookup`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design playbooks (`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, `design-handoff`), the assurance playbook `design-qa`, and UX playbooks (`ux-audit`, `research-synthesis`, `wireframes`) follow [conventions/design-ux-agents.md](conventions/design-ux-agents.md). All playbooks are under [skills/](skills/).
+`init`, `gather`, `learn`, `ticket`, and `improve` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`, `daily-digest`, `morning-brief`, `bids-register`, `finance-client-backfill`, `finance-client-sync`, `finance-lookup`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design playbooks (`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, `design-handoff`), the assurance playbook `design-qa`, and UX playbooks (`ux-audit`, `research-synthesis`, `wireframes`) follow [conventions/design-ux-agents.md](conventions/design-ux-agents.md). All playbooks are under [skills/](skills/).
 
 `daily-digest` turns the day file into a short end-of-day post for a team channel. `morning-brief` composes one morning message per person and replaces separate morning health, digest, day-plan, and meeting-prep brief messages. Agency operations playbooks take their inputs from the settings in [conventions/routine-settings.md](conventions/routine-settings.md).
 
@@ -143,7 +144,7 @@ Work lands on `develop`. A release-prep pull request sets the version. Prepare r
 | --- | --- |
 | [docs/README.md](docs/README.md) | Where documentation lives and the full map |
 | [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, moving an existing install, and moving from shed-os |
-| [docs/launch-skills.md](docs/launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` do, and where `assurance` and `pin-majors-with-reasons` live |
+| [docs/launch-skills.md](docs/launch-skills.md) | What `init`, `gather`, `learn`, `ticket`, and `improve` do, and where `assurance` and `pin-majors-with-reasons` live |
 | [docs/cursor-environments.md](docs/cursor-environments.md) | The GitHub App, Cloud Agent Environments, and how they differ |
 | [docs/team-setup.md](docs/team-setup.md) | Cursor and GitHub administration for the team |
 | [docs/release.md](docs/release.md) | How neat-os is released on `shedcollective/neat-os` |

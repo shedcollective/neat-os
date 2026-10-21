@@ -49,6 +49,15 @@ Read by the `ticket` playbook when it creates or enhances a ticket. The shape an
 - Client vocabulary (the client's names for environments, features, roles; e.g. "UAT" not "staging"): awaiting interview
 - Standing acceptance criteria every ticket carries (each starting "Done when"): awaiting interview
 
+## Improvements
+
+Read by the `improve` playbook when it records an improvement on the live product. The record shape, the categories, and the sign-off rule are company rules ([neat-os conventions/improvement-record.md](https://github.com/shedcollective/neat-os/blob/develop/conventions/improvement-record.md)); these bullets are what differs per project. Empty means none, and the playbook falls back to the account owner as approver.
+
+- Summary approver (the role that sets a record to approved; the account owner when empty): awaiting interview
+- Measuring tools and where their reports are kept (for example a Lighthouse run in CI, an accessibility scanner): awaiting interview
+- Analytics source for observed changes (the tool and who has access): awaiting interview
+- Public use of improvement results (whether the client agreed, who agreed, and when; empty means not agreed): awaiting interview
+
 ## Company knowledge
 
 How this project consumes neat-os (resolve and stop at the first hit: `NEAT_OS_ROOT`, then `github:shedcollective/neat-os#vX.Y.Z` or `file:../neat-os` → `node_modules/`, then Composer `shedcollective/neat-os` → `vendor/` which is PHP metadata only and does not ship skills/templates, then sibling `../neat-os`). Do not search the public web for neat-os. Do not copy skills into this repo. {{to confirm}}

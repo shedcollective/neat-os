@@ -110,6 +110,7 @@ try {
     '.agents/dependencies/pins.md',
     '.agents/platforms/README.md',
     '.agents/platforms/TEMPLATE.md',
+    '.agents/improvements/README.md',
   ]) {
     if (!fs.existsSync(path.join(initTmp, rel))) {
       throw new Error(`init scaffold missing ${rel}`);

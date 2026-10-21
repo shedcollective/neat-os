@@ -14,6 +14,7 @@ Locked engineering defaults for Shed. These are company knowledge: `gather` must
 | Routine settings: the fixed names a routine supplies to an agency operations playbook | [routine-settings.md](routine-settings.md) |
 | The lockfile beside a manifest names the installer for that directory | [lockfile.md](lockfile.md) |
 | Design and UX team agents: asker's connectors, 2 to 3 options, human gates, private record | [design-ux-agents.md](design-ux-agents.md) |
+| Improvement record: a baseline before the change, the same measure after, a summary a person approves | [improvement-record.md](improvement-record.md) |
 
 ## Where a fact belongs
 
