@@ -78,3 +78,11 @@ The `repositoryDependencies` setting in `.cursor/environment.json` widens the ag
 3. Check the install works before creating any files: `npm install ../neat-os` in the Environment, or the Composer require at the repository root, followed by the install check in [consume.md](consume.md).
 4. Run `init`. It does not overwrite existing files. Then run `gather` with the interview.
 5. Continue normal delivery on `develop`.
+
+## Team bots
+
+A team bot is a scheduled or on-demand agent that runs an agency operations playbook. It is not a coding agent in a product repository.
+
+Every team bot has a **bot passport** before it runs a routine. Copy [templates/agent/passport.md](../templates/agent/passport.md) into the private operations record and fill it. Do not commit a filled passport in neat-os. Change a passport by pull request. A director merges.
+
+The pin on that passport is a neat-os release tag. The wrapper that runs the routine uses the same pin ([routine-settings.md](../conventions/routine-settings.md)).

@@ -141,6 +141,12 @@ try {
   if (fs.existsSync(path.join(initTmp, 'stacks'))) {
     throw new Error('init must not copy stacks/ (that is resolved from neat-os)');
   }
+  if (fs.existsSync(path.join(initTmp, 'ops'))) {
+    throw new Error('init must not copy templates/ops into a product repo');
+  }
+  if (fs.existsSync(path.join(initTmp, 'agent'))) {
+    throw new Error('init must not copy templates/agent into a product repo');
+  }
   const emptyProject = fs.readFileSync(path.join(initTmp, '.agents/project.md'), 'utf8');
   if (!emptyProject.includes('Containers / Compose: {{to confirm}}')) {
     throw new Error(`empty-repo init must not fill Docker/Make prose:\n${emptyProject}`);

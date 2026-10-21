@@ -60,6 +60,8 @@ const required = [
   'skills/ticket/SKILL.md',
   'skills/release/SKILL.md',
   'templates/AGENTS.md',
+  'templates/ops/bot-skill.md',
+  'templates/agent/passport.md',
   'templates/.agents/README.md',
   'templates/.agents/project.md',
   'templates/.agents/docs/.gitkeep',
@@ -518,6 +520,139 @@ const docsIndex = read('docs/README.md');
 for (const name of fs.readdirSync(path.join(root, 'docs')).filter((n) => n.endsWith('.md') && n !== 'README.md')) {
   if (!docsIndex.includes(`(${name})`)) {
     fail(`docs/README.md does not list ${name}`);
+  }
+}
+
+// morning-brief composes one message in a fixed section order (GH-29).
+const morningBrief = read('skills/morning-brief/SKILL.md');
+const morningSections = ['Needs you', 'Today', 'Health', 'Pipeline'];
+const morningAt = morningSections.map((name) => morningBrief.indexOf(`**${name}**`));
+if (morningAt.some((i) => i < 0) || morningAt.some((v, i) => i > 0 && v < morningAt[i - 1])) {
+  fail(`skills/morning-brief/SKILL.md must compose sections in order: ${morningSections.join(', ')}`);
+}
+for (const sentence of [
+  'adds no new facts',
+  'does not delay that alert',
+  'quiet-when-empty',
+  'all green',
+]) {
+  if (!morningBrief.includes(sentence)) {
+    fail(`skills/morning-brief/SKILL.md must lock the morning brief rule: missing "${sentence}"`);
+  }
+}
+if (!read('skills/daily-digest/SKILL.md').includes('morning-brief')) {
+  fail('skills/daily-digest/SKILL.md must point morning messages at morning-brief');
+}
+const agencyOps = read('docs/agency-ops.md');
+if (!agencyOps.includes('morning-brief')) {
+  fail('docs/agency-ops.md must list morning-brief alongside daily-digest');
+}
+if (!agencyOps.includes('Needs you, Today, Health, Pipeline')) {
+  fail('docs/agency-ops.md must state the morning-brief section order');
+}
+
+// Wrapper templates pin a release tag, never a branch (ADR-0021).
+// check-policy.js is at its cap of ten, so this lives here with the
+// release-tag-on-main guard rather than as a prose policy.
+function wrapperPinRefAllowed(ref) {
+  if (ref === 'vX.Y.Z') return true;
+  return /^v\d+\.\d+\.\d+$/.test(ref);
+}
+
+function githubBlobRefs(text) {
+  const refs = [];
+  const re = /github\.com\/shedcollective\/neat-os\/(?:blob|raw|tree)\/([^/#?\s)]+)/g;
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    refs.push(match[1]);
+  }
+  return refs;
+}
+
+for (const [ref, allowed] of [
+  ['v0.5.0', true],
+  ['vX.Y.Z', true],
+  ['v1.2.3', true],
+  ['develop', false],
+  ['main', false],
+  ['master', false],
+  ['HEAD', false],
+  ['release/0.5.0', false],
+]) {
+  if (wrapperPinRefAllowed(ref) !== allowed) {
+    fail(`wrapper pin classifier (ADR-0021): ${ref} should be ${allowed ? 'allowed' : 'forbidden'}`);
+  }
+}
+
+const wrapperTemplate = read('templates/ops/bot-skill.md');
+if (!wrapperTemplate.includes('say so and stop')) {
+  fail('templates/ops/bot-skill.md must stop when the pin is a branch (ADR-0021)');
+}
+if (!wrapperTemplate.includes('blob/vX.Y.Z/')) {
+  fail('templates/ops/bot-skill.md must pin GitHub playbook links to vX.Y.Z (ADR-0021)');
+}
+if (/Pin `main` or a release tag/.test(wrapperTemplate)) {
+  fail('templates/ops/bot-skill.md must not treat main as a first-class pin (ADR-0021)');
+}
+
+const wrapperPinFiles = ['templates/ops/bot-skill.md', 'templates/agent/passport.md'];
+for (const rel of wrapperPinFiles) {
+  const text = rel === 'templates/ops/bot-skill.md' ? wrapperTemplate : read(rel);
+  const refs = githubBlobRefs(text);
+  for (const ref of refs) {
+    if (!wrapperPinRefAllowed(ref)) {
+      fail(`${rel} pins a branch or non-tag ref "${ref}"; pin a release tag (ADR-0021)`);
+    }
+  }
+}
+if (!githubBlobRefs(wrapperTemplate).length) {
+  fail('templates/ops/bot-skill.md must contain a GitHub blob pin (ADR-0021)');
+}
+
+const passportTemplate = read('templates/agent/passport.md');
+for (const heading of ['## Job', '## Never', '## Human gates', '## Sources', '## Routines', '## Pin', '## Review']) {
+  if (!passportTemplate.includes(heading)) {
+    fail(`templates/agent/passport.md missing ${heading}`);
+  }
+}
+if (!/private operations record/.test(passportTemplate) || !/never in neat-os/.test(passportTemplate)) {
+  fail('templates/agent/passport.md must say filled passports live in the private operations record, never in neat-os');
+}
+if (!passportTemplate.includes('Pin a release tag')) {
+  fail('templates/agent/passport.md Pin must require a release tag (ADR-0021)');
+}
+if (!/^## Team bots$/m.test(read('docs/team-setup.md'))) {
+  fail('docs/team-setup.md must say every team bot has a bot passport before it runs a routine');
+}
+if (!read('docs/team-setup.md').includes('before it runs a routine')) {
+  fail('docs/team-setup.md must require a bot passport before a team bot runs a routine');
+}
+
+const routineSettings = read('conventions/routine-settings.md');
+for (const sentence of [
+  'Pin a release tag',
+  '`main` is a stopgap only',
+  '`develop` and other branches never',
+]) {
+  if (!routineSettings.includes(sentence)) {
+    fail(`conventions/routine-settings.md must lock wrapper pins (ADR-0021): missing "${sentence}"`);
+  }
+}
+if (/Pin `main` or a release tag/.test(routineSettings)) {
+  fail('conventions/routine-settings.md must not treat main as a first-class pin (ADR-0021)');
+}
+
+const consumeDocs = read('docs/consume.md');
+if (!/^## Move a wrapper pin$/m.test(consumeDocs)) {
+  fail('docs/consume.md must document how to bump a wrapper pin (ADR-0021)');
+}
+for (const sentence of [
+  'one pull request for that wrapper',
+  'Pick one wrapper as the canary',
+  'revert that pull request to roll back',
+]) {
+  if (!consumeDocs.includes(sentence)) {
+    fail(`docs/consume.md must lock the wrapper upgrade path (ADR-0021): missing "${sentence}"`);
   }
 }
 

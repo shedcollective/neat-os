@@ -80,5 +80,6 @@ gh release create vX.Y.Z --target main --title "vX.Y.Z" --notes "…"
 | Contributors and agents | Branch from `develop` and open pull requests into `develop`. Stacked pull requests follow [conventions/git.md](../conventions/git.md#stacked-prs). |
 | People | Merge the release-prep pull request, run Prepare release, merge the `main` pull request with a merge commit, publish the draft Release, confirm `release-smoke` and `publish-npm`, and merge `main` back into `develop`. |
 | Product repositories | Pin a release tag. Moving an existing pin, including the lockfile, is in [consume.md](consume.md#move-to-a-new-tagged-release). |
+| Wrappers | Pin a release tag. `main` is a stopgap only. Moving the pin is in [consume.md](consume.md#move-a-wrapper-pin) ([ADR-0021](decisions/0021-wrapper-release-tag-pins.md)). |
 
 Branch protection on `main` is a decision for the team, not a step on this page. Publishing runs from `.github/workflows/publish-npm.yml` when the Release is published.
