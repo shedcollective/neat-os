@@ -38,6 +38,7 @@ This applies to every file a person reads in a Shed repository: READMEs, `docs/`
 | principle | One judgement rule under `principles/` | "leaf" for a principle |
 | OS repo | neat-os or a future `neat-os-tool-*` repository, as opposed to a product repo | "core repo" |
 | source of truth | Spell it out | "SoT" outside agent-facing files |
+| wrapper | The short file in a person's agent that names one playbook and fills the settings in [routine-settings.md](routine-settings.md) | "bot skill" as a second name for the same file |
 
 ## What the check enforces
 

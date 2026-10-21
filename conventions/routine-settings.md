@@ -23,4 +23,4 @@ A playbook may add its own settings, such as a prep tag or a log path. It lists 
 - A missing required setting is asked for once, then the run stops ([never-invent-facts](../principles/never-invent-facts.md)).
 - Settings hold values, not secrets. A credential is referenced by the name of an environment variable and never written into a wrapper ([never-store-secrets.md](never-store-secrets.md)).
 - Real values (the repository, the channel, the host) live in the wrapper or the private operations record, never in this repository ([neutral-reference.md](neutral-reference.md)).
-- A wrapper names the ref it reads playbooks from. Pin `main` or a release tag, not `develop`, so an unreleased change does not alter a live routine.
+- A wrapper names the ref it reads playbooks from. Pin a release tag (`vX.Y.Z`). `main` is a stopgap only. `develop` and other branches never. An unreleased change must not alter a live routine. After a release, bump the tag as in [docs/consume.md](../docs/consume.md#move-a-wrapper-pin).

@@ -7,11 +7,14 @@ description: >-
 
 # <Wrapper title>
 
-Follow [`skills/<playbook>/SKILL.md`](https://github.com/shedcollective/neat-os/blob/<ref>/skills/<playbook>/SKILL.md) at `<ref>`. Pin `main` or a release tag, not `develop`. Do not restate its steps here.
+1. Check the pin (`vX.Y.Z` in the playbook link). A release tag: continue. `main`: say that this is a stopgap, then continue. `develop` or any other branch: say so and stop.
+2. Follow [`skills/<playbook>/SKILL.md`](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/skills/<playbook>/SKILL.md) at `vX.Y.Z`. Replace `vX.Y.Z` with the tag this wrapper pins. Do not restate the playbook's steps here.
+
+The pin rule is [conventions/routine-settings.md](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/conventions/routine-settings.md). How to bump the tag is [docs/consume.md](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/docs/consume.md#move-a-wrapper-pin).
 
 ## Settings
 
-Names and meanings are in [conventions/routine-settings.md](https://github.com/shedcollective/neat-os/blob/<ref>/conventions/routine-settings.md). Delete rows the playbook does not use. Add the playbook's own settings below them.
+Names and meanings are in [conventions/routine-settings.md](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/conventions/routine-settings.md). Delete rows the playbook does not use. Add the playbook's own settings below them.
 
 | Setting | Value |
 | --- | --- |

@@ -31,7 +31,7 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 
 ## Routines
 
-Each person runs these playbooks from their own agent through a thin wrapper ([templates/ops/bot-skill.md](../templates/ops/bot-skill.md)) that supplies the settings in [routine-settings.md](../conventions/routine-settings.md). A wrapper pins `main` or a release tag. `daily-digest` runs after the day's `daily-burndown` and `enhance-daily-update` runs have written the day file.
+Each person runs these playbooks from their own agent through a thin wrapper ([templates/ops/bot-skill.md](../templates/ops/bot-skill.md)) that supplies the settings in [routine-settings.md](../conventions/routine-settings.md). The wrapper pins a release tag ([routine-settings.md](../conventions/routine-settings.md), [ADR-0021](decisions/0021-wrapper-release-tag-pins.md)). How to bump the tag is in [consume.md](consume.md#move-a-wrapper-pin). `daily-digest` runs after the day's `daily-burndown` and `enhance-daily-update` runs have written the day file.
 
 ## Order
 
