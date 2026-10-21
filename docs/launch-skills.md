@@ -74,7 +74,7 @@ These two are playbooks, and they are not part of adoption. `assurance` reads on
 
 `daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, and `meeting-prep` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
 
-`daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post.
+`daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post. `morning-brief` is the weekday morning message for one person (Needs you, Today, Health, Pipeline on Mondays). It does not replace `daily-digest`. The composition rule is in [agency-ops.md](agency-ops.md).
 
 ## Design and UX playbooks
 

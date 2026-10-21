@@ -115,9 +115,9 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 - `assurance` reads one pull request against its ticket and posts an evidence pack. It does not implement, push, approve, or merge.
 - `pin-majors-with-reasons` upgrades dependencies by blast radius and does not take a pinned major on a routine bump.
 
-`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design playbooks (`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, `design-handoff`), the assurance playbook `design-qa`, and UX playbooks (`ux-audit`, `research-synthesis`, `wireframes`) follow [conventions/design-ux-agents.md](conventions/design-ux-agents.md). All playbooks are under [skills/](skills/).
+`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`, `daily-digest`, `morning-brief`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design playbooks (`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, `design-handoff`), the assurance playbook `design-qa`, and UX playbooks (`ux-audit`, `research-synthesis`, `wireframes`) follow [conventions/design-ux-agents.md](conventions/design-ux-agents.md). All playbooks are under [skills/](skills/).
 
-`daily-digest` turns the day file into a short end-of-day post for a team channel. Agency operations playbooks take their inputs from the settings in [conventions/routine-settings.md](conventions/routine-settings.md).
+`daily-digest` turns the day file into a short end-of-day post for a team channel. `morning-brief` composes one morning message per person and replaces separate morning health, digest, and day-plan messages. Agency operations playbooks take their inputs from the settings in [conventions/routine-settings.md](conventions/routine-settings.md).
 
 ## Releases and pinning
 

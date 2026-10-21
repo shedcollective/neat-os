@@ -513,6 +513,34 @@ for (const name of fs.readdirSync(path.join(root, 'docs')).filter((n) => n.endsW
   }
 }
 
+// morning-brief composes one message in a fixed section order (GH-29).
+const morningBrief = read('skills/morning-brief/SKILL.md');
+const morningSections = ['Needs you', 'Today', 'Health', 'Pipeline'];
+const morningAt = morningSections.map((name) => morningBrief.indexOf(`**${name}**`));
+if (morningAt.some((i) => i < 0) || morningAt.some((v, i) => i > 0 && v < morningAt[i - 1])) {
+  fail(`skills/morning-brief/SKILL.md must compose sections in order: ${morningSections.join(', ')}`);
+}
+for (const sentence of [
+  'adds no new facts',
+  'does not delay that alert',
+  'quiet-when-empty',
+  'all green',
+]) {
+  if (!morningBrief.includes(sentence)) {
+    fail(`skills/morning-brief/SKILL.md must lock the morning brief rule: missing "${sentence}"`);
+  }
+}
+if (!read('skills/daily-digest/SKILL.md').includes('morning-brief')) {
+  fail('skills/daily-digest/SKILL.md must point morning messages at morning-brief');
+}
+const agencyOps = read('docs/agency-ops.md');
+if (!agencyOps.includes('morning-brief')) {
+  fail('docs/agency-ops.md must list morning-brief alongside daily-digest');
+}
+if (!agencyOps.includes('Needs you, Today, Health, Pipeline')) {
+  fail('docs/agency-ops.md must state the morning-brief section order');
+}
+
 // Wrapper templates pin a release tag, never a branch (ADR-0021).
 // check-policy.js is at its cap of ten, so this lives here with the
 // release-tag-on-main guard rather than as a prose policy.
