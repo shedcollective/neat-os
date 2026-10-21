@@ -61,6 +61,7 @@ Read by the `release` playbook ([neat-os skills/release/SKILL.md](https://github
 - Finish hook: awaiting interview
 - Hook install: awaiting interview
 - Notes surface: awaiting interview
+- Compose service: awaiting interview
 
 ## Company knowledge
 

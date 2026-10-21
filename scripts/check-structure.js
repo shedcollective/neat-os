@@ -243,10 +243,24 @@ const releaseSkill = read('skills/release/SKILL.md');
 if (!/^disable-model-invocation:\s*true\s*$/m.test(releaseSkill)) {
   fail('skills/release/SKILL.md must set disable-model-invocation: true so it runs only when named');
 }
-for (const needle of ['.agents/project.md', 'git flow release finish', '--no-verify', 'force-push', 'merge-base --is-ancestor']) {
+for (const needle of [
+  '.agents/project.md',
+  'git flow release finish',
+  '--no-verify',
+  'force-push',
+  'merge-base --is-ancestor',
+  'composer update --lock --no-scripts',
+  "jq -r '.version'",
+  'equal to or lower',
+  'drafted release notes are empty',
+  'Compose service',
+]) {
   if (!releaseSkill.includes(needle)) {
     fail(`skills/release/SKILL.md must keep the release guard (${needle})`);
   }
+}
+if (!ticketsSlotTemplate.includes('Compose service')) {
+  fail('templates/.agents/project.md Release slot must name the Compose service');
 }
 
 // Package identity and version agreement.

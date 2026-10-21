@@ -63,6 +63,7 @@ This repository is shipped by a person, following [../docs/release.md](../docs/r
 - Finish hook: none
 - Hook install: none
 - Notes surface: none
+- Compose service: none
 
 ## Company knowledge
 
