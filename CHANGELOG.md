@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.6.0
 
 The bot passport template gains a **Skills** table (OS playbook, passport enhancement, or bot-only), owner-only routine install with duplicate skip rules, and an optional **Day file** table so a passport may name its own top-level burndown sections. The default day shape stays by project. Wrappers read playbooks from `<neat-os-path>` at the pinned tag and stop if the path or tag is missing ([ADR-0022](docs/decisions/0022-wrapper-shared-path.md)). How that path is populated is [issue #15](https://github.com/shedcollective/neat-os/issues/15).
 
