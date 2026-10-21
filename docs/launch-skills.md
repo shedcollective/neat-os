@@ -72,9 +72,13 @@ These two are playbooks, and they are not part of adoption. `assurance` reads on
 
 ## Agency operations playbooks
 
-`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, and `meeting-prep` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
+`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`, `bids-register`, `finance-client-backfill`, `finance-client-sync`, and `finance-lookup` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
 
-`daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post.
+`daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post. `morning-brief` is the weekday morning message for one person (Needs you, Today, Meetings, Health, Pipeline on Mondays). It does not replace `daily-digest`. The composition rule is in [agency-ops.md](agency-ops.md).
+
+## Design and UX playbooks
+
+`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, and `design-handoff` are on-demand playbooks for the design agent. `design-qa` is an on-demand playbook for the assurance role. `ux-audit`, `research-synthesis`, and `wireframes` are on-demand playbooks for the UX agent. They are not part of product-repo adoption. The rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md).
 
 ## Order on a product repository
 

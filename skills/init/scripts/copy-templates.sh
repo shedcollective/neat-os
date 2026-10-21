@@ -11,13 +11,14 @@ usage() {
   cat <<'EOF'
 Usage: copy-templates.sh [--force] [TARGET_DIR]
 
-Copy templates/ (AGENTS.md + .agents/ Agent Guide, platforms slot, and
-project slots) into TARGET_DIR (default: current git root). Existing files
-are skipped unless --force is set. Placeholders stay unfilled — run gather
-to write the evidence passport / Agent Guide content and any beneficial
-platform leaves (frontend/backend/…).
+Copy the IDE spread from templates/ (AGENTS.md + .agents/ Agent Guide,
+platforms slot, and project slots) into TARGET_DIR (default: current git
+root). Existing files are skipped unless --force is set. Placeholders stay
+unfilled — run gather to write the evidence passport / Agent Guide content
+and any beneficial platform leaves (frontend/backend/…).
 
-Does not copy neat-os skills. Agents resolve skills with the locked order:
+Does not copy neat-os skills, agency ops wrappers, day-file shapes, or bot
+passports. Those stay in neat-os. Agents resolve skills with the locked order:
 NEAT_OS_ROOT, then node_modules/@shedcollective/neat-os (file: or github:),
 then vendor/shedcollective/neat-os (Composer metadata only), then sibling
 ../neat-os. SHED_OS_ROOT, @shedcollective/shed-os, vendor/shedcollective/shed-os,
@@ -112,7 +113,9 @@ echo "target:       $TARGET"
 
 while IFS= read -r -d '' src; do
   rel="${src#"$TEMPLATES"/}"
-  copy_file "$src" "$TARGET/$rel"
+  case "$rel" in
+    AGENTS.md|.agents/*) copy_file "$src" "$TARGET/$rel" ;;
+  esac
 done < <(find "$TEMPLATES" -type f -print0 | sort -z)
 
 if [[ ! -e "$TARGET/README.md" ]]; then

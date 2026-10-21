@@ -59,6 +59,13 @@ const required = [
   'skills/learn/SKILL.md',
   'skills/ticket/SKILL.md',
   'templates/AGENTS.md',
+  'templates/ops/bot-skill.md',
+  'templates/ops/bids-register.md',
+  'templates/ops/bid-submission.md',
+  'templates/agent/passport.md',
+  'templates/agent/passport-design.md',
+  'templates/agent/passport-ux.md',
+  'conventions/design-ux-agents.md',
   'templates/.agents/README.md',
   'templates/.agents/project.md',
   'templates/.agents/docs/.gitkeep',
@@ -505,6 +512,303 @@ const docsIndex = read('docs/README.md');
 for (const name of fs.readdirSync(path.join(root, 'docs')).filter((n) => n.endsWith('.md') && n !== 'README.md')) {
   if (!docsIndex.includes(`(${name})`)) {
     fail(`docs/README.md does not list ${name}`);
+  }
+}
+
+// morning-brief composes one message in a fixed section order (GH-29).
+const morningBrief = read('skills/morning-brief/SKILL.md');
+const morningSections = ['Needs you', 'Today', 'Meetings', 'Health', 'Pipeline'];
+const morningAt = morningSections.map((name) => morningBrief.indexOf(`**${name}**`));
+if (morningAt.some((i) => i < 0) || morningAt.some((v, i) => i > 0 && v < morningAt[i - 1])) {
+  fail(`skills/morning-brief/SKILL.md must compose sections in order: ${morningSections.join(', ')}`);
+}
+for (const sentence of [
+  'adds no new facts',
+  'does not delay that alert',
+  'quiet-when-empty',
+  'all green',
+]) {
+  if (!morningBrief.includes(sentence)) {
+    fail(`skills/morning-brief/SKILL.md must lock the morning brief rule: missing "${sentence}"`);
+  }
+}
+if (!read('skills/daily-digest/SKILL.md').includes('morning-brief')) {
+  fail('skills/daily-digest/SKILL.md must point morning messages at morning-brief');
+}
+const agencyOps = read('docs/agency-ops.md');
+if (!agencyOps.includes('morning-brief')) {
+  fail('docs/agency-ops.md must list morning-brief alongside daily-digest');
+}
+if (!agencyOps.includes('Needs you, Today, Meetings, Health, Pipeline')) {
+  fail('docs/agency-ops.md must state the morning-brief section order');
+}
+if (!read('skills/meeting-prep/SKILL.md').includes('morning-brief')) {
+  fail('skills/meeting-prep/SKILL.md must point scheduled briefs at morning-brief');
+}
+
+// Wrapper templates pin a release tag, never a branch (ADR-0021).
+// check-policy.js is at its cap of ten, so this lives here with the
+// release-tag-on-main guard rather than as a prose policy.
+function wrapperPinRefAllowed(ref) {
+  if (ref === 'vX.Y.Z') return true;
+  return /^v\d+\.\d+\.\d+$/.test(ref);
+}
+
+function githubBlobRefs(text) {
+  const refs = [];
+  const re = /github\.com\/shedcollective\/neat-os\/(?:blob|raw|tree)\/([^/#?\s)]+)/g;
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    refs.push(match[1]);
+  }
+  return refs;
+}
+
+for (const [ref, allowed] of [
+  ['v0.5.0', true],
+  ['vX.Y.Z', true],
+  ['v1.2.3', true],
+  ['develop', false],
+  ['main', false],
+  ['master', false],
+  ['HEAD', false],
+  ['release/0.5.0', false],
+]) {
+  if (wrapperPinRefAllowed(ref) !== allowed) {
+    fail(`wrapper pin classifier (ADR-0021): ${ref} should be ${allowed ? 'allowed' : 'forbidden'}`);
+  }
+}
+
+const wrapperTemplate = read('templates/ops/bot-skill.md');
+if (!wrapperTemplate.includes('say so and stop')) {
+  fail('templates/ops/bot-skill.md must stop when the pin is a branch (ADR-0021)');
+}
+if (!wrapperTemplate.includes('blob/vX.Y.Z/')) {
+  fail('templates/ops/bot-skill.md must pin GitHub playbook links to vX.Y.Z (ADR-0021)');
+}
+if (/Pin `main` or a release tag/.test(wrapperTemplate)) {
+  fail('templates/ops/bot-skill.md must not treat main as a first-class pin (ADR-0021)');
+}
+if (!wrapperTemplate.includes('<neat-os-path>')) {
+  fail('templates/ops/bot-skill.md must read playbooks from <neat-os-path> (ADR-0022)');
+}
+if (!wrapperTemplate.includes('neat-os is not at <neat-os-path>. Stop.')) {
+  fail('templates/ops/bot-skill.md must stop when <neat-os-path> is missing (ADR-0022)');
+}
+if (!wrapperTemplate.includes('is not at vX.Y.Z. Stop.')) {
+  fail('templates/ops/bot-skill.md must stop when the checkout is not the pin (ADR-0022)');
+}
+if (!wrapperTemplate.includes('issue #15')) {
+  fail('templates/ops/bot-skill.md must leave how the shared path is populated to issue #15 (ADR-0022)');
+}
+
+const wrapperPinFiles = [
+  'templates/ops/bot-skill.md',
+  'templates/agent/passport.md',
+  'templates/agent/passport-design.md',
+  'templates/agent/passport-ux.md',
+];
+for (const rel of wrapperPinFiles) {
+  const text = rel === 'templates/ops/bot-skill.md' ? wrapperTemplate : read(rel);
+  const refs = githubBlobRefs(text);
+  for (const ref of refs) {
+    if (!wrapperPinRefAllowed(ref)) {
+      fail(`${rel} pins a branch or non-tag ref "${ref}"; pin a release tag (ADR-0021)`);
+    }
+  }
+}
+if (!githubBlobRefs(wrapperTemplate).length) {
+  fail('templates/ops/bot-skill.md must contain a GitHub blob pin (ADR-0021)');
+}
+
+const passportTemplate = read('templates/agent/passport.md');
+for (const heading of ['## Job', '## Never', '## Human gates', '## Sources', '## Skills', '## Routines', '## Day file', '## Pin', '## Review']) {
+  if (!passportTemplate.includes(heading)) {
+    fail(`templates/agent/passport.md missing ${heading}`);
+  }
+}
+for (const kind of ['OS playbook', 'passport enhancement', 'bot-only']) {
+  if (!passportTemplate.includes(kind)) {
+    fail(`templates/agent/passport.md Skills table must name kind "${kind}"`);
+  }
+}
+if (!passportTemplate.includes('Install only the rows whose Owner is this passport\'s owner')) {
+  fail('templates/agent/passport.md must install routines for the owner only');
+}
+if (!passportTemplate.includes('Skip a row when a wrapper for that triple already exists')) {
+  fail('templates/agent/passport.md must skip duplicate owner-name-schedule routines');
+}
+if (!/private operations record/.test(passportTemplate) || !/never in neat-os/.test(passportTemplate)) {
+  fail('templates/agent/passport.md must say filled passports live in the private operations record, never in neat-os');
+}
+if (!passportTemplate.includes('Pin a release tag')) {
+  fail('templates/agent/passport.md Pin must require a release tag (ADR-0021)');
+}
+if (!/^## Team bots$/m.test(read('docs/team-setup.md'))) {
+  fail('docs/team-setup.md must say every team bot has a bot passport before it runs a routine');
+}
+if (!read('docs/team-setup.md').includes('before it runs a routine')) {
+  fail('docs/team-setup.md must require a bot passport before a team bot runs a routine');
+}
+
+const designUxConvention = read('conventions/design-ux-agents.md');
+for (const sentence of [
+  'read only the asker\'s own connectors',
+  'new drafts or comments',
+  'Do not edit a client\'s live library, live site, or live Figma file',
+  'Do not change a ticket\'s status',
+  'Do not send anything to a client',
+  'Links only',
+  '2 to 3 Figma options',
+  'lock owner named on the brief',
+  'EXAMPLE DATA',
+  'design/<brand>/',
+  'tokens.json',
+  'belongs to the assurance role',
+  'Do not write code, open a code pull request, or merge',
+  'Never use a team secret',
+  'Set the file name at creation',
+  'dedicated throwaway',
+  'Self-merge stays forbidden everywhere else',
+  'Keyword volumes cite',
+]) {
+  if (!designUxConvention.includes(sentence)) {
+    fail(`conventions/design-ux-agents.md must lock design and UX agent rules: missing "${sentence}"`);
+  }
+}
+
+const passportHeadings = ['## Job', '## Never', '## Human gates', '## Sources', '## Skills', '## Routines', '## Day file', '## Pin', '## Review'];
+for (const rel of ['templates/agent/passport-design.md', 'templates/agent/passport-ux.md']) {
+  const text = read(rel);
+  for (const heading of passportHeadings) {
+    if (!text.includes(heading)) {
+      fail(`${rel} missing ${heading}`);
+    }
+  }
+  if (!/role-neutral example/.test(text) || !/never in neat-os/.test(text)) {
+    fail(`${rel} must say it is a role-neutral example and that filled passports never live in neat-os`);
+  }
+  if (!text.includes('`v0.5.0`')) {
+    fail(`${rel} must pin v0.5.0`);
+  }
+  if (!text.includes('Passport owner | director')) {
+    fail(`${rel} must name director as the passport owner role`);
+  }
+  if (!text.includes('<YYYY-MM-DD>')) {
+    fail(`${rel} Review date must stay a placeholder`);
+  }
+}
+
+const designPassport = read('templates/agent/passport-design.md');
+if (designPassport.includes('Canva')) {
+  fail('templates/agent/passport-design.md must not list Canva');
+}
+if (!designPassport.includes('2 to 3 Figma options')) {
+  fail('templates/agent/passport-design.md Job must be 2 to 3 Figma options a lock owner picks');
+}
+
+for (const [rel, refuse] of [
+  ['skills/brand-from-site/SKILL.md', 'Never edit an existing file'],
+  ['skills/design-qa/SKILL.md', 'Comment on the ticket or pull request'],
+  ['skills/ux-audit/SKILL.md', 'Do not edit the site'],
+  ['skills/research-synthesis/SKILL.md', 'Strip personal data'],
+  ['skills/wireframes/SKILL.md', 'Do not merge'],
+  ['skills/design-brief/SKILL.md', 'Check the asker\'s Figma seat first'],
+  ['skills/mockup/SKILL.md', 'EXAMPLE DATA'],
+  ['skills/design-handoff/SKILL.md', 'conventions/ticket-content.md'],
+  ['skills/brand-board-from-assets/SKILL.md', 'open-decisions'],
+  ['skills/naming-and-voice/SKILL.md', 'locked.md'],
+]) {
+  const text = read(rel);
+  if (!text.includes(refuse)) {
+    fail(`${rel} must lock its refuse rule: missing "${refuse}"`);
+  }
+  if (!text.includes('conventions/design-ux-agents.md')) {
+    fail(`${rel} must point at conventions/design-ux-agents.md`);
+  }
+}
+
+const routineSettings = read('conventions/routine-settings.md');
+for (const sentence of [
+  'Pin a release tag',
+  '`main` is a stopgap only',
+  '`develop` and other branches never',
+]) {
+  if (!routineSettings.includes(sentence)) {
+    fail(`conventions/routine-settings.md must lock wrapper pins (ADR-0021): missing "${sentence}"`);
+  }
+}
+if (/Pin `main` or a release tag/.test(routineSettings)) {
+  fail('conventions/routine-settings.md must not treat main as a first-class pin (ADR-0021)');
+}
+
+if (!routineSettings.includes('<neat-os-path>')) {
+  fail('conventions/routine-settings.md must name <neat-os-path> (ADR-0022)');
+}
+if (!routineSettings.includes('issue #15')) {
+  fail('conventions/routine-settings.md must leave how the shared path is populated to issue #15 (ADR-0022)');
+}
+
+const consumeDocs = read('docs/consume.md');
+if (!/^## Move a wrapper pin$/m.test(consumeDocs)) {
+  fail('docs/consume.md must document how to bump a wrapper pin (ADR-0021)');
+}
+for (const sentence of [
+  'one pull request for that wrapper',
+  'Pick one wrapper as the canary',
+  'revert that pull request to roll back',
+]) {
+  if (!consumeDocs.includes(sentence)) {
+    fail(`docs/consume.md must lock the wrapper upgrade path (ADR-0021): missing "${sentence}"`);
+  }
+}
+if (!consumeDocs.includes('<neat-os-path>')) {
+  fail('docs/consume.md must say wrappers read from <neat-os-path> (ADR-0022)');
+}
+
+const burndownSkill = read('skills/daily-burndown/SKILL.md');
+if (!burndownSkill.includes('OS does not forbid named top-level sections')) {
+  fail('skills/daily-burndown/SKILL.md must allow passport-named day-file sections');
+}
+const enhanceSkill = read('skills/enhance-daily-update/SKILL.md');
+if (!enhanceSkill.includes('OS does not forbid named top-level sections')) {
+  fail('skills/enhance-daily-update/SKILL.md must allow passport-named day-file sections');
+}
+if (enhanceSkill.includes('Do not add `## Front end`')) {
+  fail('skills/enhance-daily-update/SKILL.md must not forbid named top-level sections');
+}
+
+const bidsRegister = read('skills/bids-register/SKILL.md');
+for (const sentence of [
+  'bids/<yyyy-mm-dd>-<buyer-slug>-<ref>/',
+  'submission.md',
+  'idempotent',
+  'Never commit credentials, portal logins, or tokens',
+  'Never commit a full financial or accounts package',
+  'Never commit the zip',
+  'superseded',
+  'operations lead',
+  'There is no separate new-business agent',
+]) {
+  if (!bidsRegister.includes(sentence)) {
+    fail(`skills/bids-register/SKILL.md must lock the bids register rule: missing "${sentence}"`);
+  }
+}
+if (!read('templates/ops/bid-submission.md').includes('Zip sha256')) {
+  fail('templates/ops/bid-submission.md must record the zip sha256');
+}
+
+for (const rel of [
+  'skills/finance-client-backfill/SKILL.md',
+  'skills/finance-client-sync/SKILL.md',
+  'skills/finance-lookup/SKILL.md',
+]) {
+  const text = read(rel);
+  if (!text.includes('<accounting-tool>') || !text.includes('<ACCOUNTING_TOKEN_ENV>') || !text.includes('<accounting-account>')) {
+    fail(`${rel} must leave the accounting tool, token, and account to the passport`);
+  }
+  if (!text.includes('Director only')) {
+    fail(`${rel} must be usable by any director and refuse another director's account`);
   }
 }
 
