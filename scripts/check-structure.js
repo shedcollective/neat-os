@@ -60,6 +60,8 @@ const required = [
   'skills/ticket/SKILL.md',
   'templates/AGENTS.md',
   'templates/ops/bot-skill.md',
+  'templates/ops/bids-register.md',
+  'templates/ops/bid-submission.md',
   'templates/agent/passport.md',
   'templates/agent/passport-design.md',
   'templates/agent/passport-ux.md',
@@ -515,7 +517,7 @@ for (const name of fs.readdirSync(path.join(root, 'docs')).filter((n) => n.endsW
 
 // morning-brief composes one message in a fixed section order (GH-29).
 const morningBrief = read('skills/morning-brief/SKILL.md');
-const morningSections = ['Needs you', 'Today', 'Health', 'Pipeline'];
+const morningSections = ['Needs you', 'Today', 'Meetings', 'Health', 'Pipeline'];
 const morningAt = morningSections.map((name) => morningBrief.indexOf(`**${name}**`));
 if (morningAt.some((i) => i < 0) || morningAt.some((v, i) => i > 0 && v < morningAt[i - 1])) {
   fail(`skills/morning-brief/SKILL.md must compose sections in order: ${morningSections.join(', ')}`);
@@ -537,8 +539,11 @@ const agencyOps = read('docs/agency-ops.md');
 if (!agencyOps.includes('morning-brief')) {
   fail('docs/agency-ops.md must list morning-brief alongside daily-digest');
 }
-if (!agencyOps.includes('Needs you, Today, Health, Pipeline')) {
+if (!agencyOps.includes('Needs you, Today, Meetings, Health, Pipeline')) {
   fail('docs/agency-ops.md must state the morning-brief section order');
+}
+if (!read('skills/meeting-prep/SKILL.md').includes('morning-brief')) {
+  fail('skills/meeting-prep/SKILL.md must point scheduled briefs at morning-brief');
 }
 
 // Wrapper templates pin a release tag, never a branch (ADR-0021).
@@ -584,6 +589,18 @@ if (!wrapperTemplate.includes('blob/vX.Y.Z/')) {
 if (/Pin `main` or a release tag/.test(wrapperTemplate)) {
   fail('templates/ops/bot-skill.md must not treat main as a first-class pin (ADR-0021)');
 }
+if (!wrapperTemplate.includes('<neat-os-path>')) {
+  fail('templates/ops/bot-skill.md must read playbooks from <neat-os-path> (ADR-0022)');
+}
+if (!wrapperTemplate.includes('neat-os is not at <neat-os-path>. Stop.')) {
+  fail('templates/ops/bot-skill.md must stop when <neat-os-path> is missing (ADR-0022)');
+}
+if (!wrapperTemplate.includes('is not at vX.Y.Z. Stop.')) {
+  fail('templates/ops/bot-skill.md must stop when the checkout is not the pin (ADR-0022)');
+}
+if (!wrapperTemplate.includes('issue #15')) {
+  fail('templates/ops/bot-skill.md must leave how the shared path is populated to issue #15 (ADR-0022)');
+}
 
 const wrapperPinFiles = [
   'templates/ops/bot-skill.md',
@@ -605,10 +622,21 @@ if (!githubBlobRefs(wrapperTemplate).length) {
 }
 
 const passportTemplate = read('templates/agent/passport.md');
-for (const heading of ['## Job', '## Never', '## Human gates', '## Sources', '## Routines', '## Pin', '## Review']) {
+for (const heading of ['## Job', '## Never', '## Human gates', '## Sources', '## Skills', '## Routines', '## Day file', '## Pin', '## Review']) {
   if (!passportTemplate.includes(heading)) {
     fail(`templates/agent/passport.md missing ${heading}`);
   }
+}
+for (const kind of ['OS playbook', 'passport enhancement', 'bot-only']) {
+  if (!passportTemplate.includes(kind)) {
+    fail(`templates/agent/passport.md Skills table must name kind "${kind}"`);
+  }
+}
+if (!passportTemplate.includes('Install only the rows whose Owner is this passport\'s owner')) {
+  fail('templates/agent/passport.md must install routines for the owner only');
+}
+if (!passportTemplate.includes('Skip a row when a wrapper for that triple already exists')) {
+  fail('templates/agent/passport.md must skip duplicate owner-name-schedule routines');
 }
 if (!/private operations record/.test(passportTemplate) || !/never in neat-os/.test(passportTemplate)) {
   fail('templates/agent/passport.md must say filled passports live in the private operations record, never in neat-os');
@@ -649,7 +677,7 @@ for (const sentence of [
   }
 }
 
-const passportHeadings = ['## Job', '## Never', '## Human gates', '## Sources', '## Routines', '## Pin', '## Review'];
+const passportHeadings = ['## Job', '## Never', '## Human gates', '## Sources', '## Skills', '## Routines', '## Day file', '## Pin', '## Review'];
 for (const rel of ['templates/agent/passport-design.md', 'templates/agent/passport-ux.md']) {
   const text = read(rel);
   for (const heading of passportHeadings) {
@@ -714,6 +742,13 @@ if (/Pin `main` or a release tag/.test(routineSettings)) {
   fail('conventions/routine-settings.md must not treat main as a first-class pin (ADR-0021)');
 }
 
+if (!routineSettings.includes('<neat-os-path>')) {
+  fail('conventions/routine-settings.md must name <neat-os-path> (ADR-0022)');
+}
+if (!routineSettings.includes('issue #15')) {
+  fail('conventions/routine-settings.md must leave how the shared path is populated to issue #15 (ADR-0022)');
+}
+
 const consumeDocs = read('docs/consume.md');
 if (!/^## Move a wrapper pin$/m.test(consumeDocs)) {
   fail('docs/consume.md must document how to bump a wrapper pin (ADR-0021)');
@@ -725,6 +760,55 @@ for (const sentence of [
 ]) {
   if (!consumeDocs.includes(sentence)) {
     fail(`docs/consume.md must lock the wrapper upgrade path (ADR-0021): missing "${sentence}"`);
+  }
+}
+if (!consumeDocs.includes('<neat-os-path>')) {
+  fail('docs/consume.md must say wrappers read from <neat-os-path> (ADR-0022)');
+}
+
+const burndownSkill = read('skills/daily-burndown/SKILL.md');
+if (!burndownSkill.includes('OS does not forbid named top-level sections')) {
+  fail('skills/daily-burndown/SKILL.md must allow passport-named day-file sections');
+}
+const enhanceSkill = read('skills/enhance-daily-update/SKILL.md');
+if (!enhanceSkill.includes('OS does not forbid named top-level sections')) {
+  fail('skills/enhance-daily-update/SKILL.md must allow passport-named day-file sections');
+}
+if (enhanceSkill.includes('Do not add `## Front end`')) {
+  fail('skills/enhance-daily-update/SKILL.md must not forbid named top-level sections');
+}
+
+const bidsRegister = read('skills/bids-register/SKILL.md');
+for (const sentence of [
+  'bids/<yyyy-mm-dd>-<buyer-slug>-<ref>/',
+  'submission.md',
+  'idempotent',
+  'Never commit credentials, portal logins, or tokens',
+  'Never commit a full financial or accounts package',
+  'Never commit the zip',
+  'superseded',
+  'operations lead',
+  'There is no separate new-business agent',
+]) {
+  if (!bidsRegister.includes(sentence)) {
+    fail(`skills/bids-register/SKILL.md must lock the bids register rule: missing "${sentence}"`);
+  }
+}
+if (!read('templates/ops/bid-submission.md').includes('Zip sha256')) {
+  fail('templates/ops/bid-submission.md must record the zip sha256');
+}
+
+for (const rel of [
+  'skills/finance-client-backfill/SKILL.md',
+  'skills/finance-client-sync/SKILL.md',
+  'skills/finance-lookup/SKILL.md',
+]) {
+  const text = read(rel);
+  if (!text.includes('<accounting-tool>') || !text.includes('<ACCOUNTING_TOKEN_ENV>') || !text.includes('<accounting-account>')) {
+    fail(`${rel} must leave the accounting tool, token, and account to the passport`);
+  }
+  if (!text.includes('Director only')) {
+    fail(`${rel} must be usable by any director and refuse another director's account`);
   }
 }
 

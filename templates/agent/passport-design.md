@@ -41,12 +41,30 @@ Connectors this agent may read. Always the asker's own, never another person's.
 - GitHub (read)
 - Jira
 
+## Skills
+
+| Skill | Kind |
+| --- | --- |
+| `design-brief` | OS playbook |
+| `mockup` | OS playbook |
+| `brand-from-site` | OS playbook |
+| `brand-board-from-assets` | OS playbook |
+| `naming-and-voice` | OS playbook |
+| `design-handoff` | OS playbook |
+
 ## Routines
 
-None yet. Add a wrapper here when a routine is opted in.
+None yet. Add a wrapper here when a routine is opted in. Install only the rows whose Owner is this passport's owner. Skip a row when a wrapper for that owner, name, and schedule already exists.
 
 | Name | Schedule | Timezone | Owner | Wrapper | Playbook |
 | --- | --- | --- | --- | --- | --- |
+
+## Day file
+
+Leave empty to keep the default by-project shape.
+
+| Heading | Meaning |
+| --- | --- |
 
 ## Pin
 
@@ -54,7 +72,7 @@ The neat-os release tag this agent reads playbooks from. Pin a release tag (`vX.
 
 `v0.5.0`
 
-How to bump the tag is in [docs/consume.md](https://github.com/shedcollective/neat-os/blob/v0.5.0/docs/consume.md#move-a-wrapper-pin).
+How to bump the tag is in [docs/consume.md](https://github.com/shedcollective/neat-os/blob/v0.5.0/docs/consume.md#move-a-wrapper-pin). The wrapper reads that pin from `<neat-os-path>` ([ADR-0022](https://github.com/shedcollective/neat-os/blob/v0.5.0/docs/decisions/0022-wrapper-shared-path.md)).
 
 ## Review
 

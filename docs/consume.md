@@ -182,7 +182,7 @@ After the pin moves, update the product repository's guide only where [`template
 
 ## Move a wrapper pin
 
-A wrapper is not a product repository. It reads playbooks through a git ref in [templates/ops/bot-skill.md](../templates/ops/bot-skill.md). The pin rule is in [routine-settings.md](../conventions/routine-settings.md) ([ADR-0021](decisions/0021-wrapper-release-tag-pins.md)). After a release, bump that tag.
+A wrapper is not a product repository. It reads playbooks from `<neat-os-path>` at a pinned release tag ([templates/ops/bot-skill.md](../templates/ops/bot-skill.md), [ADR-0022](decisions/0022-wrapper-shared-path.md)). The pin rule is in [routine-settings.md](../conventions/routine-settings.md) ([ADR-0021](decisions/0021-wrapper-release-tag-pins.md)). After a release, bump that tag. How the shared path is populated is not this page ([issue #15](https://github.com/shedcollective/neat-os/issues/15)).
 
 1. Pick one wrapper as the canary. Change its pin from the old tag to the new tag (`vX.Y.Z`).
 2. Open one pull request for that wrapper. A person reviews and merges.

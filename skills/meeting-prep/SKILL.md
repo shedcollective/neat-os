@@ -21,6 +21,7 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does (`res
 
 ## When not to use
 
+- The weekday morning message (that is [`morning-brief`](../morning-brief/SKILL.md)). Scheduled `brief` content is a **Meetings** section there, not a second ping.
 - A general client brief that is not tied to a meeting (that is [`client-brief`](../client-brief/SKILL.md)).
 - A project status for a named project (that is [`project-update`](../project-update/SKILL.md)).
 - Writing one ticket from a brief someone gave you (that is [`ticket`](../ticket/SKILL.md)).
@@ -85,7 +86,7 @@ More than one person's agent may follow up the same meeting. Before proposing, a
 
 ### brief
 
-Run before the day's meetings, on the schedule the routine sets. When there are no qualifying meetings, stay quiet.
+Run before the day's meetings only when someone names a meeting, or when [`morning-brief`](../morning-brief/SKILL.md) asks this mode for its **Meetings** section. A scheduled weekday morning run delivers through `morning-brief`, not as a separate message. When there are no qualifying meetings, stay quiet.
 
 1. **Gather.** List today's (or the named day's) qualifying meetings from the person's calendar. For each meeting:
    - Notes or transcripts from the last two or three meetings with the same account or attendees: decisions, open actions, owners.
@@ -106,7 +107,7 @@ Run before the day's meetings, on the schedule the routine sets. When there are 
    - **You owe**, then **They owe**: reconciled.
    - **Raise**: one to three points.
    - A gaps note naming any source that was not checked.
-4. **Deliver** to `<destination>`. Keep it warm, brief, and easy to skim.
+4. **Deliver** to `<destination>` when this mode was asked on its own. When `morning-brief` called this mode, return the blocks for its **Meetings** section and do not post a second message. Keep it warm, brief, and easy to skim.
 
 ## Post-meeting mode
 
