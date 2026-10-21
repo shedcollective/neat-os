@@ -32,27 +32,29 @@ The routine supplies these values, named as in [conventions/routine-settings.md]
 - **`<connectors>` only.** Never invent a source that is not connected. List missing sources under Sources unavailable ([never-invent-facts](../../principles/never-invent-facts.md)).
 - **No billing amounts** in the day file or the in-flight board.
 - **No secrets** ([never-store-secrets.md](../../conventions/never-store-secrets.md)).
-- Write the **shared day body** only: Agency state, project sections, Agency, Sources unavailable. Fill **by project**, not by source type. Leave later perspective detail for `enhance-daily-update`, which appends into the same `###` project sections.
+- Write the **shared day body** only. The default is Agency state, project sections, Agency, Sources unavailable. Fill **by project**, not by source type, unless the bot passport names other top-level sections (for example by discipline). When it does, those headings replace the project block. Agency state stays first. Sources unavailable stays last. OS does not forbid named top-level sections. Leave later perspective detail for `enhance-daily-update`, which appends into the same sections.
 - When there is nothing work-related to report, follow `<quiet-when-empty>`: stay quiet, or write an explicit empty stub.
 - One line per fact. Do not invent holidays, absences, or leave from a misread message.
 
 ## Day shape
 
-Use [templates/ops/burndown-day.md](../../templates/ops/burndown-day.md) (or the record's own copy):
+Use [templates/ops/burndown-day.md](../../templates/ops/burndown-day.md) (or the record's own copy) unless the bot passport's Day file table names other top-level headings.
 
-1. `### Agency state` first, with `#### People` (holidays, OOO, absences, cover — only when verified) and `#### Notable` (sparse later-useful agency facts).
+Default shape:
+
+1. `### Agency state` first, with `#### People` (holidays, OOO, absences, cover, only when verified) and `#### Notable` (sparse later-useful agency facts).
 2. One `### <Project>` per project that had work today. Optional `Client:` line when the private record has a CRM folder. Then only the `####` activity headings that have content: Tickets, Email, Slack, Meetings / notes, Ships / merges, Blocked / next. Flat `- ` bullets under each; omit empty headings.
 3. `### Agency` for cross-cutting delivery that is not one project (same activity headings; omit empty).
 4. `### Sources unavailable` for connectors that were missing or failed.
 
-There are no separate top-level perspective wrappers in the day file.
+When the passport names top-level sections, keep Agency state first and Sources unavailable last, and use those named headings in place of the project block. Do not invent a heading the passport did not name.
 
 ## Steps
 
 1. **Resolve the date** in `<timezone>` (default: today). Build the day path the record uses, typically `burndown/YYYY/MM/YYYY-MM-DD.md`.
 2. **Confirm `<ops-record>`** (clone or remote). Stop if it is missing.
 3. **Collect work activity** for that local day from `<connectors>`: version control pushes and pull requests, team channels, Slack Connect / external client channels when the team uses them, the asker's work-related direct messages, calendar meetings (including OOO / holiday calendars), meeting notes, work email, and tickets that moved.
-4. **Draft the day file** from the template. Agency state first, then projects, Agency, and Sources unavailable.
+4. **Draft the day file** from the template, or from the passport Day file table when it has rows. Agency state first. Sources unavailable last.
 5. **Refresh the in-flight board** in that record: project, what is in flight, owner, done when, blocked.
 6. **Commit** the day file and the in-flight board per `<write-rule>` (normally direct to the default branch for those two paths). Never rewrite history. Prefer merge commits on feature branches ([conventions/git.md](../../conventions/git.md)).
 7. **Voice:** British English, short active sentences. Lead with the decision, the owner, and the next move. Do not name bots ([conventions/writing.md](../../conventions/writing.md), [neutral-reference.md](../../conventions/neutral-reference.md)).
