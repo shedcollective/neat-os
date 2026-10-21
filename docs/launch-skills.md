@@ -76,6 +76,10 @@ These two are playbooks, and they are not part of adoption. `assurance` reads on
 
 `daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post. `morning-brief` is the weekday morning message for one person (Needs you, Today, Meetings, Health, Pipeline on Mondays). It does not replace `daily-digest`. The composition rule is in [agency-ops.md](agency-ops.md).
 
+## Design and UX playbooks
+
+`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, and `design-handoff` are on-demand playbooks for the design agent. `design-qa` is an on-demand playbook for the assurance role. `ux-audit`, `research-synthesis`, and `wireframes` are on-demand playbooks for the UX agent. They are not part of product-repo adoption. The rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md).
+
 ## Order on a product repository
 
 For a new repository: install neat-os ([consume.md](consume.md)), run `init`, run `gather`, then start feature work on `develop`. Run `ticket` whenever work needs to reach Jira. Run `learn` after a stretch of work when you want to know what could be shared.

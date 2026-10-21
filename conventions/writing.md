@@ -41,6 +41,10 @@ This applies to every file a person reads in a Shed repository: READMEs, `docs/`
 | wrapper | The short file in a person's agent that names one playbook and fills the settings in [routine-settings.md](routine-settings.md) | "bot skill" as a second name for the same file |
 | bot passport | The one-screen record of a team bot's job, refusals, human gates, sources, skills, routines, pin, and owner | "profile" |
 | operations lead | The role that owns the private operations record, including the bids register | "chief of staff" as a second name, a person's name, a bot name |
+| design agent | The team agent whose job is to turn a brief into 2 to 3 Figma options a named lock owner picks | a bot name |
+| UX agent | The team agent whose job is UX audit, research synthesis, and information architecture with clickable wireframes | a bot name |
+| lock owner | The person named on the brief who picks one of the 2 to 3 options | a person's name |
+| client lead | The person who may send work to that client, and who may approve edits to that client's design system | a person's name |
 
 ## What the check enforces
 

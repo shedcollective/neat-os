@@ -63,6 +63,9 @@ const required = [
   'templates/ops/bids-register.md',
   'templates/ops/bid-submission.md',
   'templates/agent/passport.md',
+  'templates/agent/passport-design.md',
+  'templates/agent/passport-ux.md',
+  'conventions/design-ux-agents.md',
   'templates/.agents/README.md',
   'templates/.agents/project.md',
   'templates/.agents/docs/.gitkeep',
@@ -599,7 +602,12 @@ if (!wrapperTemplate.includes('issue #15')) {
   fail('templates/ops/bot-skill.md must leave how the shared path is populated to issue #15 (ADR-0022)');
 }
 
-const wrapperPinFiles = ['templates/ops/bot-skill.md', 'templates/agent/passport.md'];
+const wrapperPinFiles = [
+  'templates/ops/bot-skill.md',
+  'templates/agent/passport.md',
+  'templates/agent/passport-design.md',
+  'templates/agent/passport-ux.md',
+];
 for (const rel of wrapperPinFiles) {
   const text = rel === 'templates/ops/bot-skill.md' ? wrapperTemplate : read(rel);
   const refs = githubBlobRefs(text);
@@ -641,6 +649,83 @@ if (!/^## Team bots$/m.test(read('docs/team-setup.md'))) {
 }
 if (!read('docs/team-setup.md').includes('before it runs a routine')) {
   fail('docs/team-setup.md must require a bot passport before a team bot runs a routine');
+}
+
+const designUxConvention = read('conventions/design-ux-agents.md');
+for (const sentence of [
+  'read only the asker\'s own connectors',
+  'new drafts or comments',
+  'Do not edit a client\'s live library, live site, or live Figma file',
+  'Do not change a ticket\'s status',
+  'Do not send anything to a client',
+  'Links only',
+  '2 to 3 Figma options',
+  'lock owner named on the brief',
+  'EXAMPLE DATA',
+  'design/<brand>/',
+  'tokens.json',
+  'belongs to the assurance role',
+  'Do not write code, open a code pull request, or merge',
+  'Never use a team secret',
+  'Set the file name at creation',
+  'dedicated throwaway',
+  'Self-merge stays forbidden everywhere else',
+  'Keyword volumes cite',
+]) {
+  if (!designUxConvention.includes(sentence)) {
+    fail(`conventions/design-ux-agents.md must lock design and UX agent rules: missing "${sentence}"`);
+  }
+}
+
+const passportHeadings = ['## Job', '## Never', '## Human gates', '## Sources', '## Skills', '## Routines', '## Day file', '## Pin', '## Review'];
+for (const rel of ['templates/agent/passport-design.md', 'templates/agent/passport-ux.md']) {
+  const text = read(rel);
+  for (const heading of passportHeadings) {
+    if (!text.includes(heading)) {
+      fail(`${rel} missing ${heading}`);
+    }
+  }
+  if (!/role-neutral example/.test(text) || !/never in neat-os/.test(text)) {
+    fail(`${rel} must say it is a role-neutral example and that filled passports never live in neat-os`);
+  }
+  if (!text.includes('`v0.5.0`')) {
+    fail(`${rel} must pin v0.5.0`);
+  }
+  if (!text.includes('Passport owner | director')) {
+    fail(`${rel} must name director as the passport owner role`);
+  }
+  if (!text.includes('<YYYY-MM-DD>')) {
+    fail(`${rel} Review date must stay a placeholder`);
+  }
+}
+
+const designPassport = read('templates/agent/passport-design.md');
+if (designPassport.includes('Canva')) {
+  fail('templates/agent/passport-design.md must not list Canva');
+}
+if (!designPassport.includes('2 to 3 Figma options')) {
+  fail('templates/agent/passport-design.md Job must be 2 to 3 Figma options a lock owner picks');
+}
+
+for (const [rel, refuse] of [
+  ['skills/brand-from-site/SKILL.md', 'Never edit an existing file'],
+  ['skills/design-qa/SKILL.md', 'Comment on the ticket or pull request'],
+  ['skills/ux-audit/SKILL.md', 'Do not edit the site'],
+  ['skills/research-synthesis/SKILL.md', 'Strip personal data'],
+  ['skills/wireframes/SKILL.md', 'Do not merge'],
+  ['skills/design-brief/SKILL.md', 'Check the asker\'s Figma seat first'],
+  ['skills/mockup/SKILL.md', 'EXAMPLE DATA'],
+  ['skills/design-handoff/SKILL.md', 'conventions/ticket-content.md'],
+  ['skills/brand-board-from-assets/SKILL.md', 'open-decisions'],
+  ['skills/naming-and-voice/SKILL.md', 'locked.md'],
+]) {
+  const text = read(rel);
+  if (!text.includes(refuse)) {
+    fail(`${rel} must lock its refuse rule: missing "${refuse}"`);
+  }
+  if (!text.includes('conventions/design-ux-agents.md')) {
+    fail(`${rel} must point at conventions/design-ux-agents.md`);
+  }
 }
 
 const routineSettings = read('conventions/routine-settings.md');
