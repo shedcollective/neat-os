@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+`morning-brief` composes one morning message per person, in a fixed order: Needs you, Today, Health, Pipeline (Mondays). It adds no new facts. Empty sections are omitted. An all-green brief is one line, or silent when `<quiet-when-empty>` is `yes`. A red production build still alerts at once; this playbook does not delay that alert. It replaces separate morning health, digest, and day-plan messages. `daily-digest` remains the end-of-day team post. The map is [docs/agency-ops.md](docs/agency-ops.md).
+
 Wrappers that run agency operations playbooks pin a **release tag**. `main` is a stopgap only. `develop` and other branches never. `scripts/check-structure.js` fails when a wrapper template pins a branch. After a release, bump the tag by pull request: one wrapper at a time, canary first, revert to roll back. The rule is [conventions/routine-settings.md](conventions/routine-settings.md). The upgrade path is [docs/consume.md](docs/consume.md#move-a-wrapper-pin). [ADR-0021](docs/decisions/0021-wrapper-release-tag-pins.md).
 
 Every team bot has a **bot passport** before it runs a routine. The template is [templates/agent/passport.md](templates/agent/passport.md): Job, Never, Human gates, Sources, Routines, Pin, Review date and owner. Filled passports live in the private operations record, never in this repository. `scripts/check-structure.js` requires the template. The rule is in [docs/team-setup.md](docs/team-setup.md).
