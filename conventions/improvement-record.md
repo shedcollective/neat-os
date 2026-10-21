@@ -2,7 +2,7 @@
 
 **Locked:** an improvement on a live product is recorded with a baseline taken before the change, the same measure taken after it, and a summary a client can read. The record is a file in the product repository under `.agents/improvements/`.
 
-This page says what an improvement record holds. The `improve` playbook ([skills/improve/SKILL.md](../skills/improve/SKILL.md)) writes it. A person writing one by hand follows the same shape. A roll-up reads the records without a person in the loop, such as the stats page proposed in [#7](https://github.com/shedcollective/neat-os/issues/7), so values are numbers, each measure names its unit and direction, and each record says how widely its summary may be shown. Why the record lives in the repository and who approves the summary is recorded in [ADR-0022](../docs/decisions/0022-improvement-records-live-in-the-product-repo.md).
+This page says what an improvement record holds. The `improve` playbook ([skills/improve/SKILL.md](../skills/improve/SKILL.md)) writes it. A person writing one by hand follows the same shape. A roll-up reads the records without a person in the loop, such as the stats page proposed in [#7](https://github.com/shedcollective/neat-os/issues/7), so values are numbers, each measure names its unit and direction, and each record says how widely its summary may be shown. Why the record lives in the repository and who approves the summary is recorded in [ADR-0023](../docs/decisions/0023-improvement-records-live-in-the-product-repo.md).
 
 ## What counts as an improvement
 
@@ -162,4 +162,4 @@ The baseline window is 1 to 28 September. The result window closes four weeks af
 
 ## Source
 
-[ADR-0022](../docs/decisions/0022-improvement-records-live-in-the-product-repo.md).
+[ADR-0023](../docs/decisions/0023-improvement-records-live-in-the-product-repo.md).

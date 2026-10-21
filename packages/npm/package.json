@@ -1,6 +1,6 @@
 {
   "name": "@shedcollective/neat-os",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "neat-os path helpers. Consumers install the repo root via file: or github:shedcollective/neat-os#vX.Y.Z.",
   "license": "MIT",
   "main": "index.js",

@@ -31,4 +31,5 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0019](0019-publish-github-packages.md) | Publish neat-os to GitHub Packages on a release | Accepted |
 | [0020](0020-ticket-records-the-decided-outcome.md) | A ticket records only the decided outcome | Accepted |
 | [0021](0021-wrapper-release-tag-pins.md) | Bot wrappers pin a release tag | Accepted |
-| [0022](0022-improvement-records-live-in-the-product-repo.md) | Improvement records live in the product repository and a person approves the summary | Proposed |
+| [0022](0022-wrapper-shared-path.md) | Wrappers read neat-os from a shared path at the pin | Accepted |
+| [0023](0023-improvement-records-live-in-the-product-repo.md) | Improvement records live in the product repository and a person approves the summary | Proposed |

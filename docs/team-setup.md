@@ -81,8 +81,12 @@ The `repositoryDependencies` setting in `.cursor/environment.json` widens the ag
 
 ## Team bots
 
-A team bot is a scheduled or on-demand agent that runs an agency operations playbook. It is not a coding agent in a product repository.
+A team bot is a scheduled or on-demand agent that runs a neat-os playbook. It is not a coding agent in a product repository.
 
 Every team bot has a **bot passport** before it runs a routine. Copy [templates/agent/passport.md](../templates/agent/passport.md) into the private operations record and fill it. Do not commit a filled passport in neat-os. Change a passport by pull request. A director merges.
 
-The pin on that passport is a neat-os release tag. The wrapper that runs the routine uses the same pin ([routine-settings.md](../conventions/routine-settings.md)).
+The passport lists every skill (OS playbook, passport enhancement, or bot-only) and every routine. Install only the routines whose Owner is this passport's owner. Skip a routine when a wrapper for that owner, name, and schedule already exists. Two passports never share a wrapper path.
+
+Role-neutral examples for the design agent and the UX agent are [templates/agent/passport-design.md](../templates/agent/passport-design.md) and [templates/agent/passport-ux.md](../templates/agent/passport-ux.md). Copy one into the private record and fill the team's facts. Their rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md). Design playbooks are `design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, and `design-handoff`. `design-qa` belongs to the assurance role. UX playbooks are `ux-audit`, `research-synthesis`, and `wireframes`.
+
+The pin on that passport is a neat-os release tag. The wrapper that runs the routine uses the same pin and reads playbooks from `<neat-os-path>` at that tag ([routine-settings.md](../conventions/routine-settings.md), [ADR-0022](decisions/0022-wrapper-shared-path.md)). If the path or the tag is missing, the wrapper stops. How that path is populated is [issue #15](https://github.com/shedcollective/neat-os/issues/15).
