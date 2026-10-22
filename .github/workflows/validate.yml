@@ -3,6 +3,8 @@ name: Validate neat-os
 on:
   push:
   pull_request:
+    # edited: a new title or body is checked again.
+    types: [opened, edited, reopened, synchronize]
 
 permissions:
   contents: read
@@ -12,7 +14,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      # The neutral-reference check reads the pull request body and commit messages when this is a pull_request.
+      # The neutral-reference check reads the pull request title, body, and commit messages when this is a pull_request.
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4

@@ -5,8 +5,8 @@
  * Neutral-reference check (ADR-0016, ADR-0023). conventions/neutral-reference.md.
  *
  * Keeps Shed's business out of what this repository publishes. Scans the tree
- * and, on a pull_request event, the pull request body and the commit messages
- * in that pull request only. It does not read commit authors or committers,
+ * and, on a pull_request event, the pull request title, the body, and the
+ * commit messages in that pull request only. It does not read commit authors or committers,
  * or commits outside the pull request range. Not a policy entry:
  * scripts/check-policy.js is capped at 10.
  *
@@ -70,6 +70,10 @@ function scan(rel, text) {
     // A Slack id is an uppercase token that contains a digit. A word such as
     // CODEOWNERS or UNLICENSED is not one.
     if (/(?<![A-Za-z0-9])[CDUW](?=[A-Z0-9]*\d)[A-Z0-9]{8,11}(?![A-Za-z0-9])/.test(line)) add('slack id');
+    // Any host under slack.com is a workspace, except Slack's public API docs.
+    for (const match of line.matchAll(/(?<![A-Za-z0-9.-])((?:[A-Za-z0-9-]+\.)+slack\.com)(?![A-Za-z0-9-])/gi)) {
+      if (match[1].toLowerCase() !== 'api.slack.com') add('slack link');
+    }
     if (/[A-Za-z0-9.-]+\.atlassian\.net/i.test(line)) add('atlassian host');
 
     if (!phraseExempt && /\b(ask|tell|ping)\s+me\b/i.test(line)) add('ask/tell/ping me');
@@ -135,7 +139,10 @@ async function pullRequestHits() {
   const pr = event.pull_request;
   if (!pr) return [];
 
-  const hits = scan('pull request body', authorBody(pr.body || ''));
+  const hits = [
+    ...scan('pull request title', pr.title || ''),
+    ...scan('pull request body', authorBody(pr.body || '')),
+  ];
   const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
   if (!token || !repo || !pr.number) {
@@ -181,6 +188,9 @@ function selfTest() {
   assertCase('not a ticket key', scan('t', 'utf-8 psr-4 PSR-4 v0-1 feature/gh-19-v0-1-0-batch'), false);
   assertCase('not a slack id', scan('t', 'CODEOWNERS UNLICENSED GITHUB_WORKSPACE CANDIDATE'), false);
   assertCase('slack', scan('t', 'ping U0123456789'), true);
+  assertCase('slack link', scan('t', 'see https://acme.slack.com/archives/general'), true);
+  assertCase('slack app link', scan('t', 'open app.slack.com/client'), true);
+  assertCase('slack public docs', scan('t', 'https://api.slack.com/methods and https://slack.com/help'), false);
   assertCase('atlassian', scan('t', 'https://acme.atlassian.net/browse/ACME-1'), true);
   assertCase('phrases', scan('t', 'please ask me about my repo'), true);
   assertCase('convention may name the phrase', scan('conventions/neutral-reference.md', 'Do not write ask me'), false);
@@ -217,7 +227,7 @@ function help() {
   console.log(`Usage: node scripts/check-neutral.js
 
 Scans the repository for the neutral-reference rules in conventions/neutral-reference.md.
-In a GitHub Actions pull_request job, the pull request body and the commit messages in that pull request are checked too.
+In a GitHub Actions pull_request job, the pull request title, the body, and the commit messages in that pull request are checked too.
 A commit message in that pull request also fails on a co-author trailer (conventions/attribution.md).
 `);
 }
