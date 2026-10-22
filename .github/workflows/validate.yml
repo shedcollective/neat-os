@@ -12,7 +12,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      # The neutral-reference check reads pull request commits (message, author, committer) when this is a pull_request.
+      # The neutral-reference check reads the pull request body and commit messages when this is a pull_request.
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
