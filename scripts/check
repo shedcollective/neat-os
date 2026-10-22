@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # neat-os required check. Same command locally, in CI, and for agents.
 # Runs: structure (paths, indexes, package agreement) → policy (short ADR-backed
-# prose lint) → neutral reference (names the public tree must not carry) →
+# prose lint) → neutral reference (client and internal detail in published text) →
 # smoke (init / gather / resolve-consume against temp repos).
 set -euo pipefail
 

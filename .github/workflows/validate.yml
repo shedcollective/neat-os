@@ -3,6 +3,8 @@ name: Validate neat-os
 on:
   push:
   pull_request:
+    # edited: a new title or body is checked again.
+    types: [opened, edited, reopened, synchronize]
 
 permissions:
   contents: read
@@ -12,7 +14,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      # The neutral-reference check reads pull request commits when this is a pull_request.
+      # The neutral-reference check reads the pull request title, body, branch, and commit messages when this is a pull_request.
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -20,6 +22,9 @@ jobs:
         with:
           node-version: '22'
       - run: bash scripts/check
+        env:
+          # Client, client company, and client project names. Empty on a fork's pull request. Never echo it.
+          NEAT_OS_PRIVATE_TERMS: ${{ secrets.NEAT_OS_PRIVATE_TERMS }}
       - name: Smoke sibling file install and require API
         run: |
           set -euo pipefail

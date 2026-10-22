@@ -27,6 +27,7 @@ Four things are fixed:
 | Protected git scope, a Cursor team setting | Set to `<org>`, so Cloud Agents run by the `<org>` team can only reach this organisation's repositories |
 | IP allow list, if enabled | Allows the addresses of installed GitHub Apps, which covers Cursor |
 | GitHub Packages | Product repositories may install the published package. The token and `.npmrc` are in [consume.md](consume.md). Do not create a Packages token for an agent during onboarding. An agent installs from the git pin. |
+| Actions secret `NEAT_OS_PRIVATE_TERMS` on `neat-os` | The private term list for the neutral check: client, client company, and client project names. Set by a team admin. The format and the steps are in [neutral-reference.md](../conventions/neutral-reference.md#private-terms). |
 
 ## Cursor team settings
 
@@ -70,6 +71,7 @@ The `repositoryDependencies` setting in `.cursor/environment.json` widens the ag
 4. Add the install to the repository ([consume.md](consume.md)).
 5. Run `init`, then `gather`, until Client and Product are filled.
 6. Protect `main` when the team agrees. Feature work goes to `develop`.
+7. Add the client name and the project name to the private term list ([neutral-reference.md](../conventions/neutral-reference.md#private-terms)).
 
 ## An existing project
 
@@ -78,6 +80,7 @@ The `repositoryDependencies` setting in `.cursor/environment.json` widens the ag
 3. Check the install works before creating any files: `npm install ../neat-os` in the Environment, or the Composer require at the repository root, followed by the install check in [consume.md](consume.md).
 4. Run `init`. It does not overwrite existing files. Then run `gather` with the interview.
 5. Continue normal delivery on `develop`.
+6. Add the client name and the project name to the private term list ([neutral-reference.md](../conventions/neutral-reference.md#private-terms)).
 
 ## Team bots
 

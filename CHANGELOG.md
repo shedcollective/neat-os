@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+The neutral rule keeps Shed's business out of what this repository publishes: client names, client companies, client projects, Slack links and quotes, and internal discussion. It is not about people, so a person's name, a commit author, and a GitHub login may appear, and the check no longer flags a login. `scripts/check-neutral.js` now also flags a Slack workspace link and reads the pull request title. Client, client company, and client project names come from a private term list in the Actions secret `NEAT_OS_PRIVATE_TERMS`, which is never committed and never printed ([conventions/neutral-reference.md](conventions/neutral-reference.md#private-terms)). The author of a commit is the person who did the work, with no list of people and no identity check. A co-author trailer still fails the check on a pull request ([conventions/attribution.md](conventions/attribution.md), [ADR-0023](docs/decisions/0023-neutral-rule-guards-what-is-published.md), [issue #38](https://github.com/shedcollective/neat-os/issues/38)).
+
 ## 0.6.0
 
 The bot passport template gains a **Skills** table (OS playbook, passport enhancement, or bot-only), owner-only routine install with duplicate skip rules, and an optional **Day file** table so a passport may name its own top-level burndown sections. The default day shape stays by project. Wrappers read playbooks from `<neat-os-path>` at the pinned tag and stop if the path or tag is missing ([ADR-0022](docs/decisions/0022-wrapper-shared-path.md)). How that path is populated is [issue #15](https://github.com/shedcollective/neat-os/issues/15).
