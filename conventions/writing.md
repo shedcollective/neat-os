@@ -46,6 +46,8 @@ This applies to every file a person reads in a Shed repository: READMEs, `docs/`
 | lock owner | The person named on the brief who picks one of the 2 to 3 options | a person's name |
 | client lead | The person who may send work to that client, and who may approve edits to that client's design system | a person's name |
 
+The roles in this repository are maintainer, PR author, reviewer, director, asker, operations lead, lock owner, client lead, code agent, assurance agent, design agent, and UX agent. When a sentence is about a role, name the role.
+
 ## What the check enforces
 
 `scripts/check-policy.js` fails the reader-facing pages (`README.md`, `docs/*.md`, `packages/*/README.md`, `conventions/*.md`, `principles/*.md`, `stacks/**/*.md`, `schema/README.md`) on the part of this convention that software can see: em dashes, `≠`, `in order to`, `utilise`, `leverage`, `simply`, and references to a ticket sub-step such as `GH-42 step 4`. `scripts/check-structure.js` rejects Notion URLs anywhere ([ADR-0008](../docs/decisions/0008-repo-is-source-of-truth.md)). Everything else in this page is review.
