@@ -35,7 +35,8 @@ This repo is itself a neat-os tree, so the launch playbooks run against it witho
 ## Rules
 
 - Do **not** invent client or project facts. `init` scaffolds empty/template IDE-spread slots only. `gather` fills them from repo evidence plus interview (Agent Guide, stack, Docker/Make, passport, ticket prefix). Do **not** re-ask [conventions/](conventions/README.md).
-- Name roles, not people, clients, projects, products, or bots. The rule is [conventions/neutral-reference.md](conventions/neutral-reference.md) ([ADR-0016](docs/decisions/0016-neutral-reference.md)).
+- Keep client names, client projects, and internal chat out of this repository. Personal names, authorship, and a team member's GitHub login are allowed. The rule is [conventions/neutral-reference.md](conventions/neutral-reference.md) ([ADR-0016](docs/decisions/0016-neutral-reference.md), narrowed by [ADR-0023](docs/decisions/0023-commit-attribution.md)).
+- Attribute each commit to the person who drove the session. On the clone, set `user.name` and `user.email` to that person's GitHub noreply address, and point `core.hooksPath` at a hooks directory with no co-author `commit-msg` hook. The rule is [conventions/attribution.md](conventions/attribution.md) ([ADR-0023](docs/decisions/0023-commit-attribution.md)).
 - Do **not** store secrets, credentials, or project-specific information in this repository. The convention is [never-store-secrets](conventions/never-store-secrets.md).
 - Do **not** create `neat-os-platform-*` or `neat-os-tool-*` repos from this skeleton. Stack guidance lives under [stacks/](stacks/) ([ADR-0013](docs/decisions/0013-stack-packs-in-shed-os.md)).
 - **`learn` may propose elevation only.** Never push skills to this repo, a platform leaf, or any org skill store. A human opens the PR.

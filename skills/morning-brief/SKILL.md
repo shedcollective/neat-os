@@ -85,7 +85,7 @@ When every section is empty (nothing needs the person, health is green, no day-p
 - **Adds no new facts.** Distil, do not dump. Skip quiet projects and routine ticket moves.
 - **Urgent alerts stay immediate.** A red production build still alerts at once. This playbook does not delay that alert and does not replace it. If a red is still open when the brief runs, **Health** or **Needs you** may mention it.
 - The person's own connectors only (`<connectors>`). Never another person's.
-- No billing amounts, secrets, personal material, or bot names. British English ([writing.md](../../conventions/writing.md), [agent-work-logging.md](../../conventions/agent-work-logging.md), [neutral-reference.md](../../conventions/neutral-reference.md)).
+- No billing amounts, secrets, personal material, or bot names. British English ([writing.md](../../conventions/writing.md), [agent-work-logging.md](../../conventions/agent-work-logging.md)).
 - Deliver only to `<destination>`.
 
 ## Steps

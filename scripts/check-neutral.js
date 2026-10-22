@@ -4,8 +4,8 @@
 /**
  * Neutral-reference check (ADR-0016, conventions/neutral-reference.md).
  *
- * Scans the tree for names a public reference must not carry. Not a policy
- * entry: scripts/check-policy.js is capped at 10.
+ * Scans the tree for client names and internal chat a public reference must
+ * not carry. Not a policy entry: scripts/check-policy.js is capped at 10.
  *
  * On a GitHub Actions pull_request event the check also reads the pull
  * request body and the commit messages in that pull request. The platform
@@ -21,7 +21,10 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const SELF = 'scripts/check-neutral.js';
-const PHRASE_EXEMPT = new Set(['conventions/neutral-reference.md']);
+const PHRASE_EXEMPT = new Set([
+  'conventions/neutral-reference.md',
+  'conventions/attribution.md',
+]);
 const KEY_PREFIXES = new Set(['GH', 'ADR', 'ACME', 'TICKET']);
 
 const BEGIN = '<!-- CURSOR_AGENT_PR_BODY_BEGIN -->';
@@ -187,6 +190,7 @@ function selfTest() {
   assertCase('atlassian', scan('t', 'https://acme.atlassian.net/browse/ACME-1'), true);
   assertCase('phrases', scan('t', 'please ask me about my repo'), true);
   assertCase('convention may name the phrase', scan('conventions/neutral-reference.md', 'Do not write ask me or Co-authored-by'), false);
+  assertCase('attribution page may name the trailer', scan('conventions/attribution.md', 'Do not add a Co-authored-by trailer'), false);
   assertCase('trailer', scan('t', 'Co-authored-by: A <a@example.com>'), true);
   const wrapped = `${BEGIN}\nACME-1 is fine\n${END}\nCo-authored-by: Bot <bot@elsewhere.test>\nplease ask me`;
   assertCase('platform footer', scan('pull request body', authorBody(wrapped)), false);

@@ -25,10 +25,11 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0013](0013-stack-packs-in-shed-os.md) | Stack packs live in shed-os; init and gather point at them | Accepted |
 | [0014](0014-commit-shape-for-review.md) | Commits are one concern, explained, and ordered for review | Accepted |
 | [0015](0015-ticket-titles-name-a-capability-or-a-breakage.md) | Ticket titles name a new capability or a breakage | Accepted |
-| [0016](0016-neutral-reference.md) | The public tree is a neutral reference | Accepted |
+| [0016](0016-neutral-reference.md) | The public tree is a neutral reference | Partially superseded by 0023 |
 | [0017](0017-consume-via-github-packages.md) | Client repositories consume shed-os from GitHub Packages | Partially superseded by 0019 |
 | [0018](0018-no-numeric-principle-cap.md) | The principle set has no numeric cap | Accepted |
 | [0019](0019-publish-github-packages.md) | Publish neat-os to GitHub Packages on a release | Accepted |
 | [0020](0020-ticket-records-the-decided-outcome.md) | A ticket records only the decided outcome | Accepted |
 | [0021](0021-wrapper-release-tag-pins.md) | Bot wrappers pin a release tag | Accepted |
 | [0022](0022-wrapper-shared-path.md) | Wrappers read neat-os from a shared path at the pin | Accepted |
+| [0023](0023-commit-attribution.md) | Credit a commit to the person who drove the session | Accepted |
