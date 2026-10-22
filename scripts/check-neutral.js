@@ -2,18 +2,20 @@
 'use strict';
 
 /**
- * Neutral-reference check (ADR-0016, conventions/neutral-reference.md).
+ * Neutral-reference check (ADR-0016, ADR-0023).
+ * conventions/neutral-reference.md and conventions/attribution.md.
  *
  * Scans the tree for client names and internal chat a public reference must
- * not carry. Not a policy entry: scripts/check-policy.js is capped at 10.
+ * not carry. On a pull_request event it also checks each commit in that pull
+ * request only: message, author email, and committer email. It does not read
+ * commits outside the pull request range. Not a policy entry:
+ * scripts/check-policy.js is capped at 10.
  *
- * On a GitHub Actions pull_request event the check also reads the pull
- * request body and the commit messages in that pull request. The platform
- * wraps the author text in CURSOR_AGENT_PR_BODY_BEGIN / END and appends a
- * footer after the end marker. Only the text between the markers is checked.
- * A body without the markers is checked in full.
+ * The platform wraps the pull request body in CURSOR_AGENT_PR_BODY_BEGIN / END
+ * and appends a footer after the end marker. Only the text between the markers
+ * is checked. A body without the markers is checked in full.
  *
- * This file is not scanned. It holds the patterns.
+ * This file is not scanned. It holds the patterns and the allowlist.
  */
 
 const fs = require('fs');
@@ -29,6 +31,63 @@ const KEY_PREFIXES = new Set(['GH', 'ADR', 'ACME', 'TICKET']);
 
 const BEGIN = '<!-- CURSOR_AGENT_PR_BODY_BEGIN -->';
 const END = '<!-- CURSOR_AGENT_PR_BODY_END -->';
+
+const GITHUB_NOREPLY_SUFFIX = '@users.noreply.github.com';
+
+// Shared identities that must not author or commit. The noreply local part
+// credits an unrelated GitHub account with that login.
+const BLOCKED_EMAILS = new Set([
+  'noreply@users.noreply.github.com',
+  'neat-os-build@users.noreply.github.com',
+  'cursoragent@cursor.com',
+]);
+
+// Team GitHub noreply allowlist. To add a person, append { login, id }.
+// id is the numeric field from https://api.github.com/users/<login>.
+// The accepted author address is `${id}+${login}@users.noreply.github.com`.
+// Seeded from that API on 22 October 2026: Shaun, Gary, Pablo.
+const TEAM_NOREPLY = [
+  { login: 'shauunhimseelf', id: '6403585' },
+  { login: 'gsdd', id: '348198' },
+  { login: 'hellopablo', id: '233585' },
+];
+
+function normaliseEmail(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function teamNoreplyAddress(entry) {
+  return `${entry.id}+${String(entry.login).toLowerCase()}${GITHUB_NOREPLY_SUFFIX}`;
+}
+
+function allowlistedAuthorEmails() {
+  return new Set(TEAM_NOREPLY.map(teamNoreplyAddress));
+}
+
+function identityHits(label, authorEmail, committerEmail) {
+  const hits = [];
+  const author = normaliseEmail(authorEmail);
+  const committer = normaliseEmail(committerEmail);
+  const add = (rule) => hits.push(`${label} ${rule}`);
+  if (!author) add('author email missing');
+  if (!committer) add('committer email missing');
+  if (BLOCKED_EMAILS.has(author)) add('blocked author email');
+  if (BLOCKED_EMAILS.has(committer)) add('blocked committer email');
+  if (author.endsWith(GITHUB_NOREPLY_SUFFIX) && !allowlistedAuthorEmails().has(author)) {
+    add('author email is not an allowlisted GitHub noreply');
+  }
+  return hits;
+}
+
+function hitsForCommit(item) {
+  const sha = (item.sha || '').slice(0, 7);
+  const commit = item.commit || {};
+  const hits = scan(`commit ${sha}`, commit.message || '');
+  const authorEmail = commit.author && commit.author.email;
+  const committerEmail = commit.committer && commit.committer.email;
+  hits.push(...identityHits(`commit ${sha}`, authorEmail, committerEmail));
+  return hits;
+}
 
 function authorBody(raw) {
   const text = raw || '';
@@ -156,11 +215,7 @@ async function pullRequestHits() {
       throw new Error(`check-neutral: could not read pull request commits (${response.status}) ${detail.slice(0, 200)}`);
     }
     const data = await response.json();
-    for (const item of data) {
-      const sha = (item.sha || '').slice(0, 7);
-      const message = (item.commit && item.commit.message) || '';
-      hits.push(...scan(`commit ${sha}`, message));
-    }
+    for (const item of data) hits.push(...hitsForCommit(item));
     url = data.length < 100 ? '' : nextLink(response.headers.get('link'));
   }
   return hits;
@@ -192,6 +247,72 @@ function selfTest() {
   assertCase('convention may name the phrase', scan('conventions/neutral-reference.md', 'Do not write ask me or Co-authored-by'), false);
   assertCase('attribution page may name the trailer', scan('conventions/attribution.md', 'Do not add a Co-authored-by trailer'), false);
   assertCase('trailer', scan('t', 'Co-authored-by: A <a@example.com>'), true);
+  const seeded = [
+    ['shauunhimseelf', '6403585'],
+    ['gsdd', '348198'],
+    ['hellopablo', '233585'],
+  ];
+  for (const email of BLOCKED_EMAILS) {
+    if (allowlistedAuthorEmails().has(email)) {
+      throw new Error(`check-neutral self-test allowlist contains a blocked address`);
+    }
+  }
+  let allowed = '';
+  for (const [login, id] of seeded) {
+    const entry = TEAM_NOREPLY.find((row) => row.login === login && String(row.id) === id);
+    if (!entry) throw new Error(`check-neutral self-test allowlist: missing ${id}+${login}`);
+    const address = teamNoreplyAddress(entry);
+    if (!allowed) allowed = address;
+    assertCase(`allowlisted ${login}`, identityHits('c', address, address), false);
+    assertCase(`allowlisted ${login} web merge`, identityHits('c', address, 'noreply@github.com'), false);
+  }
+  assertCase('blocked noreply author', identityHits('c', 'noreply@users.noreply.github.com', allowed), true);
+  assertCase('blocked build author', identityHits('c', 'neat-os-build@users.noreply.github.com', allowed), true);
+  assertCase('blocked noreply committer', identityHits('c', allowed, 'noreply@users.noreply.github.com'), true);
+  assertCase('blocked build committer', identityHits('c', allowed, 'NEAT-OS-BUILD@users.noreply.github.com'), true);
+  assertCase('cursor agent author', identityHits('c', 'cursoragent@cursor.com', allowed), true);
+  assertCase('cursor agent committer', identityHits('c', allowed, 'CursorAgent@cursor.com'), true);
+  assertCase('login-only noreply', identityHits('c', 'shauunhimseelf@users.noreply.github.com', allowed), true);
+  assertCase('unknown noreply author', identityHits('c', '1+other@users.noreply.github.com', allowed), true);
+  assertCase('unknown noreply committer', identityHits('c', allowed, '1+other@users.noreply.github.com'), false);
+  assertCase('other domain author', identityHits('c', 'dev@example.com', 'noreply@github.com'), false);
+  assertCase('missing author email', identityHits('c', '', allowed), true);
+  assertCase(
+    'api shape allowlisted',
+    hitsForCommit({
+      sha: 'abcdef0',
+      commit: {
+        message: 'docs: record the rule (GH-38)\n',
+        author: { email: allowed },
+        committer: { email: allowed },
+      },
+    }),
+    false,
+  );
+  assertCase(
+    'api shape trailer',
+    hitsForCommit({
+      sha: 'abcdef1',
+      commit: {
+        message: 'docs: record the rule\n\nCo-authored-by: A <a@example.com>\n',
+        author: { email: allowed },
+        committer: { email: 'noreply@github.com' },
+      },
+    }),
+    true,
+  );
+  assertCase(
+    'api shape blocked',
+    hitsForCommit({
+      sha: 'abcdef2',
+      commit: {
+        message: 'chore: set the author\n',
+        author: { email: 'noreply@users.noreply.github.com' },
+        committer: { email: 'noreply@github.com' },
+      },
+    }),
+    true,
+  );
   const wrapped = `${BEGIN}\nACME-1 is fine\n${END}\nCo-authored-by: Bot <bot@elsewhere.test>\nplease ask me`;
   assertCase('platform footer', scan('pull request body', authorBody(wrapped)), false);
   assertCase('unmarked body', scan('pull request body', authorBody('please ask me')), true);
@@ -201,7 +322,7 @@ function help() {
   console.log(`Usage: node scripts/check-neutral.js
 
 Scans the repository for the neutral-reference rules in conventions/neutral-reference.md.
-In a GitHub Actions pull_request job, the pull request body and its commit messages are scanned too.
+In a GitHub Actions pull_request job, the body and the commits in that pull request are checked (message, author email, committer email). See conventions/attribution.md.
 `);
 }
 
