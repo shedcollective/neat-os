@@ -67,7 +67,7 @@ For an OS repository the same playbook writes a GitHub Issue with `gh issue crea
 
 ## `assurance` and `pin-majors-with-reasons`
 
-These two are playbooks, and they are not part of adoption. `assurance` reads one pull request on a product repository and posts an evidence pack. It does not implement the change. `pin-majors-with-reasons` upgrades dependencies and leaves a pinned major where it is. Their steps are in [`skills/assurance/SKILL.md`](../skills/assurance/SKILL.md) and [`skills/pin-majors-with-reasons/SKILL.md`](../skills/pin-majors-with-reasons/SKILL.md).
+These two are playbooks, and they are not part of adoption. `assurance` reads one pull request on a product repository and posts an evidence pack. It does not implement the change. The command that writes that comment is [`skills/assurance/scripts/post-evidence-pack.md`](../skills/assurance/scripts/post-evidence-pack.md). `pin-majors-with-reasons` upgrades dependencies and leaves a pinned major where it is. Their steps are in [`skills/assurance/SKILL.md`](../skills/assurance/SKILL.md) and [`skills/pin-majors-with-reasons/SKILL.md`](../skills/pin-majors-with-reasons/SKILL.md).
 
 
 ## Agency operations playbooks
