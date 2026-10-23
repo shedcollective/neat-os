@@ -23,6 +23,7 @@ Read this index at the start of any multi-step task. Open a principle when its *
 | [red-is-a-stop](red-is-a-stop.md) | A red required check on the integration branch is the first task; nothing new is branched, stacked or merged onto red. |
 | [use-the-declared-runtime](use-the-declared-runtime.md) | If the Agent Guide names a runtime, run the toolchain through it; host binaries are not a substitute. |
 | [enqueue-external-side-effects](enqueue-external-side-effects.md) | When a repo already queues writes to an external system, new writes use that queue. |
+| [script-checks-formats](script-checks-formats.md) | Commit ticket keys and pull request titles are checked by a script; the agent runs it and is not the authority on the format. |
 
 ## Parallelism: independent workers, including Cloud Agents
 
