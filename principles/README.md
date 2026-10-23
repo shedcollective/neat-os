@@ -31,6 +31,7 @@ Read this index at the start of any multi-step task. Open a principle when its *
 | --- | --- |
 | [keep-human-gates](keep-human-gates.md) | Humans merge, release and approve destructive actions; automate a gate only once it is chore rather than value. |
 | [surface-conflicts](surface-conflicts.md) | When instructions conflict or scope changes materially, stop and surface it; do not guess and do not block silently. |
+| [claim-a-shared-number](claim-a-shared-number.md) | Before using a shared sequential number, claim the first free number above the integration branch and any open pull request. |
 
 ## Adding a principle
 
