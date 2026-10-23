@@ -23,13 +23,15 @@ Read this index at the start of any multi-step task. Open a principle when its *
 | [red-is-a-stop](red-is-a-stop.md) | A red required check on the integration branch is the first task; nothing new is branched, stacked or merged onto red. |
 | [use-the-declared-runtime](use-the-declared-runtime.md) | If the Agent Guide names a runtime, run the toolchain through it; host binaries are not a substitute. |
 | [enqueue-external-side-effects](enqueue-external-side-effects.md) | When a repo already queues writes to an external system, new writes use that queue. |
+| [script-checks-formats](script-checks-formats.md) | Commit ticket keys and pull request titles are checked by a script; the agent runs it and is not the authority on the format. |
 
 ## Parallelism: independent workers, including Cloud Agents
 
 | Principle | Rule |
 | --- | --- |
-| [keep-human-gates](keep-human-gates.md) | Humans merge, release and approve destructive actions; automate a gate only once it is chore rather than value. |
+| [keep-human-gates](keep-human-gates.md) | Humans merge, release and approve destructive actions; no reply is never approval, and a gate is automated only once it is chore rather than value. |
 | [surface-conflicts](surface-conflicts.md) | When instructions conflict or scope changes materially, stop and surface it; do not guess and do not block silently. |
+| [claim-a-shared-number](claim-a-shared-number.md) | Before using a shared sequential number, claim the first free number above the integration branch and any open pull request. |
 
 ## Adding a principle
 

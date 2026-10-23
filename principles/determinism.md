@@ -12,3 +12,4 @@ Principles under this goal:
 - [red-is-a-stop](red-is-a-stop.md)
 - [use-the-declared-runtime](use-the-declared-runtime.md)
 - [enqueue-external-side-effects](enqueue-external-side-effects.md)
+- [script-checks-formats](script-checks-formats.md)
