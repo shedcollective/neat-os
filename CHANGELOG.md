@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+The neutral-reference check treats a ticket key as an uppercase prefix and a number of at least two digits. A lowercase branch slug in a merge commit subject is not a key ([conventions/neutral-reference.md](conventions/neutral-reference.md), [ADR-0023](docs/decisions/0023-neutral-rule-guards-what-is-published.md)).
+
 A red required check stops work on the integration branch and on any branch another step is stacked on ([red-is-a-stop](principles/red-is-a-stop.md)). Waiting on a person, such as a pending merge or review, never blocks the next step of a stack. When a step goes red, the agent fixes that step before adding or rebasing any step above it. A step that merged on green and later goes red counts as red on its target branch ([ADR-0024](docs/decisions/0024-red-stops-a-stack.md)).
 
 [PURPOSE.md](PURPOSE.md) states what neat-os is for. The aim covers every agent, both in product repositories and as team bots, and the work it produces carries its own evidence (for code, a pull request with passing checks and a record of what was verified). [README.md](README.md) links the file. A director owns it, and it changes only by pull request. A new rule or proposal states which aim of that file it serves. The requirement is in [schema/README.md](schema/README.md), [docs/contributing.md](docs/contributing.md), and the draft list in [skills/learn/SKILL.md](skills/learn/SKILL.md).
