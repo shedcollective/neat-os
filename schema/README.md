@@ -11,7 +11,7 @@ neat-os is built from six kinds of thing. Before adding a file, decide which kin
 | **Script** | Deterministic code. Same input, same output. The source of truth for "green". | Software can do or check the thing. Prefer this over prose every time it is possible. | `skills/*/scripts/`, `scripts/` | Executable with `--help`; exits non-zero on failure; no interactive prompts unless a TTY is present. |
 | **Agent** | A subagent definition with separate context, used for independent challenge or verification. | Separate context would improve challenge (reviewer, QA) rather than add ceremony. | `agents/` (not yet present; add only with a demonstrated need) | One file per role: job, boundary, what it must not do. |
 
-Two things that are *not* mechanisms: **project knowledge** (lives in the product repo's `AGENTS.md` and `.agents/`, filled by `gather`) and **decisions** (live in [`docs/decisions/`](../docs/decisions/README.md) as ADRs and explain why a mechanism exists).
+Two things that are *not* mechanisms: **project knowledge** (lives in the product repo's `AGENTS.md` and `.agents/`, filled by `gather`) and **decisions** (live in [`docs/decisions/`](../docs/decisions/README.md) as ADRs and explain why a mechanism exists). [PURPOSE.md](../PURPOSE.md) is not a mechanism either. It states what neat-os is for.
 
 ## Choosing by what the thing is for
 
@@ -39,6 +39,7 @@ Type is read from location and shape, not from a list kept here. `scripts/check-
 ## Authoring rules (all mechanisms)
 
 - State a rule once. Other files point at it by path; they do not restate it.
+- A new rule or proposal states which aim of [PURPOSE.md](../PURPOSE.md) it serves.
 - Keep only prose that changes a decision. Tell the agent what to do; explain only when the rule is confusing without a reason.
 - When a rule can be a script, make it a script and delete the prose (see [encode-lessons-in-structure](../principles/encode-lessons-in-structure.md)).
 - When in doubt, delete.

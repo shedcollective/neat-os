@@ -4,6 +4,10 @@
 
 A red required check stops work on the integration branch and on any branch another step is stacked on ([red-is-a-stop](principles/red-is-a-stop.md)). Waiting on a person, such as a pending merge or review, never blocks the next step of a stack. When a step goes red, the agent fixes that step before adding or rebasing any step above it. A step that merged on green and later goes red counts as red on its target branch ([ADR-0023](docs/decisions/0023-red-stops-a-stack.md)).
 
+[PURPOSE.md](PURPOSE.md) states what neat-os is for. The aim covers every agent, both in product repositories and as team bots, and the work it produces carries its own evidence (for code, a pull request with passing checks and a record of what was verified). [README.md](README.md) links the file. A director owns it, and it changes only by pull request. A new rule or proposal states which aim of that file it serves. The requirement is in [schema/README.md](schema/README.md), [docs/contributing.md](docs/contributing.md), and the draft list in [skills/learn/SKILL.md](skills/learn/SKILL.md).
+
+Every pull request title uses `[<KEY>] <type>: <description>`. The commit subject or footer keeps the ticket key in parentheses (`feat(gather): … (GH-42)`). The rules are [conventions/git.md](conventions/git.md#pr-titles) and [conventions/tickets.md](conventions/tickets.md#where-the-key-goes). Part of [issue #53](https://github.com/shedcollective/neat-os/issues/53).
+
 ## 0.6.0
 
 The bot passport template gains a **Skills** table (OS playbook, passport enhancement, or bot-only), owner-only routine install with duplicate skip rules, and an optional **Day file** table so a passport may name its own top-level burndown sections. The default day shape stays by project. Wrappers read playbooks from `<neat-os-path>` at the pinned tag and stop if the path or tag is missing ([ADR-0022](docs/decisions/0022-wrapper-shared-path.md)). How that path is populated is [issue #15](https://github.com/shedcollective/neat-os/issues/15).
