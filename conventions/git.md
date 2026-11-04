@@ -59,7 +59,7 @@ Humans merge every PR in the stack, steps included; review happens per step and 
 
 **A pending merge never blocks the next step.** The agent branches step *n+1* from the head of step *n* as soon as step *n* is merge-ready (PR open, CI green, evidence posted) and continues. When step *n* merges, the agent rebases the open steps above it. When `develop` moves, it merges `develop` into the feature branch and rebases the steps. Keeping a stack merge-ready is agent work; pressing merge is not.
 
-A single, unstacked PR uses plain Conventional Commits with the key: `feat(gather): … (GH-42)`.
+A single, unstacked pull request uses the locked title in [PR titles](#pr-titles). Commits keep the `(GH-42)` form in [tickets.md](tickets.md#where-the-key-goes).
 
 ### Commits
 
