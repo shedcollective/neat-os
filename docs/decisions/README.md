@@ -33,3 +33,4 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0021](0021-wrapper-release-tag-pins.md) | Bot wrappers pin a release tag | Accepted |
 | [0022](0022-wrapper-shared-path.md) | Wrappers read neat-os from a shared path at the pin | Accepted |
 | [0023](0023-neutral-rule-guards-what-is-published.md) | The neutral rule guards what is published, not who is credited | Accepted |
+| [0024](0024-red-stops-a-stack.md) | Red stops the steps above it | Accepted |
