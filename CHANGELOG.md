@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-[PURPOSE.md](PURPOSE.md) states what neat-os is for. A director owns it, and it changes only by pull request. A new rule or proposal states which aim of that file it serves. The requirement is in [schema/README.md](schema/README.md), [docs/contributing.md](docs/contributing.md), and the draft list in [skills/learn/SKILL.md](skills/learn/SKILL.md).
+[PURPOSE.md](PURPOSE.md) states what neat-os is for. The aim covers every agent, both in product repositories and as team bots, and the work it produces carries its own evidence (for code, a pull request with passing checks and a record of what was verified). [README.md](README.md) links the file. A director owns it, and it changes only by pull request. A new rule or proposal states which aim of that file it serves. The requirement is in [schema/README.md](schema/README.md), [docs/contributing.md](docs/contributing.md), and the draft list in [skills/learn/SKILL.md](skills/learn/SKILL.md).
 
 ## 0.6.0
 
