@@ -39,37 +39,20 @@ Do not address the reader as the person to ask, tell, or ping (`ask me`, `tell m
 
 ## What the check enforces
 
-`scripts/check-neutral.js` checks what this repository publishes in three layers. `scripts/check` runs it.
+Writing is the first layer. [Write for a public reader](writing.md#write-for-a-public-reader) keeps names and chatter out of code comments, commit messages, docs, and pull request titles and bodies. The two layers below are the backstops.
+
+`scripts/check-neutral.js` checks what this repository publishes in two layers. `scripts/check` runs it.
 
 - Generic patterns need no list of names. The check flags a mailbox whose domain is not `example.*`, except in a commit message, plus a Slack id, a link to a Slack workspace, an Atlassian cloud host, a ticket key whose prefix is not `GH`, `ADR`, `ACME`, or `TICKET`, and the phrases in the previous section.
-- Private terms are the names of clients, client companies, and client projects. They come from a list that is never committed, described in [Private terms](#private-terms).
-- Review covers what software cannot see: a quote from a Slack thread without its link, a project described without its name, or a client that is not on the list yet.
+- Review covers what those patterns cannot see: a client, a client company, or a client project named in plain words, or a Slack thread or other internal discussion quoted without a link the pattern can match. No list of those names is kept, because a list would need maintaining. The pull request template is the review step for that layer ([.github/pull_request_template.md](../.github/pull_request_template.md)).
 
 A Slack workspace link is a host under `slack.com` other than `api.slack.com`, which is Slack's public API documentation. A ticket key is a letter prefix and a number of at least two digits. A URL userinfo at `github.com` is the git transport, same as `git@github.com`.
 
-The check reads every file in the tree except binary files. It does not apply the generic patterns to `scripts/check-neutral.js`, because that file holds them. It applies the private terms to every file, that one included, and to every file path, so the list cannot be added to the check.
+The check reads every file in the tree except binary files. It does not apply the generic patterns to `scripts/check-neutral.js`, because that file holds them.
 
-On a pull request, the check also reads the pull request title, the pull request body, the branch name, and the commit messages in the pull request range. Private terms apply to all of those. The mailbox pattern applies to files, the title, the body, and the branch name. It does not apply to a commit message: an email address in the body or on a trailer line is allowed. Slack ids, Slack links, Atlassian hosts, ticket keys, and the chatter phrases still apply to commit messages. The branch name is not scanned for those other patterns, because they misread a slug. Editing the title or the body runs the check again. It does not read commits outside the pull request range, issues, comments, or reviews. Those are review. It reads commit messages, not commit authors.
+On a pull request, the check also reads the pull request title, the pull request body, the branch name, and the commit messages in the pull request range. The mailbox pattern applies to files, the title, the body, and the branch name. It does not apply to a commit message: an email address in the body or on a trailer line is allowed. Slack ids, Slack links, Atlassian hosts, ticket keys, and the chatter phrases still apply to commit messages. The branch name is not scanned for those other patterns, because they misread a slug. Editing the title or the body runs the check again. It does not read commits outside the pull request range, issues, comments, or reviews. Those are review. It reads commit messages, not commit authors.
 
 The platform wraps the body in `<!-- CURSOR_AGENT_PR_BODY_BEGIN -->` and `<!-- CURSOR_AGENT_PR_BODY_END -->` and appends a footer after the end marker. The check reads only the text between the markers. The markers and the footer are platform boilerplate. A body without the markers is checked in full. The pull request body is not exempt. This page is the only file that may name the rejected phrases.
-
-## Private terms
-
-The private term list is the names of clients, client companies, and client projects. It is the Actions secret `NEAT_OS_PRIVATE_TERMS` on this repository, and the `validate` job passes it to `scripts/check`. The list is never committed, not even inside the check.
-
-The secret holds one term per line. A line that starts with `#` is a comment. A term matches as a whole word, in any case. Spaces, hyphens, and underscores in a term match any run of those characters, or none, so `Example Project` also matches `example-project` and `ExampleProject`. Every match fails the check, so add the most specific form of a name.
-
-The check never prints a term or the number of terms. A hit names the file or the pull request field, and the line number. Another hit on the same line prints with each match replaced by `<private>`.
-
-When the secret is not set, the check skips this layer and says so. That is the case on a laptop, and on a pull request from a fork, because GitHub does not pass secrets to a pull request from a fork. Review covers those.
-
-To change the list:
-
-1. Edit the source copy in the private operations record. Do not keep a copy in a clone of this repository.
-2. Run `gh secret set NEAT_OS_PRIVATE_TERMS --repo shedcollective/neat-os < <path-to-list>`.
-3. Re-run the `validate` job on an open pull request.
-
-To run the same layer on a laptop, run `NEAT_OS_PRIVATE_TERMS="$(cat <path-to-list>)" bash scripts/check`.
 
 ## Source
 

@@ -4,6 +4,16 @@
 
 This applies to every file a person reads in a Shed repository: READMEs, `docs/`, principles, conventions, the `AGENTS.md` and `.agents/` files that `init` copies into product repos, pull request descriptions, and commit messages. Agent-facing files (`SKILL.md`, `AGENTS.md`) may be terser and may bold a hard rule, because the reader is scanning for constraints. The sentence rules still apply to them.
 
+## Write for a public reader
+
+This is the first layer for everything this repository commits or publishes: code comments, commit messages, docs, and pull request titles and bodies. Generic-pattern checks and review are the backstops ([neutral-reference.md](neutral-reference.md)).
+
+Write for a public reader who has never met the client. Describe what changed and why in generic terms, such as "a client's checkout" or "the reviewer asked for". Do not write who did it, or where it happened.
+
+Point to context by ticket key. The detail lives in the ticket, not in the commit.
+
+Do not paste chat, meeting notes, or emails. Summarise the decision instead.
+
 ## Rules
 
 1. **Assume the reader has only the repository.** Every reference must be something the reader can open from the file: a path in the repo, a GitHub issue or pull request link, or a public URL. Do not cite meetings, chat threads, private notes, or the internal position of a piece of work ("step 4 of the batch"). State the fact instead and link the issue if the history matters.
