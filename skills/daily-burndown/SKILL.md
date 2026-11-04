@@ -57,7 +57,7 @@ When the passport names top-level sections, keep Agency state first and Sources 
 4. **Draft the day file** from the template, or from the passport Day file table when it has rows. Agency state first. Sources unavailable last.
 5. **Refresh the in-flight board** in that record: project, what is in flight, owner, done when, blocked.
 6. **Commit** the day file and the in-flight board per `<write-rule>` (normally direct to the default branch for those two paths). Never rewrite history. Prefer merge commits on feature branches ([conventions/git.md](../../conventions/git.md)).
-7. **Voice:** British English, short active sentences. Lead with the decision, the owner, and the next move. Do not name bots ([conventions/writing.md](../../conventions/writing.md), [neutral-reference.md](../../conventions/neutral-reference.md)).
+7. **Voice:** British English, short active sentences. Lead with the decision, the owner, and the next move. Do not name bots ([conventions/writing.md](../../conventions/writing.md), [agent-work-logging.md](../../conventions/agent-work-logging.md)).
 
 ## Stop
 
