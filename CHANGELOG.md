@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+A red required check stops work on the integration branch and on any branch another step is stacked on ([red-is-a-stop](principles/red-is-a-stop.md)). Waiting on a person, such as a pending merge or review, never blocks the next step of a stack. When a step goes red, the agent fixes that step before adding or rebasing any step above it. A step that merged on green and later goes red counts as red on its target branch ([ADR-0023](docs/decisions/0023-red-stops-a-stack.md)).
+
 ## 0.6.0
 
 The bot passport template gains a **Skills** table (OS playbook, passport enhancement, or bot-only), owner-only routine install with duplicate skip rules, and an optional **Day file** table so a passport may name its own top-level burndown sections. The default day shape stays by project. Wrappers read playbooks from `<neat-os-path>` at the pinned tag and stop if the path or tag is missing ([ADR-0022](docs/decisions/0022-wrapper-shared-path.md)). How that path is populated is [issue #15](https://github.com/shedcollective/neat-os/issues/15).
