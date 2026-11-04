@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+[PURPOSE.md](PURPOSE.md) states what neat-os is for. The aim covers every agent, both in product repositories and as team bots, and the work it produces carries its own evidence (for code, a pull request with passing checks and a record of what was verified). [README.md](README.md) links the file. A director owns it, and it changes only by pull request. A new rule or proposal states which aim of that file it serves. The requirement is in [schema/README.md](schema/README.md), [docs/contributing.md](docs/contributing.md), and the draft list in [skills/learn/SKILL.md](skills/learn/SKILL.md).
+
 Every pull request title uses `[<KEY>] <type>: <description>`. The commit subject or footer keeps the ticket key in parentheses (`feat(gather): … (GH-42)`). The rules are [conventions/git.md](conventions/git.md#pr-titles) and [conventions/tickets.md](conventions/tickets.md#where-the-key-goes). Part of [issue #53](https://github.com/shedcollective/neat-os/issues/53).
 
 ## 0.6.0
