@@ -69,7 +69,7 @@ When a piece of work is recorded as several commits, order them so a reviewer ca
 
 Subjects stay Conventional Commits (`feat|fix|chore|refactor|docs|test|style`), with the ticket key per [tickets.md](tickets.md).
 
-Who the author is, and the ban on a co-author trailer, is [attribution.md](attribution.md).
+Who the author is, and that a co-author trailer is allowed, is [attribution.md](attribution.md).
 
 Stacked pull requests split review. They do not put each commit in its own pull request.
 

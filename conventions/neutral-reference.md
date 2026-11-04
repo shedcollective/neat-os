@@ -41,7 +41,7 @@ Do not address the reader as the person to ask, tell, or ping (`ask me`, `tell m
 
 `scripts/check-neutral.js` checks what this repository publishes in three layers. `scripts/check` runs it.
 
-- Generic patterns need no list of names. The check flags a mailbox whose domain is not `example.*`, a Slack id, a link to a Slack workspace, an Atlassian cloud host, a ticket key whose prefix is not `GH`, `ADR`, `ACME`, or `TICKET`, and the phrases in the previous section.
+- Generic patterns need no list of names. The check flags a mailbox whose domain is not `example.*`, except in a commit message, plus a Slack id, a link to a Slack workspace, an Atlassian cloud host, a ticket key whose prefix is not `GH`, `ADR`, `ACME`, or `TICKET`, and the phrases in the previous section.
 - Private terms are the names of clients, client companies, and client projects. They come from a list that is never committed, described in [Private terms](#private-terms).
 - Review covers what software cannot see: a quote from a Slack thread without its link, a project described without its name, or a client that is not on the list yet.
 
@@ -49,7 +49,7 @@ A Slack workspace link is a host under `slack.com` other than `api.slack.com`, w
 
 The check reads every file in the tree except binary files. It does not apply the generic patterns to `scripts/check-neutral.js`, because that file holds them. It applies the private terms to every file, that one included, and to every file path, so the list cannot be added to the check.
 
-On a pull request, the check also reads the pull request title, the pull request body, and the commit messages in the pull request range, with both layers. It reads the branch name for private terms only, because the branch name lands in the merge commit message. Editing the title or the body runs the check again. It does not read commits outside the pull request range, issues, comments, or reviews. Those are review. It reads commit messages, not commit authors.
+On a pull request, the check also reads the pull request title, the pull request body, the branch name, and the commit messages in the pull request range. Private terms apply to all of those. The mailbox pattern applies to files, the title, the body, and the branch name. It does not apply to a commit message: an email address in the body or on a trailer line is allowed. Slack ids, Slack links, Atlassian hosts, ticket keys, and the chatter phrases still apply to commit messages. The branch name is not scanned for those other patterns, because they misread a slug. Editing the title or the body runs the check again. It does not read commits outside the pull request range, issues, comments, or reviews. Those are review. It reads commit messages, not commit authors.
 
 The platform wraps the body in `<!-- CURSOR_AGENT_PR_BODY_BEGIN -->` and `<!-- CURSOR_AGENT_PR_BODY_END -->` and appends a footer after the end marker. The check reads only the text between the markers. The markers and the footer are platform boilerplate. A body without the markers is checked in full. The pull request body is not exempt. This page is the only file that may name the rejected phrases.
 

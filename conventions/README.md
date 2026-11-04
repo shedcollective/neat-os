@@ -5,7 +5,7 @@ Locked engineering defaults for Shed. These are company knowledge: `gather` must
 | Convention | File |
 | --- | --- |
 | Git workflow is always **git-flow** | [git.md](git.md) |
-| Commit attribution: the author is the person who did the work; nobody is listed, gated, or allowlisted | [attribution.md](attribution.md) |
+| Commit attribution: the author is the person who did the work; nobody is listed, gated, or allowlisted. A co-author trailer, including an AI one, is allowed | [attribution.md](attribution.md) |
 | Tickets: Jira for product repos, GitHub Issues for OS repos | [tickets.md](tickets.md) |
 | Ticket content: a Task that describes the problem and the outcome, written for the client to read | [ticket-content.md](ticket-content.md) |
 | Writing: pages are written for a reader who has only the repository | [writing.md](writing.md) |

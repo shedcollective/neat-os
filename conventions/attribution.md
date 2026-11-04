@@ -6,13 +6,7 @@ When an agent writes the commit, the person who drove the session did the work. 
 
 There is no list of people and no check of commit authors or committers. The neutral rule in [neutral-reference.md](neutral-reference.md) is about what this repository publishes, not about who is credited.
 
-## No co-author trailer
-
-Do not add a `Co-authored-by` trailer. The author field already names the person who did the work, and an AI tool is not an author.
-
-A platform may append that trailer from a managed `commit-msg` hook. To stop it, point `core.hooksPath` at a hooks directory that does not contain the hook.
-
-On a pull request, `scripts/check-neutral.js` fails a commit in the pull request range when a line of its message starts with `Co-authored-by:`. This is the only attribution check, and it is separate from the neutral rule. It reads commit messages only, and it does not read commits outside the pull request range. History on `develop`, `main`, and tags stays as it is.
+A `Co-authored-by` trailer is allowed, including one that names an AI tool. This repository does not hide AI involvement. The check does not fail a commit for that trailer. What the neutral check still flags in a commit message is in [neutral-reference.md](neutral-reference.md#what-the-check-enforces).
 
 ## Source
 

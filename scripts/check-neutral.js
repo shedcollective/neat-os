@@ -15,9 +15,10 @@
  * the tree. No term, and no count of terms, is ever printed. Every hit is
  * redacted before it is printed.
  *
- * The co-author trailer rule is separate (conventions/attribution.md). It
- * reads only the commit messages in the pull request range, and shares this
- * script so those commits are fetched once.
+ * A mailbox in a commit message is not a hit, in the body or on a trailer
+ * line. The mailbox pattern still applies to files, the pull request title,
+ * the pull request body, and the branch name. Private terms and the other
+ * generic patterns still apply to commit messages (conventions/neutral-reference.md).
  *
  * The platform wraps the pull request body in CURSOR_AGENT_PR_BODY_BEGIN / END
  * and appends a footer after the end marker. Only the text between the markers
@@ -104,7 +105,9 @@ function emailAllowed(address) {
   return example !== -1 && example < labels.length - 1;
 }
 
-function scan(rel, text, terms = PRIVATE_TERMS) {
+function scan(rel, text, terms = PRIVATE_TERMS, options = {}) {
+  const skipEmail = options.skipEmail === true;
+  const emailOnly = options.emailOnly === true;
   const hits = privateHits(rel, text, terms);
   const phraseExempt = PHRASE_EXEMPT.has(rel);
   const lines = String(text).split('\n');
@@ -116,9 +119,14 @@ function scan(rel, text, terms = PRIVATE_TERMS) {
       hits.push(`${redact(`${rel}:${lineNo} ${rule}`, terms)}${excerpt ? `: ${excerpt}` : ''}`);
     };
 
-    for (const match of line.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)) {
-      if (!emailAllowed(match[0])) add('email');
+    if (!skipEmail) {
+      for (const match of line.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)) {
+        if (!emailAllowed(match[0])) add('email');
+      }
     }
+    // A branch slug is misread by the other generic patterns. Private terms
+    // above, and the mailbox pattern, are the layers that apply to it.
+    if (emailOnly) return;
     // A Slack id is an uppercase token that contains a digit. A word such as
     // CODEOWNERS or UNLICENSED is not one.
     if (/(?<![A-Za-z0-9])[CDUW](?=[A-Z0-9]*\d)[A-Z0-9]{8,11}(?![A-Za-z0-9])/.test(line)) add('slack id');
@@ -140,18 +148,10 @@ function scan(rel, text, terms = PRIVATE_TERMS) {
   return hits;
 }
 
-function trailerHits(label, message) {
-  const hits = [];
-  String(message).split('\n').forEach((line, index) => {
-    if (/^\s*co-authored-by\s*:/i.test(line)) hits.push(`${label}:${index + 1} co-author trailer`);
-  });
-  return hits;
-}
-
 function commitHits(item, terms = PRIVATE_TERMS) {
   const label = `commit ${(item.sha || '').slice(0, 7)}`;
   const message = (item.commit && item.commit.message) || '';
-  return [...scan(label, message, terms), ...trailerHits(label, message)];
+  return scan(label, message, terms, { skipEmail: true });
 }
 
 function walk(dir, out = []) {
@@ -192,12 +192,13 @@ async function pullRequestHits(terms = PRIVATE_TERMS) {
   const pr = event.pull_request;
   if (!pr) return [];
 
-  // The branch name lands in the merge commit message. Generic patterns would
-  // misread its slug, so only the private terms read it.
+  // Slack ids, ticket keys, and chatter phrases misread a branch slug.
+  // Private terms and the mailbox pattern still apply to it.
+  const branch = (pr.head && pr.head.ref) || '';
   const hits = [
     ...scan('pull request title', pr.title || '', terms),
     ...scan('pull request body', authorBody(pr.body || ''), terms),
-    ...privateHits('pull request branch', (pr.head && pr.head.ref) || '', terms),
+    ...scan('pull request branch', branch, terms, { emailOnly: true }),
   ];
   const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
@@ -252,10 +253,25 @@ function selfTest() {
   assertCase('atlassian', scan('t', 'https://acme.atlassian.net/browse/ACME-1', none), true);
   assertCase('phrases', scan('t', 'please ask me about my repo', none), true);
   assertCase('convention may name the phrase', scan('conventions/neutral-reference.md', 'Do not write ask me', none), false);
-  assertCase('trailer is not a neutral rule', scan('t', 'Do not add a Co-authored-by trailer', none), false);
-  assertCase('trailer', trailerHits('c', 'docs: record the rule\n\nCo-authored-by: A <a@example.com>\n'), true);
-  assertCase('trailer in any case', trailerHits('c', 'docs: record the rule\n\n  co-authored-by: A <a@example.com>'), true);
-  assertCase('trailer named in prose', trailerHits('c', 'docs: record the rule\n\nThe Co-authored-by rule stays.'), false);
+  assertCase(
+    'commit trailer mailbox',
+    commitHits({ sha: 'abcdef1', commit: { message: 'docs: record the rule (GH-38)\n\nCo-authored-by: Example Person <someone@realdomain.test>\n' } }, none),
+    false,
+  );
+  assertCase(
+    'commit body mailbox',
+    commitHits({ sha: 'abcdef3', commit: { message: 'docs: record the rule (GH-38)\n\nWrite to someone@realdomain.test about the change.\n' } }, none),
+    false,
+  );
+  assertCase('pull request body mailbox', scan('pull request body', 'Write to someone@realdomain.test about the change.', none), true);
+  assertCase('pull request title mailbox', scan('pull request title', 'Note someone@realdomain.test', none), true);
+  assertCase('branch mailbox', scan('pull request branch', 'feature/someone@realdomain.test', none, { emailOnly: true }), true);
+  assertCase('branch slug is not a ticket key', scan('pull request branch', 'feature/zz-99-login', none, { emailOnly: true }), false);
+  assertCase(
+    'commit chatter',
+    commitHits({ sha: 'abcdef4', commit: { message: 'docs: record the rule (GH-38)\n\nplease ask me\n' } }, none),
+    true,
+  );
   assertCase(
     'commit identity is not read',
     commitHits(
@@ -270,11 +286,6 @@ function selfTest() {
       none,
     ),
     false,
-  );
-  assertCase(
-    'commit trailer',
-    commitHits({ sha: 'abcdef1', commit: { message: 'docs: record the rule\n\nCo-authored-by: A <a@example.com>\n' } }, none),
-    true,
   );
   const wrapped = `${BEGIN}\nACME-1 is fine\n${END}\nCo-authored-by: Bot <bot@elsewhere.test>\nplease ask me`;
   assertCase('platform footer', scan('pull request body', authorBody(wrapped), none), false);
@@ -297,6 +308,11 @@ function selfTest() {
     commitHits({ sha: 'abcdef2', commit: { message: 'docs: note the Example Project rollout (GH-38)\n' } }, synthetic),
     true,
   );
+  assertCase(
+    'private term on a trailer',
+    commitHits({ sha: 'abcdef6', commit: { message: 'docs: record the rule (GH-38)\n\nCo-authored-by: Acme Person <a@example.com>\n' } }, synthetic),
+    true,
+  );
   const printed = [
     ...scan('docs/acme-notes.md', 'Acme wrote to dev@elsewhere.test', synthetic),
     ...pathHits('docs/example-project/notes.md', synthetic),
@@ -315,7 +331,7 @@ function help() {
 
 Scans the repository for the neutral-reference rules in conventions/neutral-reference.md.
 In a GitHub Actions pull_request job, the pull request title, the body, the branch name, and the commit messages in that pull request are checked too.
-A commit message in that pull request also fails on a co-author trailer (conventions/attribution.md).
+A mailbox in a commit message is not a hit. The mailbox pattern still applies to files, the title, the body, and the branch name.
 Client, client company, and client project names are read from ${PRIVATE_ENV}, one term per line. They are never printed.
 `);
 }
