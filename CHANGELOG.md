@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+[PURPOSE.md](PURPOSE.md) states what neat-os is for. The aim covers every agent, both in product repositories and as team bots, and the work it produces carries its own evidence (for code, a pull request with passing checks and a record of what was verified). [README.md](README.md) links the file. A director owns it, and it changes only by pull request. A new rule or proposal states which aim of that file it serves. The requirement is in [schema/README.md](schema/README.md), [docs/contributing.md](docs/contributing.md), and the draft list in [skills/learn/SKILL.md](skills/learn/SKILL.md).
+
+Every pull request title uses `[<KEY>] <type>: <description>`. The commit subject or footer keeps the ticket key in parentheses (`feat(gather): … (GH-42)`). The rules are [conventions/git.md](conventions/git.md#pr-titles) and [conventions/tickets.md](conventions/tickets.md#where-the-key-goes). Part of [issue #53](https://github.com/shedcollective/neat-os/issues/53).
+
 The neutral rule keeps Shed's business out of what this repository publishes: client names, client companies, client projects, Slack links and quotes, and internal discussion. It is not about people, so a person's name, a commit author, and a GitHub login may appear, and the check no longer flags a login. `scripts/check-neutral.js` now also flags a Slack workspace link and reads the pull request title. Client, client company, and client project names come from a private term list in the Actions secret `NEAT_OS_PRIVATE_TERMS`, which is never committed and never printed ([conventions/neutral-reference.md](conventions/neutral-reference.md#private-terms)). The author of a commit is the person who did the work, with no list of people and no identity check. A co-author trailer still fails the check on a pull request ([conventions/attribution.md](conventions/attribution.md), [ADR-0023](docs/decisions/0023-neutral-rule-guards-what-is-published.md), [issue #38](https://github.com/shedcollective/neat-os/issues/38)).
 
 ## 0.6.0

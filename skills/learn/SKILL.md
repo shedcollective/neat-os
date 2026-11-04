@@ -59,6 +59,7 @@ This is **not** `gather`. Do not fill the Agent Guide, evidence passport, or `.a
    Each draft must include:
    - Proposed `name` and when to use it
    - What it locks (the rule, in company-wide wording)
+   - Which aim of [PURPOSE.md](../../PURPOSE.md) it serves
    - Suggested location: `principles/` / `conventions/` / `skills/` vs `stacks/<name>/`
    - Why it should **not** be auto-merged
    - A stub YAML frontmatter + outline the human can edit
