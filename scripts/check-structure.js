@@ -456,7 +456,7 @@ for (const sentence of [
   }
 }
 
-// Red stops the steps above it (ADR-0023). The policy list is already at its
+// Red stops the steps above it (ADR-0024). The policy list is already at its
 // cap of 10, so the sentences are asserted here.
 for (const sentence of [
   'A pending merge never blocks the next step.',
@@ -466,7 +466,7 @@ for (const sentence of [
   'A step that merged on green and later goes red counts as red on its target branch.',
 ]) {
   if (!gitConvention.includes(sentence)) {
-    fail(`conventions/git.md must lock red on a stack (ADR-0023): missing "${sentence}"`);
+    fail(`conventions/git.md must lock red on a stack (ADR-0024): missing "${sentence}"`);
   }
 }
 
@@ -492,7 +492,7 @@ for (const link of principleIndex.matchAll(/\(([a-z0-9-]+\.md)\)/g)) {
   }
 }
 
-// Which branches red covers (ADR-0023). The index restates the one-line rule.
+// Which branches red covers (ADR-0024). The index restates the one-line rule.
 const redStop = read('principles/red-is-a-stop.md');
 for (const sentence of [
   'any branch another step is stacked on',
@@ -501,11 +501,11 @@ for (const sentence of [
   'A step that merged on green and later goes red counts as red on its target branch.',
 ]) {
   if (!redStop.includes(sentence)) {
-    fail(`principles/red-is-a-stop.md must lock which branches red covers (ADR-0023): missing "${sentence}"`);
+    fail(`principles/red-is-a-stop.md must lock which branches red covers (ADR-0024): missing "${sentence}"`);
   }
 }
 if (!principleIndex.includes('any branch another step is stacked on')) {
-  fail('principles/README.md must name the branches red-is-a-stop covers (ADR-0023)');
+  fail('principles/README.md must name the branches red-is-a-stop covers (ADR-0024)');
 }
 
 // Conventions index ↔ files.

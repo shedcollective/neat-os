@@ -1,4 +1,4 @@
-# 0023 — Red stops the steps above it
+# 0024 — Red stops the steps above it
 
 **Status:** Accepted
 **Date:** 2026-11-04
