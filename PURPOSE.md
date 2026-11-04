@@ -1,0 +1,3 @@
+# Purpose
+
+neat-os is our machine that builds better. It gives every agent we run, in a product repository or as a team bot, the principles, conventions, playbooks and checks it needs to turn a request into work a person can trust without rereading every line, because it carries its own evidence: for code, a pull request with passing checks and a record of what was verified; for the other roles, a brief, routed handoff, design option, wireframe, status or record. It improves by turning each correction into structure, so the same correction is never needed twice. Every rule here serves one of those aims; a rule that serves neither is a candidate to drop. Anyone can propose a rule; open an issue saying which aim it serves.
