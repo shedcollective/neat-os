@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+[PURPOSE.md](PURPOSE.md) states what neat-os is for. A director owns it, and it changes only by pull request. A new rule or proposal states which aim of that file it serves. The requirement is in [schema/README.md](schema/README.md), [docs/contributing.md](docs/contributing.md), and the draft list in [skills/learn/SKILL.md](skills/learn/SKILL.md).
+
 ## 0.6.0
 
 The bot passport template gains a **Skills** table (OS playbook, passport enhancement, or bot-only), owner-only routine install with duplicate skip rules, and an optional **Day file** table so a passport may name its own top-level burndown sections. The default day shape stays by project. Wrappers read playbooks from `<neat-os-path>` at the pinned tag and stop if the path or tag is missing ([ADR-0022](docs/decisions/0022-wrapper-shared-path.md)). How that path is populated is [issue #15](https://github.com/shedcollective/neat-os/issues/15).
