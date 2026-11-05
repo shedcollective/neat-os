@@ -31,17 +31,21 @@ The composition rule sits with `daily-digest` on [docs/agency-ops.md](../../docs
 
 The routine supplies these values, named as in [conventions/routine-settings.md](../../conventions/routine-settings.md): `<ops-record>`, `<timezone>`, `<destination>`, `<connectors>`, `<tracker-host>`, and `<quiet-when-empty>`. The Meetings section also uses the `brief` settings in [`meeting-prep`](../meeting-prep/SKILL.md) (`<internal-domains>`, `<prep-tag>`). If a required setting is missing, ask once and stop.
 
+`<staging-board>` is optional, and it is set per client in the wrapper. It points at that client's staging board and the settings [`staging-board`](../staging-board/SKILL.md) needs. When it is absent, do not ask for it. The brief is unchanged.
+
 A team bot does not run this routine without a filled bot passport ([docs/team-setup.md](../../docs/team-setup.md#team-bots)).
 
 ## Composition
 
 The brief **adds no new facts**. Every line comes from a source below. Omit a section that has nothing to say. Do not write "none" or "all green" inside a section.
 
+When a meeting's client has `<staging-board>` configured, the staging lines under that meeting are facts from the deploy service and the tracker, read the way [`staging-board`](../staging-board/SKILL.md) reads them. They are not a new claim. A brief whose meetings have no board configured is unchanged.
+
 Sections appear in this order:
 
 1. **Needs you** — From the in-flight board and the latest day file in `<ops-record>` (written by `daily-burndown`): items that need this person's decision, unblock, or review today. Link ticket keys under `<tracker-host>`.
 2. **Today** — The day plan. From today's calendar on `<connectors>`, and in-flight items this person owns. Reuse yesterday's `daily-digest` Tomorrow block when that post is available in `<ops-record>` or `<destination>`. Do not re-run `daily-digest`.
-3. **Meetings** — Today's qualifying meetings, using the `brief` composition in [`meeting-prep`](../meeting-prep/SKILL.md) (qualify, gather, reconcile owed actions, write Last time / Shipped / In flight / You owe / They owe / Raise). Omit when there are none. Do not send a separate `meeting-prep` brief from this run.
+3. **Meetings** — Today's qualifying meetings, using the `brief` composition in [`meeting-prep`](../meeting-prep/SKILL.md) (qualify, gather, reconcile owed actions, write Last time / Shipped / In flight / You owe / They owe / Raise). Omit when there are none. Do not send a separate `meeting-prep` brief from this run. When `<staging-board>` is set for that meeting's client, add a short staging status under the meeting. For each staging server, give the class [`staging-board`](../staging-board/SKILL.md) assigned (free, in use, or check with deployer), the branch, who deployed it, how old the deploy is, and the ticket with its status. When the board's ref line does not match the latest deploys, say the board is out of date. This is read-only. Do not restate that playbook's rules, and do not write the board.
 4. **Health** — Production and required-check status from `<connectors>` (version control, hosting). There is no separate health-check playbook. Omit this section when everything is green.
 5. **Pipeline** — Mondays only, using the weekday in `<timezone>`. From pipeline or new-business notes in `<ops-record>`, including the bids register when one exists. Omit on other days, and omit when the record has none.
 
@@ -64,6 +68,7 @@ HH:MM <event>
 *Meetings*
 HH:MM <title>
 <Last time / Shipped / In flight / You owe / They owe / Raise>
+<staging, only when this client has a board: class, branch, who deployed, age, ticket and status. Say when the board ref line is out of date>
 
 *Health*
 <one line of notable status>
@@ -82,6 +87,7 @@ When every section is empty (nothing needs the person, health is green, no day-p
 ## Hard rules
 
 - **One message.** Do not also send a separate morning health, digest, day-plan, or meeting-prep brief message from this run.
+- **Staging lines are read-only.** They follow [`staging-board`](../staging-board/SKILL.md). Do not write the board. Do not invent a class. Omit them when no board is configured.
 - **Adds no new facts.** Distil, do not dump. Skip quiet projects and routine ticket moves.
 - **Urgent alerts stay immediate.** A red production build still alerts at once. This playbook does not delay that alert and does not replace it. If a red is still open when the brief runs, **Health** or **Needs you** may mention it.
 - The person's own connectors only (`<connectors>`). Never another person's.
@@ -95,10 +101,11 @@ When every section is empty (nothing needs the person, health is green, no day-p
 3. Read `<ops-record>`: in-flight board, the latest day file, and yesterday's digest Tomorrow block when it was stored. List missing sources; do not invent them.
 4. Read `<connectors>` for today's calendar and for production or required-check status.
 5. For the Meetings section, run the `brief` steps in [`meeting-prep`](../meeting-prep/SKILL.md) for today's qualifying meetings, but do not deliver them as a separate message.
-6. Draft the five sections in the composition order. Omit empties. On a day that is not Monday, omit **Pipeline**.
-7. If every section is empty, follow `<quiet-when-empty>` (one line, or silent).
-8. Otherwise post the one message to `<destination>`. Do not send the old separate morning messages, and do not send a separate `meeting-prep` brief.
+6. When a meeting's client has `<staging-board>` configured, add the short staging status for that meeting. Read it the way [`staging-board`](../staging-board/SKILL.md) reads it, and do not write the board. When the board's ref line does not match the latest deploys, say the board is out of date. When the board or a source cannot be read, say that, and do not invent a class. When `<staging-board>` is set but one of its required settings is missing, ask once, leave the staging lines out, and still deliver the rest of the brief. When no meeting's client has a board configured, skip this step.
+7. Draft the five sections in the composition order. Omit empties. On a day that is not Monday, omit **Pipeline**.
+8. If every section is empty, follow `<quiet-when-empty>` (one line, or silent).
+9. Otherwise post the one message to `<destination>`. Do not send the old separate morning messages, and do not send a separate `meeting-prep` brief.
 
 ## Stop
 
-Complete when the one morning message is delivered to `<destination>`, or when the run stayed silent because `<quiet-when-empty>` is `yes` and every section was empty. Not complete if a second morning health, digest, day-plan, or meeting-prep brief message was also sent, if a fact was invented, if an empty section was padded, or if an urgent alert was delayed until this brief.
+Complete when the one morning message is delivered to `<destination>`, or when the run stayed silent because `<quiet-when-empty>` is `yes` and every section was empty. Not complete if a second morning health, digest, day-plan, or meeting-prep brief message was also sent, if a fact was invented, if an empty section was padded, if an urgent alert was delayed until this brief, or if this run wrote the staging board or invented a staging class.
