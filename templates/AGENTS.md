@@ -35,6 +35,7 @@ Company default: **git-flow** ([neat-os conventions/git.md](https://github.com/s
 - Commits: Conventional Commits (`feat|fix|chore|refactor|docs|test|style`) with the ticket key — Jira for client repos (`ACME-42`), GitHub Issues for OS repos (`GH-42`) ([conventions/tickets.md](https://github.com/shedcollective/neat-os/blob/develop/conventions/tickets.md)). Commit shape (one concern, what and why, documentation first, then an order a reviewer can follow) is locked in [conventions/git.md](https://github.com/shedcollective/neat-os/blob/develop/conventions/git.md)
 - PR titles: `[<KEY>] <type>: <description>` (stacked steps add `(<step>/<total>)` after the key; [conventions/git.md](https://github.com/shedcollective/neat-os/blob/develop/conventions/git.md#pr-titles))
 - Feature plans: `.agents/features/{{TICKET}}-overview.md` (ticket key lowercase in the filename, e.g. `acme-42-overview.md` / `gh-42-overview.md`; branch names stay lowercase with the `feature/` prefix, e.g. `feature/acme-42-checkout`)
+- Prose comments state current behaviour and the constraint that makes it true ([conventions/code-comments.md](https://github.com/shedcollective/neat-os/blob/develop/conventions/code-comments.md))
 
 ## Repo structure
 
