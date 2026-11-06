@@ -22,7 +22,7 @@ Work on neat-os is tracked in GitHub Issues in this repository, keyed `GH-<n>` (
 bash scripts/check
 ```
 
-`npm test` runs the same command. It runs four scripts in order: structure, policy, the neutral reference, then smoke. The same command runs locally, in CI, and for agents. Do not weaken an assertion to make a documentation edit pass. It needs Node 22 and bash, and no npm dependencies.
+`npm test` runs the same command. It runs five scripts in order: structure, policy, the neutral reference, smoke, and the assurance evidence pack comment tests. The same command runs locally, in CI, and for agents. Do not weaken an assertion to make a documentation edit pass. It needs Node 22 and bash, and no npm dependencies.
 
 ## Adding a file
 
