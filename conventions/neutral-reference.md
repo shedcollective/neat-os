@@ -39,7 +39,7 @@ Do not address the reader as the person to ask, tell, or ping (`ask me`, `tell m
 
 ## What the check enforces
 
-Writing is the first layer. [Write for a public reader](writing.md#write-for-a-public-reader) keeps names and chatter out of code comments, commit messages, docs, and pull request titles and bodies. The two layers below are the backstops.
+Writing is the first layer. [Write for a public reader](writing.md#write-for-a-public-reader) keeps names and chatter out of code comments, commit messages, docs, and pull request titles and bodies. What a prose comment may say about behaviour is [code-comments.md](code-comments.md) ([ADR-0025](../docs/decisions/0025-code-comments-state-current-behaviour.md)). The two layers below are the backstops.
 
 `scripts/check-neutral.js` checks what this repository publishes in two layers. `scripts/check` runs it.
 

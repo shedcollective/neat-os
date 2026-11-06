@@ -8,15 +8,15 @@ This applies to every file a person reads in a Shed repository: READMEs, `docs/`
 
 This is the first layer for everything this repository commits or publishes: code comments, commit messages, docs, and pull request titles and bodies. Generic-pattern checks and review are the backstops ([neutral-reference.md](neutral-reference.md)).
 
-Write for a public reader who has never met the client. Describe what changed and why in generic terms, such as "a client's checkout" or "the reviewer asked for". Do not write who did it, or where it happened.
+Write for a public reader who has never met the client. In a commit or a pull request, describe what changed and why in generic terms, such as "a client's checkout" or "the reviewer asked for". Do not write who did it, or where it happened.
 
-Point to context by ticket key. The detail lives in the ticket, not in the commit.
+A commit message and a pull request point to context by ticket key. The detail lives in the ticket, not in the commit message. A prose comment states current behaviour and the constraint that makes it true ([code-comments.md](code-comments.md), [ADR-0025](../docs/decisions/0025-code-comments-state-current-behaviour.md)).
 
 Do not paste chat, meeting notes, or emails. Summarise the decision instead.
 
 ## Rules
 
-1. **Assume the reader has only the repository.** Every reference must be something the reader can open from the file: a path in the repo, a GitHub issue or pull request link, or a public URL. Do not cite meetings, chat threads, private notes, or the internal position of a piece of work ("step 4 of the batch"). State the fact instead and link the issue if the history matters.
+1. **Assume the reader has only the repository.** Every reference must be something the reader can open from the file: a path in the repo, a GitHub issue or pull request link, or a public URL. Do not cite meetings, chat threads, private notes, or the internal position of a piece of work ("step 4 of the batch"). State the fact instead and link the issue if the history matters. In a prose comment, use the links [code-comments.md](code-comments.md) allows.
 2. **One page, one job.** Decide before writing whether a page gives steps to a goal (how-to), facts to look up (reference), or reasons (explanation). Do not mix them on one page. Link where they meet. The root `README.md` is a map with quick starts. Each page under `docs/` does one job. `docs/decisions/` holds the reasons.
 3. **Say it once, then link.** A recipe, rule, or fact lives in one file. Every other file points at it by path and does not restate it. If two files disagree, the one named as the source of truth wins and the other is a defect.
 4. **Use the words a developer would say out loud.** Prefer "use" to `utilise`, "help" to `facilitate`, "if" to `in the event that`. Do not write `simply` or `easy` in a procedure. Do not coin a metaphor for something that has a plain name. A named term is fine when the page says what it means the first time.
@@ -55,13 +55,14 @@ Do not paste chat, meeting notes, or emails. Summarise the decision instead.
 | UX agent | The team agent whose job is UX audit, research synthesis, and information architecture with clickable wireframes | a bot name |
 | lock owner | The person named on the brief who picks one of the 2 to 3 options | a person's name |
 | client lead | The person who may send work to that client, and who may approve edits to that client's design system | a person's name |
+| prose comment | A comment a person reads to understand the code. The rule is [code-comments.md](code-comments.md) | ticket or review narrative in the file |
 
 The roles in this repository are maintainer, PR author, reviewer, director, asker, operations lead, lock owner, client lead, code agent, assurance agent, design agent, and UX agent. When a sentence is about a role, name the role.
 
 ## What the check enforces
 
-`scripts/check-policy.js` fails the reader-facing pages (`README.md`, `docs/*.md`, `packages/*/README.md`, `conventions/*.md`, `principles/*.md`, `stacks/**/*.md`, `schema/README.md`) on the part of this convention that software can see: em dashes, `≠`, `in order to`, `utilise`, `leverage`, `simply`, and references to a ticket sub-step such as `GH-42 step 4`. `scripts/check-structure.js` rejects Notion URLs anywhere ([ADR-0008](../docs/decisions/0008-repo-is-source-of-truth.md)). Everything else in this page is review.
+`scripts/check-policy.js` fails the reader-facing pages (`README.md`, `docs/*.md`, `packages/*/README.md`, `conventions/*.md`, `principles/*.md`, `stacks/**/*.md`, `schema/README.md`) on the part of this convention that software can see: em dashes, `≠`, `in order to`, `utilise`, `leverage`, `simply`, and references to a ticket sub-step such as `GH-42 step 4`. The policy id is `written-for-a-reader-with-only-the-repo`. It does not parse code comments. Prose comments are review under [code-comments.md](code-comments.md). `scripts/check-structure.js` rejects Notion URLs anywhere ([ADR-0008](../docs/decisions/0008-repo-is-source-of-truth.md)). Everything else in this page is review.
 
 ## Source
 
-[ADR-0009](../docs/decisions/0009-writing-convention.md). The rules are a short form of four public standards: [Diátaxis](https://diataxis.fr) for page types, the [Google developer documentation style guide](https://developers.google.com/style) for sentences, [ASD-STE100](https://www.asd-ste100.org) for one thought per sentence, and *The Global English Style Guide* (SAS Press, 2008) for sentences that read one way. The layering, and the catalogue of machine-written tells that rule 4 and rule 5 cut, follow the `technical-writing` and `unslop` skills in [pstack](https://github.com/cursor/plugins/tree/main/pstack), a public plugin for Cursor. This OS keeps them as a convention, not a skill: they are a locked default that every page follows, not a step an agent invokes.
+[ADR-0009](../docs/decisions/0009-writing-convention.md). The ticket-key sentence in the public-reader section applies to commit messages and pull request text. Prose comments are [code-comments.md](code-comments.md) ([ADR-0025](../docs/decisions/0025-code-comments-state-current-behaviour.md)). The rules are a short form of four public standards: [Diátaxis](https://diataxis.fr) for page types, the [Google developer documentation style guide](https://developers.google.com/style) for sentences, [ASD-STE100](https://www.asd-ste100.org) for one thought per sentence, and *The Global English Style Guide* (SAS Press, 2008) for sentences that read one way. The layering, and the catalogue of machine-written tells that rule 4 and rule 5 cut, follow the `technical-writing` and `unslop` skills in [pstack](https://github.com/cursor/plugins/tree/main/pstack), a public plugin for Cursor. This OS keeps them as a convention, not a skill: they are a locked default that every page follows, not a step an agent invokes.
