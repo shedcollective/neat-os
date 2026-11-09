@@ -1,4 +1,4 @@
-# 0023 — Improvement records live in the product repository and a person approves the summary
+# 0026 — Improvement records live in the product repository and a person approves the summary
 
 **Status:** Proposed
 **Date:** 2026-10-20

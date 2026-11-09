@@ -10,6 +10,8 @@
 
 neat-os is the shared knowledge that Shed's AI agents work from. It is an operating standard: the fixed set of rules and procedures the agents run on, whichever project they are working in. It is a git repository that every Shed product repository installs. It holds the principles agents apply while deciding, the engineering conventions every Shed repo shares, the playbooks, the template files those playbooks copy, the ADRs that record why a locked behaviour exists, and the stack packs under [`stacks/`](stacks/). Everything lives in this repository so a Cursor Cloud Agent can read it with a git checkout and nothing else.
 
+[PURPOSE.md](PURPOSE.md) states what neat-os is for. A director owns it, and it changes only by pull request.
+
 `init` leaves an empty stack-pack slot. `gather` points a product repo at the matching pack. Tool-specific knowledge will live in separate `neat-os-tool-*` repositories later. They are not part of this one. Together with neat-os they are the OS repos. Everything else at Shed is a product repo.
 
 It is also the agency rulebook for shared operations playbooks. Living operational state stays in a private operations repository; the rules and playbooks stay here ([docs/agency-ops.md](docs/agency-ops.md)).
@@ -142,6 +144,7 @@ Work lands on `develop`. A release-prep pull request sets the version. Prepare r
 
 | Page | What it covers |
 | --- | --- |
+| [PURPOSE.md](PURPOSE.md) | What neat-os is for |
 | [docs/README.md](docs/README.md) | Where documentation lives and the full map |
 | [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, moving an existing install, and moving from shed-os |
 | [docs/launch-skills.md](docs/launch-skills.md) | What `init`, `gather`, `learn`, `ticket`, and `improve` do, and where `assurance` and `pin-majors-with-reasons` live |

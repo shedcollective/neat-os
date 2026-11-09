@@ -244,11 +244,11 @@ if (!/^## Tickets$/m.test(ticketsSlotTemplate)) {
   fail('templates/.agents/project.md must carry a Tickets slot for the ticket playbook to read');
 }
 
-// improve writes one record in the locked shape and never approves it (ADR-0023).
+// improve writes one record in the locked shape and never approves it (ADR-0026).
 // The categories, the key order, and the sign-off sentence live in the
 // convention; the playbook reads the convention instead of restating it.
 if (fs.existsSync(path.join(root, 'skills/improve/scripts'))) {
-  fail('skills/improve/ must not carry scripts: the playbook uses the measuring tool the project already has (ADR-0023)');
+  fail('skills/improve/ must not carry scripts: the playbook uses the measuring tool the project already has (ADR-0026)');
 }
 const improveSkill = read('skills/improve/SKILL.md');
 const improveConvention = read('conventions/improvement-record.md');
@@ -272,10 +272,10 @@ if (keyRows.join('|') !== improveKeys.join('|')) {
 }
 for (const [rel, text] of [['conventions/improvement-record.md', improveConvention], ['skills/improve/SKILL.md', improveSkill]]) {
   if (!text.includes('A person sets status to approved')) {
-    fail(`${rel} must lock the sign-off rule (ADR-0023): missing "A person sets status to approved"`);
+    fail(`${rel} must lock the sign-off rule (ADR-0026): missing "A person sets status to approved"`);
   }
   if (!/audience: internal/.test(text)) {
-    fail(`${rel} must write audience: internal so a person raises it (ADR-0023)`);
+    fail(`${rel} must write audience: internal so a person raises it (ADR-0026)`);
   }
 }
 if (!/^## Example/m.test(improveConvention)) {
@@ -506,6 +506,20 @@ for (const sentence of [
   }
 }
 
+// Red stops the steps above it (ADR-0024). The policy list is already at its
+// cap of 10, so the sentences are asserted here.
+for (const sentence of [
+  'A pending merge never blocks the next step.',
+  'Waiting on a person, such as a pending merge or review, never blocks. Red always does',
+  'When any step in a stack goes red, the agent fixes that step before adding or rebasing any step above it.',
+  'Steps below the red one are unaffected.',
+  'A step that merged on green and later goes red counts as red on its target branch.',
+]) {
+  if (!gitConvention.includes(sentence)) {
+    fail(`conventions/git.md must lock red on a stack (ADR-0024): missing "${sentence}"`);
+  }
+}
+
 // Principles index ↔ leaves.
 const goals = new Set(['README.md', 'kaizen.md', 'determinism.md', 'parallelism.md']);
 const principleDir = path.join(root, 'principles');
@@ -526,6 +540,22 @@ for (const link of principleIndex.matchAll(/\(([a-z0-9-]+\.md)\)/g)) {
   if (!fs.existsSync(path.join(principleDir, link[1]))) {
     fail(`principles/README.md links missing leaf ${link[1]}`);
   }
+}
+
+// Which branches red covers (ADR-0024). The index restates the one-line rule.
+const redStop = read('principles/red-is-a-stop.md');
+for (const sentence of [
+  'any branch another step is stacked on',
+  'When any step in a stack goes red, the agent fixes that step before adding or rebasing any step above it.',
+  'Steps below the red one are unaffected.',
+  'A step that merged on green and later goes red counts as red on its target branch.',
+]) {
+  if (!redStop.includes(sentence)) {
+    fail(`principles/red-is-a-stop.md must lock which branches red covers (ADR-0024): missing "${sentence}"`);
+  }
+}
+if (!principleIndex.includes('any branch another step is stacked on')) {
+  fail('principles/README.md must name the branches red-is-a-stop covers (ADR-0024)');
 }
 
 // Conventions index ↔ files.
