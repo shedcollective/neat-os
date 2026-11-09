@@ -1,4 +1,4 @@
-# 0025 — Prose comments state current behaviour and the constraint
+# 0026 — Prose comments state current behaviour and the constraint
 
 **Status:** Accepted
 **Date:** 2026-11-06

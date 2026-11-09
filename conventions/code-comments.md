@@ -77,4 +77,4 @@ A warning on added comments is [issue #71](https://github.com/shedcollective/nea
 
 ## Source
 
-[ADR-0025](../docs/decisions/0025-code-comments-state-current-behaviour.md). [Issue #74](https://github.com/shedcollective/neat-os/issues/74).
+[ADR-0026](../docs/decisions/0026-code-comments-state-current-behaviour.md). [Issue #74](https://github.com/shedcollective/neat-os/issues/74).

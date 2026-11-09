@@ -10,7 +10,7 @@ This is the first layer for everything this repository commits or publishes: cod
 
 Write for a public reader who has never met the client. In a commit or a pull request, describe what changed and why in generic terms, such as "a client's checkout" or "the reviewer asked for". Do not write who did it, or where it happened.
 
-A commit message and a pull request point to context by ticket key. The detail lives in the ticket, not in the commit message. A prose comment states current behaviour and the constraint that makes it true ([code-comments.md](code-comments.md), [ADR-0025](../docs/decisions/0025-code-comments-state-current-behaviour.md)).
+A commit message and a pull request point to context by ticket key. The detail lives in the ticket, not in the commit message. A prose comment states current behaviour and the constraint that makes it true ([code-comments.md](code-comments.md), [ADR-0026](../docs/decisions/0026-code-comments-state-current-behaviour.md)).
 
 Do not paste chat, meeting notes, or emails. Summarise the decision instead.
 
@@ -25,8 +25,52 @@ Do not paste chat, meeting notes, or emails. Summarise the decision instead.
 7. **Instructions are commands, condition first.** "To pin a release, set the tag in `package.json`." Numbered lists for sequences, bullets for everything else. Introduce a list with a complete sentence.
 8. **Headings carry the point and use sentence case.** "Tag only what installs", not "Tagging".
 9. **Bold the one thing the reader must not miss.** A paragraph with three bold phrases has none. Do not bold every "not".
-10. **Pull request descriptions and commit messages are writing too.** A pull request body is a briefing a reviewer reads in under a minute: what changed, why, how it was verified. Link logs and test output instead of pasting them. Follow [git.md](git.md) for the title and ticket key.
+10. **Pull request descriptions and commit messages are writing too.** Commit messages follow [git.md](git.md). A pull request body follows [Pull request bodies](#pull-request-bodies). Link logs and test output instead of pasting them.
 11. **Do not hard-wrap a paragraph.** Each paragraph and each list item is one line. The editor or GitHub soft-wraps it. Put a line break between paragraphs, headings, and list items, not in the middle of a sentence.
+
+## Pull request bodies
+
+A pull request body is the note a reviewer reads before they decide. It states **the practical change and why that change is the one to accept**. It does not narrate the diff file by file, and it does not open with a preamble that repeats the title.
+
+Write the opening in plain sentences. Say what a person can do, or rely on, that they could not before, and why this is the change. Stop when the reviewer can accept or reject it. Do not repeat that reason later in the body.
+
+When a concrete before and after shows the change more clearly than another sentence, include one. Leave it out when the opening is already clear.
+
+When the change is a decision or a trade-off, name the decision and name the path the reviewer should open. When the change is straightforward, do not invent a decision.
+
+State what was verified and what was not. Tie the evidence to the command, the artefact, or the commit that was checked. A compiler finishing, or a type check passing, does not show that two behaviours are the same.
+
+Keep the notes a later reader may need in one collapsed reference. Use a `details` block with a `summary` when the host renders one. Include a line only when it has something to say. Those lines are the rules this change touches, the rationale, who is affected, references, and work that was deferred. Name a rule by the identifier this repository already uses: a principle slug, a convention path, an ADR id, or a policy id. The rationale is the convention or principle that forced the shape, not a second copy of the opening. The summary names the reference. It must not hide a risk, and it must not contradict the text inside. A risk the reviewer must weigh belongs in the opening.
+
+One pull request describes one coherent change. Short sentences do not turn unrelated decisions into one change. Split them.
+
+The title and the ticket key stay in [git.md](git.md). A pull request into `develop` still includes the closing keyword from [tickets.md](tickets.md#where-the-key-goes). A stacked step still starts with the line [git.md](git.md#stacked-prs) requires. Those lines stay in the body. They are not a second briefing. The neutrality checkbox on the pull request template stays. It is the review step in [neutral-reference.md](neutral-reference.md).
+
+This shape serves the aim in [PURPOSE.md](../PURPOSE.md) that a person can trust the work without rereading every line. The shape is review. It is not a check in `scripts/`. [ADR-0025](../docs/decisions/0025-pull-request-body-for-the-reviewer.md).
+
+### Example of a pull request body
+
+The example is generic. The page path is invented. It is not a change in this repository.
+
+```text
+The order page said "Submit", and a failed save left a blank page. It now says "Place order", and a failed save shows "Try again" and keeps what the customer typed. A customer can correct the order without starting again.
+
+Before: a failed save replaced the form with a blank page.
+After: the form stays, and the page shows "Try again".
+
+The message stays in the existing page template. A new component would be a second place to change one string. Read templates/order.html.
+
+Verified: the checkout flow was clicked through in a local browser at the pull request head, including a failed save. The payment provider was not called.
+
+<details>
+<summary>Reference</summary>
+
+Consumers: the storefront page template only.
+
+Deferred: the message shown when the payment provider rejects a card.
+
+</details>
+```
 
 ## Terms
 
@@ -65,4 +109,4 @@ The roles in this repository are maintainer, PR author, reviewer, director, aske
 
 ## Source
 
-[ADR-0009](../docs/decisions/0009-writing-convention.md). The ticket-key sentence in the public-reader section applies to commit messages and pull request text. Prose comments are [code-comments.md](code-comments.md) ([ADR-0025](../docs/decisions/0025-code-comments-state-current-behaviour.md)). The rules are a short form of four public standards: [Diátaxis](https://diataxis.fr) for page types, the [Google developer documentation style guide](https://developers.google.com/style) for sentences, [ASD-STE100](https://www.asd-ste100.org) for one thought per sentence, and *The Global English Style Guide* (SAS Press, 2008) for sentences that read one way. The layering, and the catalogue of machine-written tells that rule 4 and rule 5 cut, follow the `technical-writing` and `unslop` skills in [pstack](https://github.com/cursor/plugins/tree/main/pstack), a public plugin for Cursor. This OS keeps them as a convention, not a skill: they are a locked default that every page follows, not a step an agent invokes.
+[ADR-0009](../docs/decisions/0009-writing-convention.md). The ticket-key sentence in the public-reader section applies to commit messages and pull request text. Prose comments are [code-comments.md](code-comments.md) ([ADR-0026](../docs/decisions/0026-code-comments-state-current-behaviour.md)). The rules are a short form of four public standards: [Diátaxis](https://diataxis.fr) for page types, the [Google developer documentation style guide](https://developers.google.com/style) for sentences, [ASD-STE100](https://www.asd-ste100.org) for one thought per sentence, and *The Global English Style Guide* (SAS Press, 2008) for sentences that read one way. The layering, and the catalogue of machine-written tells that rule 4 and rule 5 cut, follow the `technical-writing` and `unslop` skills in [pstack](https://github.com/cursor/plugins/tree/main/pstack), a public plugin for Cursor. This OS keeps them as a convention, not a skill: they are a locked default that every page follows, not a step an agent invokes.
