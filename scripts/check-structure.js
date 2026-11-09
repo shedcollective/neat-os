@@ -59,6 +59,13 @@ const required = [
   'skills/learn/SKILL.md',
   'skills/ticket/SKILL.md',
   'templates/AGENTS.md',
+  'templates/ops/bot-skill.md',
+  'templates/ops/bids-register.md',
+  'templates/ops/bid-submission.md',
+  'templates/agent/passport.md',
+  'templates/agent/passport-design.md',
+  'templates/agent/passport-ux.md',
+  'conventions/design-ux-agents.md',
   'templates/.agents/README.md',
   'templates/.agents/project.md',
   'templates/.agents/docs/.gitkeep',
@@ -89,6 +96,7 @@ const required = [
   '.github/workflows/validate.yml',
   '.github/workflows/release-smoke.yml',
   '.github/workflows/publish-npm.yml',
+  '.github/workflows/prepare-release.yml',
 ];
 
 const missing = required.filter((rel) => !fs.existsSync(path.join(root, rel)));
@@ -180,12 +188,33 @@ for (const banned of ['copy-templates.sh', 'light-scan']) {
 if (!/ticket-content\.md/.test(ticketSkill)) {
   fail('skills/ticket/SKILL.md must read conventions/ticket-content.md');
 }
-// The section list and its order are the locked shape (ADR-0012).
+// The section list and its order are the locked shape (ADR-0012, ADR-0020).
 const ticketConvention = read('conventions/ticket-content.md');
-const ticketSections = ['Title', 'Original request', 'More information needed', 'Why', 'What', 'How to replicate', 'Out of scope', 'Acceptance criteria', 'Links', 'Attachments'];
+const ticketSections = ['Title', 'More information needed', 'Why', 'What', 'How to replicate', 'Out of scope', 'Acceptance criteria', 'Links', 'Attachments'];
 const sectionRows = [...ticketConvention.matchAll(/^\| ([A-Z][a-z ]+) \| (yes|bugs only|when useful|when the request is unclear) \|/gm)].map((m) => m[1]);
 if (sectionRows.join('|') !== ticketSections.join('|')) {
   fail(`conventions/ticket-content.md sections must be, in order: ${ticketSections.join(', ')}; got ${sectionRows.join(', ') || 'none'}`);
+}
+// A ticket records only the decided outcome (ADR-0020). The three sentences
+// live in the convention and the playbook. The old section name must not return.
+const decidedOutcomeSentences = [
+  'final decided outcome, stated as fact',
+  'original request text, meeting discussion, options considered, attributions',
+  'rewrite the ticket body to the new decision instead of appending history',
+];
+for (const rel of ['conventions/ticket-content.md', 'skills/ticket/SKILL.md']) {
+  const text = rel === 'conventions/ticket-content.md' ? ticketConvention : ticketSkill;
+  for (const sentence of decidedOutcomeSentences) {
+    if (!text.includes(sentence)) {
+      fail(`${rel} must lock the decided-outcome rule (ADR-0020): missing "${sentence}"`);
+    }
+  }
+  if (text.includes('Original request')) {
+    fail(`${rel} must not tell writers to keep an Original request section (ADR-0020)`);
+  }
+}
+if (read('docs/launch-skills.md').includes('Original request')) {
+  fail('docs/launch-skills.md must not list an Original request section (ADR-0020)');
 }
 if (!ticketConvention.includes('Done when')) {
   fail('conventions/ticket-content.md must lock the "Done when" acceptance criteria shape');
@@ -234,9 +263,11 @@ for (const [label, manifest] of [['composer.json', composer], ['packages/compose
     fail(`${label} version ${manifest.version} must match package.json ${rootPkg.version} (one release tag versions both)`);
   }
 }
+const githubPackagesRegistry = 'https://npm.pkg.github.com';
 for (const [label, pkg] of [['root', rootPkg], ['packages/npm', npm]]) {
-  if (pkg.publishConfig && /npm\.pkg\.github\.com/.test(pkg.publishConfig.registry || '')) {
-    fail(`${label} package.json must not publishConfig to GitHub Packages while publish is paused (ADR-0017)`);
+  const registry = String((pkg.publishConfig && pkg.publishConfig.registry) || '').replace(/\/$/, '');
+  if (registry !== githubPackagesRegistry) {
+    fail(`${label} package.json publishConfig.registry must be ${githubPackagesRegistry} (ADR-0019)`);
   }
 }
 if (!rootPkg.scripts || !/scripts\/check/.test(rootPkg.scripts.test || '')) {
@@ -267,21 +298,51 @@ if (typeof fromRoot.resolveConsume !== 'function') {
   fail('@shedcollective/neat-os must export resolveConsume()');
 }
 for (const [label, pkg] of [['root', rootPkg], ['packages/npm', npm]]) {
-  if (!Array.isArray(pkg.files) || !pkg.files.includes('stacks')) {
-    fail(`${label} package.json files must include stacks so a published package ships stack packs (ADR-0017)`);
+  if (!Array.isArray(pkg.files) || !pkg.files.includes('stacks') || !pkg.files.includes('skills')) {
+    fail(`${label} package.json files must include stacks and skills so a published package ships them (ADR-0017)`);
   }
 }
 if (!/['"]stacks['"]/.test(read('scripts/stage-npm.js'))) {
   fail('scripts/stage-npm.js must stage stacks into packages/npm (ADR-0017)');
 }
 
-// publish-npm.yml stays paused. The licence is MIT (ADR-0017).
-const publishPath = path.join(root, '.github/workflows/publish-npm.yml');
-if (fs.existsSync(publishPath)) {
-  const publishYml = fs.readFileSync(publishPath, 'utf8');
-  if (!/paused/i.test(publishYml) || publishYml.includes('types: [published]') || /^\s+npm publish\s*$/m.test(publishYml)) {
-    fail('publish-npm.yml must stay paused: no release trigger, no npm publish (ADR-0017)');
-  }
+// publish-npm.yml publishes to GitHub Packages on a Release. Nothing else may (ADR-0019).
+const publishYml = read('.github/workflows/publish-npm.yml');
+if (/paused/i.test(publishYml)) {
+  fail('publish-npm.yml must not stay paused (ADR-0019)');
+}
+if (!/types:\s*\[published\]/.test(publishYml)) {
+  fail('publish-npm.yml must run when a Release is published (ADR-0019)');
+}
+if (!/packages:\s*write/.test(publishYml)) {
+  fail('publish-npm.yml must set packages: write for GITHUB_TOKEN (ADR-0019)');
+}
+if (!/npm\.pkg\.github\.com/.test(publishYml)) {
+  fail('publish-npm.yml must publish to https://npm.pkg.github.com (ADR-0019)');
+}
+if (/registry\.npmjs\.org/.test(publishYml)) {
+  fail('publish-npm.yml must not publish to the public npm registry (ADR-0019)');
+}
+if (!/secrets\.GITHUB_TOKEN/.test(publishYml)) {
+  fail('publish-npm.yml must authenticate npm with GITHUB_TOKEN (ADR-0019)');
+}
+if (!/^\s+npm publish\s*$/m.test(publishYml)) {
+  fail('publish-npm.yml must run npm publish (ADR-0019)');
+}
+if (!/npm pack --dry-run/.test(publishYml) || !publishYml.includes('skills/') || !publishYml.includes('stacks/')) {
+  fail('publish-npm.yml must verify the tarball includes skills/ and stacks/ (ADR-0019)');
+}
+const mainGuard = 'git merge-base --is-ancestor';
+const mainGuardError = 'Publish the Release targeting main after merging release/X.Y.Z.';
+if (!publishYml.includes('fetch-depth: 0') || !publishYml.includes(mainGuard) || !publishYml.includes('origin/main') || !publishYml.includes(mainGuardError)) {
+  fail('publish-npm.yml must refuse a release tag that is not reachable from origin/main, after a full fetch');
+}
+if (!publishYml.includes('does not match package.json version')) {
+  fail('publish-npm.yml must fail when the tag does not match package.json version');
+}
+const publishAt = publishYml.indexOf('npm publish');
+if (publishAt === -1 || publishYml.indexOf(mainGuard) > publishAt) {
+  fail('publish-npm.yml must check the tag is on main before npm publish');
 }
 
 // SHA and tag install smokes (ADR-0010). Do not weaken these.
@@ -307,8 +368,30 @@ if (!/^\s*release:\s*$/m.test(releaseSmokeYml) || !/published/.test(releaseSmoke
 if (!/skillsDir/.test(releaseSmokeYml) || !/node_modules/.test(releaseSmokeYml)) {
   fail('release-smoke.yml must assert skillsDir exists and resolveConsume mode is node_modules (ADR-0010)');
 }
-if (/^\s+npm publish\s*$/m.test(releaseSmokeYml)) {
-  fail('release-smoke.yml must not npm publish (ADR-0017)');
+if (/^\s+npm publish\s*$/m.test(releaseSmokeYml) || /registry\.npmjs\.org/.test(releaseSmokeYml)) {
+  fail('release-smoke.yml must not npm publish or use the public npm registry (ADR-0019)');
+}
+if (!releaseSmokeYml.includes('fetch-depth: 0') || !releaseSmokeYml.includes(mainGuard) || !releaseSmokeYml.includes('origin/main') || !releaseSmokeYml.includes(mainGuardError)) {
+  fail('release-smoke.yml must refuse a release tag that is not reachable from origin/main, after a full fetch');
+}
+const prepareYml = read('.github/workflows/prepare-release.yml');
+if (!/workflow_dispatch:/.test(prepareYml) || !/inputs:/.test(prepareYml)) {
+  fail('prepare-release.yml must be workflow_dispatch with a version input');
+}
+if (!/contents:\s*write/.test(prepareYml) || !/pull-requests:\s*write/.test(prepareYml)) {
+  fail('prepare-release.yml must set contents: write and pull-requests: write');
+}
+if (!prepareYml.includes('--draft') || !prepareYml.includes('--target main')) {
+  fail('prepare-release.yml must create a draft Release targeting main');
+}
+if (/gh pr merge/.test(prepareYml) || /--draft=false/.test(prepareYml)) {
+  fail('prepare-release.yml must not merge or publish the Release');
+}
+if (!prepareYml.includes('docs/release.md') || !prepareYml.includes('release-prep')) {
+  fail('prepare-release.yml must point at the release-prep pull request when develop is not at that version');
+}
+if (!prepareYml.includes('isDraft') || !prepareYml.includes('targetCommitish')) {
+  fail('prepare-release.yml must confirm the Release stays a draft targeted at the branch main');
 }
 
 // Workflow YAML: an unquoted colon inside a `name:` value is a parse error that
@@ -316,6 +399,12 @@ if (/^\s+npm publish\s*$/m.test(releaseSmokeYml)) {
 const workflowsDir = path.join(root, '.github/workflows');
 for (const file of fs.readdirSync(workflowsDir).filter((name) => /\.ya?ml$/.test(name))) {
   const lines = fs.readFileSync(path.join(workflowsDir, file), 'utf8').split('\n');
+  if (file !== 'publish-npm.yml') {
+    const yml = lines.join('\n');
+    if (/npm publish/.test(yml) || /registry\.npmjs\.org/.test(yml)) {
+      fail(`.github/workflows/${file} must not npm publish or use the public npm registry (ADR-0019)`);
+    }
+  }
   lines.forEach((line, i) => {
     const match = /^\s*(?:-\s+)?name:\s+(.+)$/.exec(line);
     if (match && !/^['"]/.test(match[1]) && /:(\s|$)/.test(match[1])) {
@@ -336,12 +425,15 @@ for (const file of adrFiles) {
     fail(`docs/decisions/README.md does not list ${file}`);
   }
   const body = read(`docs/decisions/${file}`);
-  if (!/^\*\*Status:\*\*\s+(Proposed|Accepted|Superseded by \d{4}|Deprecated)/m.test(body)) {
+  if (!/^\*\*Status:\*\*\s+(Proposed|Accepted|Partially superseded by \d{4}|Superseded by \d{4}|Deprecated)/m.test(body)) {
     fail(`docs/decisions/${file} must declare a Status line from the template`);
   }
   if (!/^\*\*Date:\*\*\s+\d{4}-\d{2}-\d{2}/m.test(body)) {
     fail(`docs/decisions/${file} must declare a Date line`);
   }
+}
+if (!/^\*\*Status:\*\*\s+Partially superseded by 0019\s*$/m.test(read('docs/decisions/0017-consume-via-github-packages.md'))) {
+  fail('docs/decisions/0017 must stay Partially superseded by 0019 (ADR-0019 replaces only the pause)');
 }
 for (const link of adrIndex.matchAll(/\((\d{4}-[^)]+\.md)\)/g)) {
   if (!fs.existsSync(path.join(adrDir, link[1]))) {
@@ -361,6 +453,20 @@ for (const sentence of [
 ]) {
   if (!gitConvention.includes(sentence)) {
     fail(`conventions/git.md must lock commit shape (ADR-0014): missing "${sentence}"`);
+  }
+}
+
+// Red stops the steps above it (ADR-0024). The policy list is already at its
+// cap of 10, so the sentences are asserted here.
+for (const sentence of [
+  'A pending merge never blocks the next step.',
+  'Waiting on a person, such as a pending merge or review, never blocks. Red always does',
+  'When any step in a stack goes red, the agent fixes that step before adding or rebasing any step above it.',
+  'Steps below the red one are unaffected.',
+  'A step that merged on green and later goes red counts as red on its target branch.',
+]) {
+  if (!gitConvention.includes(sentence)) {
+    fail(`conventions/git.md must lock red on a stack (ADR-0024): missing "${sentence}"`);
   }
 }
 
@@ -384,6 +490,22 @@ for (const link of principleIndex.matchAll(/\(([a-z0-9-]+\.md)\)/g)) {
   if (!fs.existsSync(path.join(principleDir, link[1]))) {
     fail(`principles/README.md links missing leaf ${link[1]}`);
   }
+}
+
+// Which branches red covers (ADR-0024). The index restates the one-line rule.
+const redStop = read('principles/red-is-a-stop.md');
+for (const sentence of [
+  'any branch another step is stacked on',
+  'When any step in a stack goes red, the agent fixes that step before adding or rebasing any step above it.',
+  'Steps below the red one are unaffected.',
+  'A step that merged on green and later goes red counts as red on its target branch.',
+]) {
+  if (!redStop.includes(sentence)) {
+    fail(`principles/red-is-a-stop.md must lock which branches red covers (ADR-0024): missing "${sentence}"`);
+  }
+}
+if (!principleIndex.includes('any branch another step is stacked on')) {
+  fail('principles/README.md must name the branches red-is-a-stop covers (ADR-0024)');
 }
 
 // Conventions index ↔ files.
@@ -420,6 +542,303 @@ const docsIndex = read('docs/README.md');
 for (const name of fs.readdirSync(path.join(root, 'docs')).filter((n) => n.endsWith('.md') && n !== 'README.md')) {
   if (!docsIndex.includes(`(${name})`)) {
     fail(`docs/README.md does not list ${name}`);
+  }
+}
+
+// morning-brief composes one message in a fixed section order (GH-29).
+const morningBrief = read('skills/morning-brief/SKILL.md');
+const morningSections = ['Needs you', 'Today', 'Meetings', 'Health', 'Pipeline'];
+const morningAt = morningSections.map((name) => morningBrief.indexOf(`**${name}**`));
+if (morningAt.some((i) => i < 0) || morningAt.some((v, i) => i > 0 && v < morningAt[i - 1])) {
+  fail(`skills/morning-brief/SKILL.md must compose sections in order: ${morningSections.join(', ')}`);
+}
+for (const sentence of [
+  'adds no new facts',
+  'does not delay that alert',
+  'quiet-when-empty',
+  'all green',
+]) {
+  if (!morningBrief.includes(sentence)) {
+    fail(`skills/morning-brief/SKILL.md must lock the morning brief rule: missing "${sentence}"`);
+  }
+}
+if (!read('skills/daily-digest/SKILL.md').includes('morning-brief')) {
+  fail('skills/daily-digest/SKILL.md must point morning messages at morning-brief');
+}
+const agencyOps = read('docs/agency-ops.md');
+if (!agencyOps.includes('morning-brief')) {
+  fail('docs/agency-ops.md must list morning-brief alongside daily-digest');
+}
+if (!agencyOps.includes('Needs you, Today, Meetings, Health, Pipeline')) {
+  fail('docs/agency-ops.md must state the morning-brief section order');
+}
+if (!read('skills/meeting-prep/SKILL.md').includes('morning-brief')) {
+  fail('skills/meeting-prep/SKILL.md must point scheduled briefs at morning-brief');
+}
+
+// Wrapper templates pin a release tag, never a branch (ADR-0021).
+// check-policy.js is at its cap of ten, so this lives here with the
+// release-tag-on-main guard rather than as a prose policy.
+function wrapperPinRefAllowed(ref) {
+  if (ref === 'vX.Y.Z') return true;
+  return /^v\d+\.\d+\.\d+$/.test(ref);
+}
+
+function githubBlobRefs(text) {
+  const refs = [];
+  const re = /github\.com\/shedcollective\/neat-os\/(?:blob|raw|tree)\/([^/#?\s)]+)/g;
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    refs.push(match[1]);
+  }
+  return refs;
+}
+
+for (const [ref, allowed] of [
+  ['v0.5.0', true],
+  ['vX.Y.Z', true],
+  ['v1.2.3', true],
+  ['develop', false],
+  ['main', false],
+  ['master', false],
+  ['HEAD', false],
+  ['release/0.5.0', false],
+]) {
+  if (wrapperPinRefAllowed(ref) !== allowed) {
+    fail(`wrapper pin classifier (ADR-0021): ${ref} should be ${allowed ? 'allowed' : 'forbidden'}`);
+  }
+}
+
+const wrapperTemplate = read('templates/ops/bot-skill.md');
+if (!wrapperTemplate.includes('say so and stop')) {
+  fail('templates/ops/bot-skill.md must stop when the pin is a branch (ADR-0021)');
+}
+if (!wrapperTemplate.includes('blob/vX.Y.Z/')) {
+  fail('templates/ops/bot-skill.md must pin GitHub playbook links to vX.Y.Z (ADR-0021)');
+}
+if (/Pin `main` or a release tag/.test(wrapperTemplate)) {
+  fail('templates/ops/bot-skill.md must not treat main as a first-class pin (ADR-0021)');
+}
+if (!wrapperTemplate.includes('<neat-os-path>')) {
+  fail('templates/ops/bot-skill.md must read playbooks from <neat-os-path> (ADR-0022)');
+}
+if (!wrapperTemplate.includes('neat-os is not at <neat-os-path>. Stop.')) {
+  fail('templates/ops/bot-skill.md must stop when <neat-os-path> is missing (ADR-0022)');
+}
+if (!wrapperTemplate.includes('is not at vX.Y.Z. Stop.')) {
+  fail('templates/ops/bot-skill.md must stop when the checkout is not the pin (ADR-0022)');
+}
+if (!wrapperTemplate.includes('issue #15')) {
+  fail('templates/ops/bot-skill.md must leave how the shared path is populated to issue #15 (ADR-0022)');
+}
+
+const wrapperPinFiles = [
+  'templates/ops/bot-skill.md',
+  'templates/agent/passport.md',
+  'templates/agent/passport-design.md',
+  'templates/agent/passport-ux.md',
+];
+for (const rel of wrapperPinFiles) {
+  const text = rel === 'templates/ops/bot-skill.md' ? wrapperTemplate : read(rel);
+  const refs = githubBlobRefs(text);
+  for (const ref of refs) {
+    if (!wrapperPinRefAllowed(ref)) {
+      fail(`${rel} pins a branch or non-tag ref "${ref}"; pin a release tag (ADR-0021)`);
+    }
+  }
+}
+if (!githubBlobRefs(wrapperTemplate).length) {
+  fail('templates/ops/bot-skill.md must contain a GitHub blob pin (ADR-0021)');
+}
+
+const passportTemplate = read('templates/agent/passport.md');
+for (const heading of ['## Job', '## Never', '## Human gates', '## Sources', '## Skills', '## Routines', '## Day file', '## Pin', '## Review']) {
+  if (!passportTemplate.includes(heading)) {
+    fail(`templates/agent/passport.md missing ${heading}`);
+  }
+}
+for (const kind of ['OS playbook', 'passport enhancement', 'bot-only']) {
+  if (!passportTemplate.includes(kind)) {
+    fail(`templates/agent/passport.md Skills table must name kind "${kind}"`);
+  }
+}
+if (!passportTemplate.includes('Install only the rows whose Owner is this passport\'s owner')) {
+  fail('templates/agent/passport.md must install routines for the owner only');
+}
+if (!passportTemplate.includes('Skip a row when a wrapper for that triple already exists')) {
+  fail('templates/agent/passport.md must skip duplicate owner-name-schedule routines');
+}
+if (!/private operations record/.test(passportTemplate) || !/never in neat-os/.test(passportTemplate)) {
+  fail('templates/agent/passport.md must say filled passports live in the private operations record, never in neat-os');
+}
+if (!passportTemplate.includes('Pin a release tag')) {
+  fail('templates/agent/passport.md Pin must require a release tag (ADR-0021)');
+}
+if (!/^## Team bots$/m.test(read('docs/team-setup.md'))) {
+  fail('docs/team-setup.md must say every team bot has a bot passport before it runs a routine');
+}
+if (!read('docs/team-setup.md').includes('before it runs a routine')) {
+  fail('docs/team-setup.md must require a bot passport before a team bot runs a routine');
+}
+
+const designUxConvention = read('conventions/design-ux-agents.md');
+for (const sentence of [
+  'read only the asker\'s own connectors',
+  'new drafts or comments',
+  'Do not edit a client\'s live library, live site, or live Figma file',
+  'Do not change a ticket\'s status',
+  'Do not send anything to a client',
+  'Links only',
+  '2 to 3 Figma options',
+  'lock owner named on the brief',
+  'EXAMPLE DATA',
+  'design/<brand>/',
+  'tokens.json',
+  'belongs to the assurance role',
+  'Do not write code, open a code pull request, or merge',
+  'Never use a team secret',
+  'Set the file name at creation',
+  'dedicated throwaway',
+  'Self-merge stays forbidden everywhere else',
+  'Keyword volumes cite',
+]) {
+  if (!designUxConvention.includes(sentence)) {
+    fail(`conventions/design-ux-agents.md must lock design and UX agent rules: missing "${sentence}"`);
+  }
+}
+
+const passportHeadings = ['## Job', '## Never', '## Human gates', '## Sources', '## Skills', '## Routines', '## Day file', '## Pin', '## Review'];
+for (const rel of ['templates/agent/passport-design.md', 'templates/agent/passport-ux.md']) {
+  const text = read(rel);
+  for (const heading of passportHeadings) {
+    if (!text.includes(heading)) {
+      fail(`${rel} missing ${heading}`);
+    }
+  }
+  if (!/role-neutral example/.test(text) || !/never in neat-os/.test(text)) {
+    fail(`${rel} must say it is a role-neutral example and that filled passports never live in neat-os`);
+  }
+  if (!text.includes('`v0.5.0`')) {
+    fail(`${rel} must pin v0.5.0`);
+  }
+  if (!text.includes('Passport owner | director')) {
+    fail(`${rel} must name director as the passport owner role`);
+  }
+  if (!text.includes('<YYYY-MM-DD>')) {
+    fail(`${rel} Review date must stay a placeholder`);
+  }
+}
+
+const designPassport = read('templates/agent/passport-design.md');
+if (designPassport.includes('Canva')) {
+  fail('templates/agent/passport-design.md must not list Canva');
+}
+if (!designPassport.includes('2 to 3 Figma options')) {
+  fail('templates/agent/passport-design.md Job must be 2 to 3 Figma options a lock owner picks');
+}
+
+for (const [rel, refuse] of [
+  ['skills/brand-from-site/SKILL.md', 'Never edit an existing file'],
+  ['skills/design-qa/SKILL.md', 'Comment on the ticket or pull request'],
+  ['skills/ux-audit/SKILL.md', 'Do not edit the site'],
+  ['skills/research-synthesis/SKILL.md', 'Strip personal data'],
+  ['skills/wireframes/SKILL.md', 'Do not merge'],
+  ['skills/design-brief/SKILL.md', 'Check the asker\'s Figma seat first'],
+  ['skills/mockup/SKILL.md', 'EXAMPLE DATA'],
+  ['skills/design-handoff/SKILL.md', 'conventions/ticket-content.md'],
+  ['skills/brand-board-from-assets/SKILL.md', 'open-decisions'],
+  ['skills/naming-and-voice/SKILL.md', 'locked.md'],
+]) {
+  const text = read(rel);
+  if (!text.includes(refuse)) {
+    fail(`${rel} must lock its refuse rule: missing "${refuse}"`);
+  }
+  if (!text.includes('conventions/design-ux-agents.md')) {
+    fail(`${rel} must point at conventions/design-ux-agents.md`);
+  }
+}
+
+const routineSettings = read('conventions/routine-settings.md');
+for (const sentence of [
+  'Pin a release tag',
+  '`main` is a stopgap only',
+  '`develop` and other branches never',
+]) {
+  if (!routineSettings.includes(sentence)) {
+    fail(`conventions/routine-settings.md must lock wrapper pins (ADR-0021): missing "${sentence}"`);
+  }
+}
+if (/Pin `main` or a release tag/.test(routineSettings)) {
+  fail('conventions/routine-settings.md must not treat main as a first-class pin (ADR-0021)');
+}
+
+if (!routineSettings.includes('<neat-os-path>')) {
+  fail('conventions/routine-settings.md must name <neat-os-path> (ADR-0022)');
+}
+if (!routineSettings.includes('issue #15')) {
+  fail('conventions/routine-settings.md must leave how the shared path is populated to issue #15 (ADR-0022)');
+}
+
+const consumeDocs = read('docs/consume.md');
+if (!/^## Move a wrapper pin$/m.test(consumeDocs)) {
+  fail('docs/consume.md must document how to bump a wrapper pin (ADR-0021)');
+}
+for (const sentence of [
+  'one pull request for that wrapper',
+  'Pick one wrapper as the canary',
+  'revert that pull request to roll back',
+]) {
+  if (!consumeDocs.includes(sentence)) {
+    fail(`docs/consume.md must lock the wrapper upgrade path (ADR-0021): missing "${sentence}"`);
+  }
+}
+if (!consumeDocs.includes('<neat-os-path>')) {
+  fail('docs/consume.md must say wrappers read from <neat-os-path> (ADR-0022)');
+}
+
+const burndownSkill = read('skills/daily-burndown/SKILL.md');
+if (!burndownSkill.includes('OS does not forbid named top-level sections')) {
+  fail('skills/daily-burndown/SKILL.md must allow passport-named day-file sections');
+}
+const enhanceSkill = read('skills/enhance-daily-update/SKILL.md');
+if (!enhanceSkill.includes('OS does not forbid named top-level sections')) {
+  fail('skills/enhance-daily-update/SKILL.md must allow passport-named day-file sections');
+}
+if (enhanceSkill.includes('Do not add `## Front end`')) {
+  fail('skills/enhance-daily-update/SKILL.md must not forbid named top-level sections');
+}
+
+const bidsRegister = read('skills/bids-register/SKILL.md');
+for (const sentence of [
+  'bids/<yyyy-mm-dd>-<buyer-slug>-<ref>/',
+  'submission.md',
+  'idempotent',
+  'Never commit credentials, portal logins, or tokens',
+  'Never commit a full financial or accounts package',
+  'Never commit the zip',
+  'superseded',
+  'operations lead',
+  'There is no separate new-business agent',
+]) {
+  if (!bidsRegister.includes(sentence)) {
+    fail(`skills/bids-register/SKILL.md must lock the bids register rule: missing "${sentence}"`);
+  }
+}
+if (!read('templates/ops/bid-submission.md').includes('Zip sha256')) {
+  fail('templates/ops/bid-submission.md must record the zip sha256');
+}
+
+for (const rel of [
+  'skills/finance-client-backfill/SKILL.md',
+  'skills/finance-client-sync/SKILL.md',
+  'skills/finance-lookup/SKILL.md',
+]) {
+  const text = read(rel);
+  if (!text.includes('<accounting-tool>') || !text.includes('<ACCOUNTING_TOKEN_ENV>') || !text.includes('<accounting-account>')) {
+    fail(`${rel} must leave the accounting tool, token, and account to the passport`);
+  }
+  if (!text.includes('Director only')) {
+    fail(`${rel} must be usable by any director and refuse another director's account`);
   }
 }
 

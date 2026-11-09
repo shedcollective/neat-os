@@ -1,6 +1,6 @@
 # NNNN — Title in one line
 
-**Status:** Proposed | Accepted | Superseded by NNNN | Deprecated
+**Status:** Proposed | Accepted | Superseded by NNNN | Partially superseded by NNNN | Deprecated
 **Date:** YYYY-MM-DD
 
 ## Context

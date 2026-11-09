@@ -1,6 +1,6 @@
 # 0017 — Client repositories consume shed-os from GitHub Packages
 
-**Status:** Accepted
+**Status:** Partially superseded by 0019
 **Date:** 2026-10-08
 
 ## Context

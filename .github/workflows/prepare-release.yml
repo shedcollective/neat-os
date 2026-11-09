@@ -1,0 +1,97 @@
+# Opens the release pull request and a draft Release. Does not merge or publish.
+# A person merges the pull request with a merge commit, then publishes the draft.
+# Publishing the draft creates the tag at the tip of main at that moment.
+# The repository must allow GitHub Actions to create pull requests. See docs/release.md.
+
+name: Prepare release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version X.Y.Z with no leading v
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
+      - name: Open the release pull request and a draft Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          if ! printf '%s' "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Pass the version as X.Y.Z with no leading v." >&2
+            exit 1
+          fi
+          node <<'EOF'
+          const fs = require('fs');
+          const want = process.env.VERSION;
+          const files = ['package.json', 'packages/npm/package.json', 'composer.json', 'packages/composer/composer.json'];
+          const bad = [];
+          for (const file of files) {
+            const version = JSON.parse(fs.readFileSync(file, 'utf8')).version;
+            if (version !== want) bad.push(`${file} is ${version}`);
+          }
+          const php = fs.readFileSync('packages/composer/src/NeatOs.php', 'utf8');
+          if (!php.includes(`public const VERSION = '${want}'`)) bad.push('NeatOs::VERSION');
+          const js = fs.readFileSync('packages/npm/index.js', 'utf8');
+          if (!js.includes(`version: '${want}'`)) bad.push('packages/npm/index.js');
+          if (bad.length) {
+            console.error(`develop is not at ${want}.`);
+            for (const line of bad) console.error(line);
+            console.error('Open the release-prep pull request onto develop first. See docs/release.md.');
+            process.exit(1);
+          }
+          EOF
+          notes="$(awk -v ver="$VERSION" '$0 == "## " ver { found=1; next } found && /^## / { exit } found { print }' CHANGELOG.md)"
+          if [ -z "$(printf '%s' "$notes" | tr -d '[:space:]')" ]; then
+            echo "CHANGELOG.md has no ## ${VERSION} section. Open the release-prep pull request onto develop first. See docs/release.md." >&2
+            exit 1
+          fi
+          if git ls-remote --heads origin "release/${VERSION}" | grep -q .; then
+            echo "Branch release/${VERSION} already exists. This workflow does not change it." >&2
+            exit 1
+          fi
+          if git ls-remote --tags origin "v${VERSION}" | grep -q .; then
+            echo "Tag v${VERSION} already exists. This workflow does not change it." >&2
+            exit 1
+          fi
+          if gh release view "v${VERSION}" >/dev/null 2>&1; then
+            echo "Release v${VERSION} already exists. This workflow does not change it." >&2
+            exit 1
+          fi
+          git switch -c "release/${VERSION}"
+          git push origin "HEAD:release/${VERSION}"
+          body_file="$(mktemp)"
+          cat > "$body_file" <<EOF
+          Merge this pull request into main with a merge commit. Do not squash.
+
+          Publish the draft Release v${VERSION} only after this pull request is merged. Publishing the draft creates the tag at the tip of main at that moment. Publishing before the merge tags the previous tip of main.
+
+          The draft notes are the ${VERSION} section of CHANGELOG.md.
+          EOF
+          gh pr create --base main --head "release/${VERSION}" --title "chore: Release ${VERSION}" --body-file "$body_file"
+          notes_file="$(mktemp)"
+          printf '%s\n' "$notes" > "$notes_file"
+          # --target is the branch name. GitHub stores that name on the draft and
+          # creates the tag from the branch tip when a person publishes the draft.
+          gh release create "v${VERSION}" --repo "$GITHUB_REPOSITORY" --draft --target main --title "v${VERSION}" --notes-file "$notes_file"
+          target="$(gh release view "v${VERSION}" --json isDraft,targetCommitish --jq 'if .isDraft and .targetCommitish == "main" then .targetCommitish else "" end')"
+          if [ "$target" != "main" ]; then
+            echo "The draft Release must stay a draft whose target is the branch main." >&2
+            echo "Do not publish it. A commit SHA would tag the tip of main from before the merge." >&2
+            gh release view "v${VERSION}" --json isDraft,targetCommitish >&2
+            exit 1
+          fi

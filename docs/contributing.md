@@ -39,7 +39,11 @@ Decide which kind of mechanism it is before you create it. The six kinds are def
 
 Two things are deliberately not on that list. Project knowledge (a product repository's `AGENTS.md` and `.agents/`) is filled by `gather` and belongs to that repository. Decisions belong in `docs/decisions/` as architecture decision records. Do not edit an accepted record except to change its Status. To reverse a decision, write a new record that links back.
 
+[PURPOSE.md](../PURPOSE.md) is not one of those kinds. It states what neat-os is for. A director owns it, and it changes only by pull request.
+
 State a rule once and have other files point at it by path. When in doubt, delete.
+
+A new rule or proposal states which aim of [PURPOSE.md](../PURPOSE.md) it serves.
 
 Stack packs are playbook-shaped files under [`stacks/<name>/`](../stacks/). They are company stack guidance, read from the resolved tree, not a seventh mechanism ([ADR-0013](decisions/0013-stack-packs-in-shed-os.md)).
 
@@ -51,5 +55,5 @@ Every page a person reads follows [conventions/writing.md](../conventions/writin
 
 - Do not create `neat-os-platform-*` or `neat-os-tool-*` repositories from this one. Stack guidance lives under `stacks/`.
 - `learn` proposes. It never pushes a skill to this repository or to a shared skill store.
-- Do not turn `publish-npm.yml` on ([ADR-0017](decisions/0017-consume-via-github-packages.md)). The licence is MIT, and publishing stays a later step. Do not add a registry auth line for agents.
+- Do not publish `@shedcollective/neat-os` to the public npm registry. `.github/workflows/publish-npm.yml` publishes to GitHub Packages when a Release is published ([ADR-0019](decisions/0019-publish-github-packages.md)). Do not add a registry auth line for agents. The agent install stays the git pin in [consume.md](consume.md).
 - Do not invent facts about a client or a project.

@@ -1,6 +1,6 @@
 # Runs after a person publishes a GitHub Release.
 # Installs the tag the way a product repository will, and asserts consume.
-# Does not publish to npm. publish-npm.yml stays paused (ADR-0017, ADR-0010). The licence is MIT.
+# Does not publish. publish-npm.yml publishes the tag to GitHub Packages (ADR-0019). The licence is MIT.
 
 name: Release smoke
 
@@ -15,6 +15,22 @@ jobs:
   install-tag:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+      - name: Require the release tag on main
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          git fetch --prune origin +refs/heads/main:refs/remotes/origin/main
+          sha="$(git rev-parse "HEAD")"
+          if ! git merge-base --is-ancestor "$sha" origin/main; then
+            echo "Publish the Release targeting main after merging release/X.Y.Z." >&2
+            echo "Tag ${RELEASE_TAG} (${sha}) is not reachable from origin/main." >&2
+            exit 1
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

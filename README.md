@@ -10,7 +10,11 @@
 
 neat-os is the shared knowledge that Shed's AI agents work from. It is an operating standard: the fixed set of rules and procedures the agents run on, whichever project they are working in. It is a git repository that every Shed product repository installs. It holds the principles agents apply while deciding, the engineering conventions every Shed repo shares, the playbooks, the template files those playbooks copy, the ADRs that record why a locked behaviour exists, and the stack packs under [`stacks/`](stacks/). Everything lives in this repository so a Cursor Cloud Agent can read it with a git checkout and nothing else.
 
+[PURPOSE.md](PURPOSE.md) states what neat-os is for. A director owns it, and it changes only by pull request.
+
 `init` leaves an empty stack-pack slot. `gather` points a product repo at the matching pack. Tool-specific knowledge will live in separate `neat-os-tool-*` repositories later. They are not part of this one. Together with neat-os they are the OS repos. Everything else at Shed is a product repo.
+
+It is also the agency rulebook for shared operations playbooks. Living operational state stays in a private operations repository; the rules and playbooks stay here ([docs/agency-ops.md](docs/agency-ops.md)).
 
 ## How it fits together
 
@@ -114,7 +118,9 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 - `pin-majors-with-reasons` upgrades dependencies by blast radius and does not take a pinned major on a routine bump.
 - `cloud-agent-environment` sets up install and start scripts for a Cloud Agent Environment that already exists. It does not create the Environment.
 
-`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). All seven playbooks are under [skills/](skills/).
+`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`, `daily-digest`, `morning-brief`, `bids-register`, `finance-client-backfill`, `finance-client-sync`, `finance-lookup`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design playbooks (`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, `design-handoff`), the assurance playbook `design-qa`, and UX playbooks (`ux-audit`, `research-synthesis`, `wireframes`) follow [conventions/design-ux-agents.md](conventions/design-ux-agents.md). All playbooks are under [skills/](skills/).
+
+`daily-digest` turns the day file into a short end-of-day post for a team channel. `morning-brief` composes one morning message per person and replaces separate morning health, digest, day-plan, and meeting-prep brief messages. Agency operations playbooks take their inputs from the settings in [conventions/routine-settings.md](conventions/routine-settings.md).
 
 ## Releases and pinning
 
@@ -126,7 +132,7 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
   </picture>
 </p>
 
-Work lands on `develop`. A person cuts `release/X.Y.Z` from `develop`, merges it into `main`, and publishes the GitHub Release `vX.Y.Z`. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
+Work lands on `develop`. A release-prep pull request sets the version. Prepare release opens `release/X.Y.Z` into `main` and a draft Release. A person merges that pull request with a merge commit and publishes the draft. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
 
 ### Working on neat-os itself
 
@@ -138,6 +144,7 @@ Work lands on `develop`. A person cuts `release/X.Y.Z` from `develop`, merges it
 
 | Page | What it covers |
 | --- | --- |
+| [PURPOSE.md](PURPOSE.md) | What neat-os is for |
 | [docs/README.md](docs/README.md) | Where documentation lives and the full map |
 | [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, moving an existing install, and moving from shed-os |
 | [docs/launch-skills.md](docs/launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` do, and where `assurance`, `pin-majors-with-reasons`, and `cloud-agent-environment` live |
@@ -153,7 +160,7 @@ Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of 
 
 ## What neat-os does not do
 
-- The install is a git pin to a release tag (`github:shedcollective/neat-os#vX.Y.Z`). Publishing to GitHub Packages stays paused ([ADR-0017](docs/decisions/0017-consume-via-github-packages.md)). The licence is MIT. Agents install from git and need no registry token.
+- Agents do not install from GitHub Packages. An agent token gets a 403 from the registry. Agents install from a git pin (`github:shedcollective/neat-os#vX.Y.Z`) and need no registry token. The registry install for a product repository is in [docs/consume.md](docs/consume.md) ([ADR-0019](docs/decisions/0019-publish-github-packages.md)). The licence is MIT.
 - `init` does not copy skills into a product repository's `.agents/skills/`. Agents read them from the installed package.
 - Agents do not search the public web for how to install neat-os. The resolve order in [docs/consume.md](docs/consume.md) is the only way an agent looks for it.
 - The archive tag `v0.0.1` predates a root `package.json` and cannot be installed. It is not a neat-os release. Do not pin it.

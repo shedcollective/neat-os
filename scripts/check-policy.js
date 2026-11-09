@@ -44,17 +44,27 @@ const AGENT_DOCS = ['README.md', 'AGENTS.md', ...SKILLS, 'templates/AGENTS.md', 
 
 const policies = [
   {
-    id: 'no-packages-registry-as-install-path',
-    adr: '0017',
+    id: 'registry-install-only-in-consume',
+    adr: '0019',
     check() {
+      const markerRegistry = '@shedcollective:registry=https://npm.pkg.github.com';
+      const markerAuth = '//npm.pkg.github.com/:_authToken';
       const bad = [];
       for (const rel of [...AGENT_DOCS, 'packages/npm/README.md', 'packages/composer/README.md', 'packages/composer/src/NeatOs.php']) {
+        if (rel === 'docs/consume.md') continue;
         const text = read(rel);
-        if (text.includes('@shedcollective:registry=https://npm.pkg.github.com') || text.includes('//npm.pkg.github.com/:_authToken=')) {
-          bad.push(rel);
-        }
+        if (text.includes(markerRegistry) || text.includes(markerAuth)) bad.push(rel);
       }
-      return bad.length ? `registry/_authToken install lines in: ${bad.join(', ')}` : '';
+      const problems = [];
+      if (bad.length) problems.push(`registry install lines belong only in docs/consume.md: ${bad.join(', ')}`);
+      const consume = read('docs/consume.md');
+      if (!consume.includes(markerRegistry) || !consume.includes(markerAuth)) {
+        problems.push('docs/consume.md must document the GitHub Packages registry and auth line');
+      }
+      if (!/403/.test(consume) || !/git pin/i.test(consume)) {
+        problems.push('docs/consume.md must keep the git pin for agents (registry 403)');
+      }
+      return problems.join('; ');
     },
   },
   {
