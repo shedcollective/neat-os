@@ -39,7 +39,11 @@ Decide which kind of mechanism it is before you create it. The six kinds are def
 
 Two things are deliberately not on that list. Project knowledge (a product repository's `AGENTS.md` and `.agents/`) is filled by `gather` and belongs to that repository. Decisions belong in `docs/decisions/` as architecture decision records. Do not edit an accepted record except to change its Status. To reverse a decision, write a new record that links back.
 
+[PURPOSE.md](../PURPOSE.md) is not one of those kinds. It states what neat-os is for. A director owns it, and it changes only by pull request.
+
 State a rule once and have other files point at it by path. When in doubt, delete.
+
+A new rule or proposal states which aim of [PURPOSE.md](../PURPOSE.md) it serves.
 
 Stack packs are playbook-shaped files under [`stacks/<name>/`](../stacks/). They are company stack guidance, read from the resolved tree, not a seventh mechanism ([ADR-0013](decisions/0013-stack-packs-in-shed-os.md)).
 

@@ -1,6 +1,6 @@
 {
   "name": "@shedcollective/neat-os",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Shed agency OS. Principles, playbooks, and project templates. Install from GitHub Packages, or from git (file: sibling or github:shedcollective/neat-os#vX.Y.Z).",
   "license": "MIT",
   "main": "index.js",

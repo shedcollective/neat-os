@@ -39,7 +39,7 @@ const { resolveConsume, formatConsumeReport } = require('./resolve-consume');
 
 module.exports = {
   name: '@shedcollective/neat-os',
-  version: '0.5.0',
+  version: '0.6.0',
   packageRoot,
   repoRoot: fs.existsSync(path.join(repoRoot, 'skills')) ? repoRoot : packageRoot,
   skillsDir,

@@ -15,6 +15,7 @@ A wrapper is the short file in a person's agent that says which playbook to run 
 | `<connectors>` | The sources the playbook may read. Always the asker's own connected accounts, never another person's. | calendar, mail, chat, tickets, version control |
 | `<write-rule>` | How changes reach `<ops-record>`. | Day file and in-flight board: commit to the default branch. `clients/`: pull request, a director merges. |
 | `<quiet-when-empty>` | Whether a run with nothing to report stays silent (`yes`) or writes an explicit empty stub (`no`). | `yes` |
+| `<neat-os-path>` | Absolute path of the shared neat-os checkout this wrapper reads. | `/<shared>/neat-os` |
 
 A playbook may add its own settings, such as a prep tag or a log path. It lists them in a Settings table and uses these names for everything the table above covers.
 
@@ -24,3 +25,4 @@ A playbook may add its own settings, such as a prep tag or a log path. It lists 
 - Settings hold values, not secrets. A credential is referenced by the name of an environment variable and never written into a wrapper ([never-store-secrets.md](never-store-secrets.md)).
 - Real values (the repository, the channel, the host) live in the wrapper or the private operations record, never in this repository ([neutral-reference.md](neutral-reference.md)).
 - A wrapper names the ref it reads playbooks from. Pin a release tag (`vX.Y.Z`). `main` is a stopgap only. `develop` and other branches never. An unreleased change must not alter a live routine. After a release, bump the tag as in [docs/consume.md](../docs/consume.md#move-a-wrapper-pin).
+- A wrapper follows playbooks from `<neat-os-path>` at that pin ([ADR-0022](../docs/decisions/0022-wrapper-shared-path.md)). If the path is missing, or the checkout is not the pin, the run stops with that reason. It does not search the web and it does not copy playbooks. How the path is populated is not this convention ([issue #15](https://github.com/shedcollective/neat-os/issues/15)).
