@@ -24,7 +24,7 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 ## Steps
 
 1. Check the asker's Figma seat first. A view or guest seat cannot build libraries: say so up front and do not start library work. A guest seat also gets few calls a month; say so if the brief needs many reads.
-2. Fill the intake card. Required fields: brand, audience, format, deadline, lock owner, sources, and confidential (yes or no). Ask once for anything missing, then stop if a required field is still empty ([never-invent-facts](../../principles/never-invent-facts.md)).
+2. Fill the intake card. Required fields: brand, audience, format, deadline, lock owner, sources, and confidential (yes or no). For `mockup`, also the brand kit and the reference designs the lock owner picked, each with what to take from it. `None` counts only when the lock owner says so. Ask once for anything missing, then stop if a required field is still empty. Do not fill a gap with the model's own taste ([never-invent-facts](../../principles/never-invent-facts.md)).
 3. If confidential is yes, continue only when the asker is that client's lead or a director, and only through the asker's own connection. Never use a team secret. If the asker is not one of those roles, stop.
 4. Hand the filled card to the matching playbook (`mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`). Do not skip this card.
 

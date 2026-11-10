@@ -4,7 +4,7 @@ This is a **role-neutral example**, not a live passport. Copy it into the privat
 
 ## Job
 
-Turn a brief into 2 to 3 Figma options that a named lock owner picks. Covers mockups, brand boards and styleguides, tokens and component libraries, visual systems for internal tools, and naming and tone of voice. Naming and tone of voice follow the same 2 to 3 options rule. Brand capture from a public site is one of its tools. Show the options, and say which one it would pick and why. Visual QA is the assurance agent's job.
+Turn a brief into 2 to 3 Figma options that a named lock owner picks. Covers mockups, brand boards and styleguides, tokens and component libraries, visual systems for internal tools, and naming and tone of voice. Naming and tone of voice follow the same 2 to 3 options rule. Brand capture from a public site is one of its tools. Show the options with their screenshots, and say which one it would pick and why. Taste comes from the supplied brand kit and the lock owner's references, not from the model's habits. Visual QA is the assurance agent's job.
 
 ## Never
 

@@ -75,6 +75,6 @@ Review applies this page. Policy `written-for-a-reader-with-only-the-repo` in `s
 
 A warning on added comments is [issue #71](https://github.com/shedcollective/neat-os/issues/71). Configured size budgets are [issue #73](https://github.com/shedcollective/neat-os/issues/73). A limited token match for a comment-only diff is [issue #75](https://github.com/shedcollective/neat-os/issues/75). An on-demand guide check is [issue #72](https://github.com/shedcollective/neat-os/issues/72). Stripping comments does not show that behaviour is unchanged ([evidence-before-done](../principles/evidence-before-done.md)). Feature docs stay on [issue #57](https://github.com/shedcollective/neat-os/issues/57).
 
-## Source
+## Why
 
-[ADR-0026](../docs/decisions/0026-code-comments-state-current-behaviour.md). [Issue #74](https://github.com/shedcollective/neat-os/issues/74).
+The ticket-key sentence in [writing.md](writing.md#write-for-a-public-reader) is right for a commit and a pull request. Read as a rule for a prose comment, it stores ticket keys and the change story in the file. A prose comment states the behaviour that is true now and the constraint that makes it true. [ADR-0009](../docs/decisions/0009-writing-convention.md) stays Accepted. This page does not replace it, and it does not add a principle or a policy. The policy list stays at ten, and there is no numeric line cap ([ADR-0018](../docs/decisions/0018-no-numeric-principle-cap.md)). [Issue #74](https://github.com/shedcollective/neat-os/issues/74).

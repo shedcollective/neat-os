@@ -824,6 +824,34 @@ for (const sentence of [
     fail(`skills/bids-register/SKILL.md must lock the bids register rule: missing "${sentence}"`);
   }
 }
+for (const sentence of ['duplicate check', '`pursuing`', 'outcome-sweep']) {
+  if (!bidsRegister.includes(sentence)) {
+    fail(`skills/bids-register/SKILL.md must lock stage and duplicate rules (ADR-0026): missing "${sentence}"`);
+  }
+}
+if (!read('templates/ops/bids-register.md').includes('| Stage |')) {
+  fail('templates/ops/bids-register.md must carry the Stage column (ADR-0026)');
+}
+
+// ops-capture writes each event once, records decisions as Proposed only,
+// and never sends (ADR-0026). The policy list is at its cap of 10.
+const opsCapture = read('skills/ops-capture/SKILL.md');
+for (const sentence of [
+  'idempotent',
+  'Status Proposed',
+  'pull request a director merges',
+  'Never reply, send, forward or post',
+  'Never overwrite, reorder or delete another owner\'s lines',
+  'No amounts',
+]) {
+  if (!opsCapture.includes(sentence)) {
+    fail(`skills/ops-capture/SKILL.md must lock the capture rule (ADR-0026): missing "${sentence}"`);
+  }
+}
+if (!burndownSkill.includes('Do not duplicate captured lines')) {
+  fail('skills/daily-burndown/SKILL.md must consolidate captured lines (ADR-0026)');
+}
+
 if (!read('templates/ops/bid-submission.md').includes('Zip sha256')) {
   fail('templates/ops/bid-submission.md must record the zip sha256');
 }
