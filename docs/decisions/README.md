@@ -1,10 +1,12 @@
 # Decisions
 
-Architecture decision records for neat-os. One file per decision, numbered, never edited after acceptance except to change **Status** (superseded by / partially superseded by / deprecated). A new decision that reverses an old one gets a new number and links back. A decision that reverses only part of an old one sets that record's status to `Partially superseded by NNNN`. The new record says which part it replaces. The rest of the earlier record still holds.
+New architecture decision records are paused until v1. The records in the index stay as history. Until then, the pull request body records why a rule changed, and the rule itself carries a short Why.
+
+The records below are architecture decision records for neat-os. One file per decision, numbered, never edited after acceptance except to change **Status** (superseded by / partially superseded by / deprecated). A record that reversed an earlier one took the next number and linked back. A record that reversed only part of an earlier one set that record's status to `Partially superseded by NNNN` and said which part it replaced. The rest of the earlier record still holds.
 
 Decisions below keep the product name that was true when they were accepted. From 0.4.0 that name is neat-os. Current package names, the git pin, and the resolve order, including the deprecated `SHED_OS_ROOT` fallback, are in [consume.md](../consume.md). The filename `0013-stack-packs-in-shed-os.md` is unchanged.
 
-GitHub Issues hold the discussion, pull requests hold the change, and this folder holds the reasons. Nothing here links to notes kept outside the repository ([0008](0008-repo-is-source-of-truth.md)).
+GitHub Issues hold the discussion, and pull requests hold the change. This folder holds the reasons already recorded. Nothing here links to notes kept outside the repository ([0008](0008-repo-is-source-of-truth.md)).
 
 Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asserts this index matches the files present.
 
@@ -35,3 +37,6 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0023](0023-neutral-rule-guards-what-is-published.md) | The neutral rule guards what is published, not who is credited | Accepted |
 | [0024](0024-red-stops-a-stack.md) | Red stops the steps above it | Accepted |
 | [0025](0025-pull-request-body-for-the-reviewer.md) | A pull request body states the change a reviewer accepts | Accepted |
+| [0026](0026-capture-operations-events-as-they-happen.md) | Operations events are captured as they happen, and a stated decision is recorded as Proposed | Accepted |
+| [0027](0027-ux-findings-name-their-principle-and-evidence.md) | A UX finding names its principle and its evidence | Accepted |
+| [0028](0028-design-options-come-from-supplied-references.md) | Design options come from supplied references, and a new design playbook proves its difference | Accepted |

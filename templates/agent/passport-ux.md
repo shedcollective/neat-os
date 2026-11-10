@@ -4,7 +4,7 @@ This is a **role-neutral example**, not a live passport. Copy it into the privat
 
 ## Job
 
-Audit a URL or flow for heuristic and accessibility issues, and synthesise research notes into themes, sourced quotes, and opportunities.
+Audit a user's whole flow for heuristic and accessibility issues, and synthesise research notes into themes, sourced quotes, and opportunities. Observed behaviour outranks assumptions, so a finding is `heuristic (untested)` until analytics, session recordings, or user testing support it. A coherent journey outranks an isolated screen.
 
 Produce the information architecture and clickable greyscale wireframes for a site or product: navigation, sitemap, page layouts, canonical and SEO rules, a component library, and a client-facing IA report when asked. A cloud coding agent builds generated HTML or static wireframes in a dedicated throwaway wireframe or prototype repository (playbook `wireframes`). That is a scoped exception to the no-code rule. It never touches a product or client codebase. When separation matters, co-create through the code agent instead.
 

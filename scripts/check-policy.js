@@ -2,9 +2,10 @@
 'use strict';
 
 /**
- * Policy lint: a short, declared list of prose invariants, each backed by an
- * ADR in docs/decisions/. This is the only place neat-os pins wording.
- * Add an entry only with an ADR; prefer a structural check when one is possible
+ * Policy lint: a short, declared list of prose invariants. Existing entries
+ * cite an ADR in docs/decisions/. This is the only place neat-os pins wording.
+ * Add an entry only with a reason in the pull request. The adr field still
+ * names an existing record. Prefer a structural check when one is possible
  * (principles/encode-lessons-in-structure.md).
  */
 
