@@ -57,7 +57,9 @@ Example, one feature in four steps. `GH-42` is the placeholder key from [tickets
 
 Humans merge every PR in the stack, steps included; review happens per step and the feature-branch merge is the final gate. Nothing in a stack targets `main`.
 
-**A pending merge never blocks the next step.** The agent branches step *n+1* from the head of step *n* as soon as step *n* is merge-ready (PR open, CI green, evidence posted) and continues. When step *n* merges, the agent rebases the open steps above it. When `develop` moves, it merges `develop` into the feature branch and rebases the steps. Keeping a stack merge-ready is agent work; pressing merge is not.
+**A pending merge never blocks the next step.** Waiting on a person, such as a pending merge or review, never blocks. Red always does ([red-is-a-stop](../principles/red-is-a-stop.md)). The agent branches step *n+1* from the head of step *n* as soon as step *n* is merge-ready (PR open, CI green, evidence posted) and continues. When any step in a stack goes red, the agent fixes that step before adding or rebasing any step above it. Steps below the red one are unaffected. A step that merged on green and later goes red counts as red on its target branch. Red on `develop` remains the first task. When step *n* merges, the agent rebases the open steps above it that are not stacked on red. When `develop` moves and is green, it merges `develop` into the feature branch and rebases the steps that are not stacked on red. Keeping a stack merge-ready is agent work; pressing merge is not.
+
+Why a red step stops the steps above it: [ADR-0024](../docs/decisions/0024-red-stops-a-stack.md).
 
 A single, unstacked pull request uses the locked title in [PR titles](#pr-titles). Commits keep the `(GH-42)` form in [tickets.md](tickets.md#where-the-key-goes).
 
