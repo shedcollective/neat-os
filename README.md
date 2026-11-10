@@ -127,11 +127,11 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/concept-5-releases-pinning-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="docs/assets/readme/concept-5-releases-pinning-light.svg">
-    <img alt="Work happens on develop. A release/X.Y.Z branch is cut from develop and merged into main by a person, who publishes the vX.Y.Z GitHub Release with changelog notes. Product repos pin a tag (or #develop for unreleased work), so several repos can sit on different tags: in the example, repo A is on v1.0.0, repo B on v1.1.0 and repo C on v1.2.0. A person moves a pin by hand: new tag, update the dependency, commit the lockfile. Grey cubes mark steps a person does." src="docs/assets/readme/concept-5-releases-pinning-light.svg" width="100%">
+    <img alt="Work happens on develop. A release/X.Y.Z branch is cut from develop and merged into main by a person, who publishes the vX.Y.Z GitHub Release. The notes are the merged pull request titles, plus a migration note when consumers must change something. Product repos pin a tag (or #develop for unreleased work), so several repos can sit on different tags: in the example, repo A is on v1.0.0, repo B on v1.1.0 and repo C on v1.2.0. A person moves a pin by hand: new tag, update the dependency, commit the lockfile. Grey cubes mark steps a person does." src="docs/assets/readme/concept-5-releases-pinning-light.svg" width="100%">
   </picture>
 </p>
 
-Work lands on `develop`. A release-prep pull request sets the version. Prepare release opens `release/X.Y.Z` into `main` and a draft Release. A person merges that pull request with a merge commit and publishes the draft. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
+Work lands on `develop`. A release-prep pull request sets the version. Prepare release opens `release/X.Y.Z` into `main` and a draft Release. A person merges that pull request with a merge commit and publishes the draft. The Release notes are the merged pull request titles, plus a migration note when consumers must change something. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
 
 ### Working on neat-os itself
 
@@ -149,8 +149,7 @@ Work lands on `develop`. A release-prep pull request sets the version. Prepare r
 | [docs/launch-skills.md](docs/launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` do, and where `assurance` and `pin-majors-with-reasons` live |
 | [docs/cursor-environments.md](docs/cursor-environments.md) | The GitHub App, Cloud Agent Environments, and how they differ |
 | [docs/team-setup.md](docs/team-setup.md) | Cursor and GitHub administration for the team |
-| [docs/release.md](docs/release.md) | How neat-os is released on `shedcollective/neat-os` |
-| [CHANGELOG.md](CHANGELOG.md) | What changed in each version, including the move from shed-os |
+| [docs/release.md](docs/release.md) | How neat-os is released on `shedcollective/neat-os`. Notes are on the GitHub Release |
 | [docs/faq.md](docs/faq.md) | Problems we have hit and their fixes |
 | [docs/contributing.md](docs/contributing.md) | How to change neat-os |
 | [docs/decisions/](docs/decisions/README.md) | Why locked behaviour is the way it is. New records are paused until v1 |

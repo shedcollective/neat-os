@@ -55,9 +55,29 @@ jobs:
             process.exit(1);
           }
           EOF
-          notes="$(awk -v ver="$VERSION" '$0 == "## " ver { found=1; next } found && /^## / { exit } found { print }' CHANGELOG.md)"
-          if [ -z "$(printf '%s' "$notes" | tr -d '[:space:]')" ]; then
-            echo "CHANGELOG.md has no ## ${VERSION} section. Open the release-prep pull request onto develop first. See docs/release.md." >&2
+          prev="$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname)"
+          prev="${prev%%$'\n'*}"
+          list_file="$(mktemp)"
+          notes_file="$(mktemp)"
+          gh pr list --repo "$GITHUB_REPOSITORY" --state merged --base develop --limit 200 \
+            --json number,title,mergedAt,mergeCommit \
+            --jq 'sort_by(.mergedAt) | .[] | [.number, (.mergeCommit.oid // ""), .title] | @tsv' > "$list_file"
+          if [ "$(wc -l < "$list_file" | tr -d ' ')" -ge 200 ]; then
+            echo "200 merged pull requests is the list this workflow reads. Notes would miss an older one. See docs/release.md." >&2
+            exit 1
+          fi
+          : > "$notes_file"
+          found=0
+          while IFS=$'\t' read -r num oid title; do
+            [ -n "$num" ] || continue
+            if [ -n "$prev" ] && [ -n "$oid" ] && git merge-base --is-ancestor "$oid" "$prev" 2>/dev/null; then
+              continue
+            fi
+            printf -- '- %s (#%s)\n' "$title" "$num" >> "$notes_file"
+            found=1
+          done < "$list_file"
+          if [ "$found" -eq 0 ]; then
+            echo "No merged pull request on develop is newer than ${prev:-the first commit}. See docs/release.md." >&2
             exit 1
           fi
           if git ls-remote --heads origin "release/${VERSION}" | grep -q .; then
@@ -80,11 +100,9 @@ jobs:
 
           Publish the draft Release v${VERSION} only after this pull request is merged. Publishing the draft creates the tag at the tip of main at that moment. Publishing before the merge tags the previous tip of main.
 
-          The draft notes are the ${VERSION} section of CHANGELOG.md.
+          The draft notes are the titles of the pull requests merged to develop since the previous tag. When consumers must change something, add a migration note to the draft before publishing.
           EOF
           gh pr create --base main --head "release/${VERSION}" --title "chore: Release ${VERSION}" --body-file "$body_file"
-          notes_file="$(mktemp)"
-          printf '%s\n' "$notes" > "$notes_file"
           # --target is the branch name. GitHub stores that name on the draft and
           # creates the tag from the branch tip when a person publishes the draft.
           gh release create "v${VERSION}" --repo "$GITHUB_REPOSITORY" --draft --target main --title "v${VERSION}" --notes-file "$notes_file"
