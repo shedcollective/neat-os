@@ -15,7 +15,7 @@ This is the Shed agency OS core: shared principles, launch skills, and the proje
 - [stacks/](stacks/) — stack packs (`nails/`, later Laravel and WordPress). `gather` points a product repo at the matching pack; they are not copied ([ADR-0013](docs/decisions/0013-stack-packs-in-shed-os.md))
 - [schema/](schema/README.md) — mechanism taxonomy: principle / convention / playbook / skill / script / agent
 - [docs/](docs/README.md) — implementer docs (consume, playbooks, release, contributing). The repo is the source of truth; never link to notes kept elsewhere (ADR-0008). Reader-facing pages follow [conventions/writing.md](conventions/writing.md)
-- [docs/decisions/](docs/decisions/README.md) — ADRs; why a locked behaviour exists. Changing a locked behaviour means a new ADR
+- [docs/decisions/](docs/decisions/README.md) — ADRs are paused until v1, and the change's pull request records why
 - [scripts/check](scripts/check) — the required check (`npm test`): structure → policy → neutral reference → smoke. `scripts/check-neutral.js` enforces [conventions/neutral-reference.md](conventions/neutral-reference.md). Run before every PR
 - Root [package.json](package.json) — Node consume SoT (`file:` sibling or `github:shedcollective/neat-os#vX.Y.Z`; same git auth as Composer)
 - [packages/npm](packages/npm/) — `@shedcollective/neat-os` implementation (path helpers + `resolveConsume()`; `NEAT_OS_ROOT` when working in this checkout)
