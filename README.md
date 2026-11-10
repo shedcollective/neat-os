@@ -154,7 +154,7 @@ Work lands on `develop`. A release-prep pull request sets the version. Prepare r
 | [docs/contributing.md](docs/contributing.md) | How to change neat-os |
 | [docs/decisions/](docs/decisions/README.md) | Why locked behaviour is the way it is. New records are paused until v1 |
 
-Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of mechanism that make up neat-os (principle, convention, playbook, skill, script, agent) are defined in [schema/README.md](schema/README.md). How pages are written is locked in [conventions/writing.md](conventions/writing.md).
+Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of mechanism that make up neat-os (principle, convention, playbook, skill, script, agent) are defined in [schema/README.md](schema/README.md). How pages are written is locked in [conventions/writing.md](conventions/writing.md). Prose comments are locked in [conventions/code-comments.md](conventions/code-comments.md).
 
 ## What neat-os does not do
 

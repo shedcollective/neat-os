@@ -51,7 +51,7 @@ Stack packs are playbook-shaped files under [`stacks/<name>/`](../stacks/). They
 
 ## Writing
 
-Every page a person reads follows [conventions/writing.md](../conventions/writing.md): write for a developer who has only the repository, one page does one job, plain words, one name per thing. The root [README.md](../README.md) is the entry point and pages under `docs/` go deeper. Install recipes appear only in [consume.md](consume.md). No page links to notes kept outside the repository ([ADR-0008](decisions/0008-repo-is-source-of-truth.md)).
+Every page a person reads follows [conventions/writing.md](../conventions/writing.md): write for a developer who has only the repository, one page does one job, plain words, one name per thing. Prose comments follow [conventions/code-comments.md](../conventions/code-comments.md). The root [README.md](../README.md) is the entry point and pages under `docs/` go deeper. Install recipes appear only in [consume.md](consume.md). No page links to notes kept outside the repository ([ADR-0008](decisions/0008-repo-is-source-of-truth.md)).
 
 ## Out of bounds
 
