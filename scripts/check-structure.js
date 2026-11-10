@@ -824,7 +824,7 @@ for (const sentence of [
     fail(`skills/bids-register/SKILL.md must lock the bids register rule: missing "${sentence}"`);
   }
 }
-for (const sentence of ['duplicate check', '`pursuing`', 'outcome-sweep']) {
+for (const sentence of ['duplicate check', '`pursuing`', 'outcome-sweep', '`sent-mail`', 'Never reply or send']) {
   if (!bidsRegister.includes(sentence)) {
     fail(`skills/bids-register/SKILL.md must lock stage and duplicate rules (ADR-0026): missing "${sentence}"`);
   }
