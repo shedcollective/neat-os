@@ -1,10 +1,12 @@
 # Decisions
 
-Architecture decision records for neat-os. One file per decision, numbered, never edited after acceptance except to change **Status** (superseded by / partially superseded by / deprecated). A new decision that reverses an old one gets a new number and links back. A decision that reverses only part of an old one sets that record's status to `Partially superseded by NNNN`. The new record says which part it replaces. The rest of the earlier record still holds.
+New architecture decision records are paused until v1. The records in the index stay as history. Until then, the pull request body records why a rule changed, and the rule itself carries a short Why.
+
+The records below are architecture decision records for neat-os. One file per decision, numbered, never edited after acceptance except to change **Status** (superseded by / partially superseded by / deprecated). A record that reversed an earlier one took the next number and linked back. A record that reversed only part of an earlier one set that record's status to `Partially superseded by NNNN` and said which part it replaced. The rest of the earlier record still holds.
 
 Decisions below keep the product name that was true when they were accepted. From 0.4.0 that name is neat-os. Current package names, the git pin, and the resolve order, including the deprecated `SHED_OS_ROOT` fallback, are in [consume.md](../consume.md). The filename `0013-stack-packs-in-shed-os.md` is unchanged.
 
-GitHub Issues hold the discussion, pull requests hold the change, and this folder holds the reasons. Nothing here links to notes kept outside the repository ([0008](0008-repo-is-source-of-truth.md)).
+GitHub Issues hold the discussion, and pull requests hold the change. This folder holds the reasons already recorded. Nothing here links to notes kept outside the repository ([0008](0008-repo-is-source-of-truth.md)).
 
 Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asserts this index matches the files present.
 
