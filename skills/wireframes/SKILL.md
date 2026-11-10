@@ -27,7 +27,7 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 
 ## Steps
 
-1. **Intake.** Fill the card: client lead, lock owner, audience, deadline, the dedicated throwaway wireframe repository, the cloud agent model the asker wants, house style rules, confidential yes or no. Stop if the lock owner or the throwaway repository is missing.
+1. **Intake.** Fill the card: client lead, audience, deadline, the dedicated throwaway wireframe repository, the cloud agent model the asker wants, house style rules. Stop if the throwaway repository is missing.
 2. **Gather every source in full.** Structure documents, the client's service or product material, meeting transcripts, email threads, whiteboard exports with their images, and any earlier IA. Pass the full text to the cloud agent, not a summary. A summary loses the detail the reviewer will look for first. Ask the asker for anything you cannot open. Do not brief around a missing source.
 3. **Write the brief.** Goal, deliverables, hard constraints, conflict rules (which source wins for structure, for labels, for weight), success tests, and the sources. Read the brief back before you send it. Never send a placeholder or an empty follow-up.
 4. **Deliverables in the throwaway repository**:

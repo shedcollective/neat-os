@@ -685,12 +685,13 @@ const designUxConvention = read('conventions/design-ux-agents.md');
 for (const sentence of [
   'read only the asker\'s own connectors',
   'new drafts or comments',
-  'Do not edit a client\'s live library, live site, or live Figma file',
+  'Do not edit a client\'s live library or live site',
+  'Do not edit a client-owned Figma file unless the asker explicitly says so for that file',
+  'duplicated page',
   'Do not change a ticket\'s status',
   'Do not send anything to a client',
   'Links only',
   '2 to 3 Figma options',
-  'lock owner named on the brief',
   'EXAMPLE DATA',
   'design/<brand>/',
   'tokens.json',
@@ -734,7 +735,7 @@ if (designPassport.includes('Canva')) {
   fail('templates/agent/passport-design.md must not list Canva');
 }
 if (!designPassport.includes('2 to 3 Figma options')) {
-  fail('templates/agent/passport-design.md Job must be 2 to 3 Figma options a lock owner picks');
+  fail('templates/agent/passport-design.md Job must be 2 to 3 Figma options');
 }
 
 for (const [rel, refuse] of [
