@@ -22,7 +22,7 @@ Locked engineering defaults for Shed. These are company knowledge: `gather` must
 - A fact that is true for every Shed repo belongs in this folder. Playbooks read it and templates inherit it.
 - A fact about one project (the client, the stack, the ticket prefix, an unusual integration branch name) belongs in that repo's `.agents/project.md` and `AGENTS.md`.
 - How those two kinds of fact relate is described in [schema/](../schema/README.md).
-- Why a convention exists is recorded in [docs/decisions/](../docs/decisions/README.md).
+- Each convention carries a short Why. Older reasons are in [docs/decisions/](../docs/decisions/README.md) (paused until v1).
 - How this repo ships is a process, not a convention. It is described in [docs/release.md](../docs/release.md).
 
 Do not keep a company fact only inside a playbook. Playbooks go stale. This folder is the source of truth.

@@ -244,11 +244,12 @@ if (!/^## Tickets$/m.test(ticketsSlotTemplate)) {
   fail('templates/.agents/project.md must carry a Tickets slot for the ticket playbook to read');
 }
 
-// improve writes one record in the locked shape and never approves it (ADR-0026).
+// improve writes one record in the locked shape and never approves it
+// (conventions/improvement-record.md).
 // The categories, the key order, and the sign-off sentence live in the
 // convention; the playbook reads the convention instead of restating it.
 if (fs.existsSync(path.join(root, 'skills/improve/scripts'))) {
-  fail('skills/improve/ must not carry scripts: the playbook uses the measuring tool the project already has (ADR-0026)');
+  fail('skills/improve/ must not carry scripts: the playbook uses the measuring tool the project already has (conventions/improvement-record.md)');
 }
 const improveSkill = read('skills/improve/SKILL.md');
 const improveConvention = read('conventions/improvement-record.md');
@@ -272,10 +273,10 @@ if (keyRows.join('|') !== improveKeys.join('|')) {
 }
 for (const [rel, text] of [['conventions/improvement-record.md', improveConvention], ['skills/improve/SKILL.md', improveSkill]]) {
   if (!text.includes('A person sets status to approved')) {
-    fail(`${rel} must lock the sign-off rule (ADR-0026): missing "A person sets status to approved"`);
+    fail(`${rel} must lock the sign-off rule (conventions/improvement-record.md): missing "A person sets status to approved"`);
   }
   if (!/audience: internal/.test(text)) {
-    fail(`${rel} must write audience: internal so a person raises it (ADR-0026)`);
+    fail(`${rel} must write audience: internal so a person raises it (conventions/improvement-record.md)`);
   }
 }
 if (!/^## Example/m.test(improveConvention)) {
@@ -874,6 +875,34 @@ for (const sentence of [
     fail(`skills/bids-register/SKILL.md must lock the bids register rule: missing "${sentence}"`);
   }
 }
+for (const sentence of ['duplicate check', '`pursuing`', 'outcome-sweep']) {
+  if (!bidsRegister.includes(sentence)) {
+    fail(`skills/bids-register/SKILL.md must lock stage and duplicate rules (ADR-0026): missing "${sentence}"`);
+  }
+}
+if (!read('templates/ops/bids-register.md').includes('| Stage |')) {
+  fail('templates/ops/bids-register.md must carry the Stage column (ADR-0026)');
+}
+
+// ops-capture writes each event once, records decisions as Proposed only,
+// and never sends (ADR-0026). The policy list is at its cap of 10.
+const opsCapture = read('skills/ops-capture/SKILL.md');
+for (const sentence of [
+  'idempotent',
+  'Status Proposed',
+  'pull request a director merges',
+  'Never reply, send, forward or post',
+  'Never overwrite, reorder or delete another owner\'s lines',
+  'No amounts',
+]) {
+  if (!opsCapture.includes(sentence)) {
+    fail(`skills/ops-capture/SKILL.md must lock the capture rule (ADR-0026): missing "${sentence}"`);
+  }
+}
+if (!burndownSkill.includes('Do not duplicate captured lines')) {
+  fail('skills/daily-burndown/SKILL.md must consolidate captured lines (ADR-0026)');
+}
+
 if (!read('templates/ops/bid-submission.md').includes('Zip sha256')) {
   fail('templates/ops/bid-submission.md must record the zip sha256');
 }

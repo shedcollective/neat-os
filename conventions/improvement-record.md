@@ -2,7 +2,7 @@
 
 **Locked:** an improvement on a live product is recorded with a baseline taken before the change, the same measure taken after it, and a summary a client can read. The record is a file in the product repository under `.agents/improvements/`.
 
-This page says what an improvement record holds. The `improve` playbook ([skills/improve/SKILL.md](../skills/improve/SKILL.md)) writes it. A person writing one by hand follows the same shape. A roll-up reads the records without a person in the loop, such as the stats page proposed in [#7](https://github.com/shedcollective/neat-os/issues/7), so values are numbers, each measure names its unit and direction, and each record says how widely its summary may be shown. Why the record lives in the repository and who approves the summary is recorded in [ADR-0026](../docs/decisions/0026-improvement-records-live-in-the-product-repo.md).
+This page says what an improvement record holds. The `improve` playbook ([skills/improve/SKILL.md](../skills/improve/SKILL.md)) writes it. A person writing one by hand follows the same shape. A roll-up reads the records without a person in the loop, such as the stats page proposed in [#7](https://github.com/shedcollective/neat-os/issues/7), so values are numbers, each measure names its unit and direction, and each record says how widely its summary may be shown. Why the record lives in the repository, and who approves the summary, is in [Why](#why).
 
 ## What counts as an improvement
 
@@ -160,6 +160,6 @@ The baseline window is 1 to 28 September. The result window closes four weeks af
 | Who approves a summary, which measuring tools and analytics the project uses, whether the client agreed to public use of results | Project `.agents/project.md` under Improvements. `gather` asks; the `improve` playbook reads. |
 | The records themselves | Project `.agents/improvements/` |
 
-## Source
+## Why
 
-[ADR-0026](../docs/decisions/0026-improvement-records-live-in-the-product-repo.md).
+The record lives in the product repository, in the same branch and pull request as the change, because a baseline was otherwise lost once the work merged. A ticket is the wrong place for a number a later roll-up has to add up, so the ticket links to the record and does not hold a second copy. The playbook writes `status: draft` and never sets `approved`. A person sets that status before the summary leaves the repository. That person is the role named under Improvements in `.agents/project.md`, or the account owner when the slot is empty. The same person raises `audience`, and `public` needs the client's consent recorded in that slot. Merging the pull request is not that approval. neat-os ships the shape and the steps, not a measuring tool.
