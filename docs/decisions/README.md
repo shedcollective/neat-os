@@ -35,3 +35,4 @@ Format: [0000-template.md](0000-template.md). `scripts/check-structure.js` asser
 | [0023](0023-neutral-rule-guards-what-is-published.md) | The neutral rule guards what is published, not who is credited | Accepted |
 | [0024](0024-red-stops-a-stack.md) | Red stops the steps above it | Accepted |
 | [0025](0025-pull-request-body-for-the-reviewer.md) | A pull request body states the change a reviewer accepts | Accepted |
+| [0027](0027-ux-findings-name-their-principle-and-evidence.md) | A UX finding names its principle and its evidence | Accepted |

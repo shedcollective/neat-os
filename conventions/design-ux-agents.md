@@ -6,7 +6,7 @@ These two are team agents, named by role. They are not coding agents in a produc
 
 The design agent's job is to turn a brief into 2 to 3 Figma options that a named lock owner picks. That job covers mockups, brand boards and styleguides, tokens and component libraries, visual systems for internal tools, and naming and tone of voice. Naming and tone of voice follow the same rule: 2 to 3 options, and the lock owner picks. Brand capture from a public site is one of its tools. Every design request starts with [`design-brief`](../skills/design-brief/SKILL.md).
 
-The UX agent's job is a heuristic and accessibility audit of a URL or flow, research synthesis, and information architecture with clickable wireframes. Journeys, flows, wireframes, and WCAG work stay with the UX agent. Wireframes follow [Wireframe projects](#wireframe-projects).
+The UX agent's job is a heuristic and accessibility audit of a user's whole flow, research synthesis, and information architecture with clickable wireframes. Journeys, flows, wireframes, and WCAG work stay with the UX agent. Two beliefs shape it. Observed behaviour outranks assumptions: an audit finding names the principle it rests on and is labelled `heuristic (untested)` or `evidenced`, and only analytics, session recordings, or user testing make it `evidenced`. A coherent journey outranks an isolated screen. The steps are in [`ux-audit`](../skills/ux-audit/SKILL.md). Wireframes follow [Wireframe projects](#wireframe-projects).
 
 Visual QA of a built page against Figma frames is [`design-qa`](../skills/design-qa/SKILL.md). That playbook **belongs to the assurance role**. It is not part of the design agent's job. It reads the same token source as the future `design-system-sync` playbook.
 
@@ -137,6 +137,6 @@ When that playbook lands, it and [`design-qa`](../skills/design-qa/SKILL.md) mus
 | design agent | [`naming-and-voice`](../skills/naming-and-voice/SKILL.md) | Naming options with rationale, clash and domain checks, and tone-of-voice drafts |
 | design agent | [`design-handoff`](../skills/design-handoff/SKILL.md) | Figma link, PNGs, spec, and open decisions into the private record. Code as a ticket |
 | assurance agent | [`design-qa`](../skills/design-qa/SKILL.md) | Comment visual diffs between a built page and its Figma frames. Reads `tokens.json` |
-| UX agent | [`ux-audit`](../skills/ux-audit/SKILL.md) | Ranked heuristic and accessibility findings, report only |
+| UX agent | [`ux-audit`](../skills/ux-audit/SKILL.md) | Ranked findings on a whole flow, each with a named principle and an evidence label. Report only |
 | UX agent | [`research-synthesis`](../skills/research-synthesis/SKILL.md) | Themes, sourced quotes, and opportunities, with no personal data |
 | UX agent | [`wireframes`](../skills/wireframes/SKILL.md) | IA package and clickable greyscale wireframe in a dedicated throwaway repository. Self-merge allowed there only |
