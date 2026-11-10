@@ -197,7 +197,7 @@ An agent needs GitHub read access to `shedcollective/neat-os`, through the organ
 
 ## Moving from shed-os
 
-Releases from 0.4.0 use the name neat-os. The version notes are in [CHANGELOG.md](../CHANGELOG.md). A repository that already pins shed-os changes three things, then refreshes the lockfile as in [Move to a new tagged release](#move-to-a-new-tagged-release).
+Releases from 0.4.0 use the name neat-os. The notes for a release are on its GitHub Release ([release.md](release.md)). A repository that already pins shed-os changes three things, then refreshes the lockfile as in [Move to a new tagged release](#move-to-a-new-tagged-release).
 
 1. Replace the git pin with `github:shedcollective/neat-os#vX.Y.Z`. In `package.json` that is `git+ssh://git@github.com/shedcollective/neat-os.git#vX.Y.Z`, and the package name is `@shedcollective/neat-os`.
 2. In Composer, replace `shedcollective/shed-os` with `shedcollective/neat-os` and point the VCS URL at `shedcollective/neat-os`. The PHP class is `Neat\Os\NeatOs`.

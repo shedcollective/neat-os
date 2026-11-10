@@ -456,6 +456,20 @@ for (const sentence of [
   }
 }
 
+// Red stops the steps above it (ADR-0024). The policy list is already at its
+// cap of 10, so the sentences are asserted here.
+for (const sentence of [
+  'A pending merge never blocks the next step.',
+  'Waiting on a person, such as a pending merge or review, never blocks. Red always does',
+  'When any step in a stack goes red, the agent fixes that step before adding or rebasing any step above it.',
+  'Steps below the red one are unaffected.',
+  'A step that merged on green and later goes red counts as red on its target branch.',
+]) {
+  if (!gitConvention.includes(sentence)) {
+    fail(`conventions/git.md must lock red on a stack (ADR-0024): missing "${sentence}"`);
+  }
+}
+
 // Principles index ↔ leaves.
 const goals = new Set(['README.md', 'kaizen.md', 'determinism.md', 'parallelism.md']);
 const principleDir = path.join(root, 'principles');
@@ -476,6 +490,22 @@ for (const link of principleIndex.matchAll(/\(([a-z0-9-]+\.md)\)/g)) {
   if (!fs.existsSync(path.join(principleDir, link[1]))) {
     fail(`principles/README.md links missing leaf ${link[1]}`);
   }
+}
+
+// Which branches red covers (ADR-0024). The index restates the one-line rule.
+const redStop = read('principles/red-is-a-stop.md');
+for (const sentence of [
+  'any branch another step is stacked on',
+  'When any step in a stack goes red, the agent fixes that step before adding or rebasing any step above it.',
+  'Steps below the red one are unaffected.',
+  'A step that merged on green and later goes red counts as red on its target branch.',
+]) {
+  if (!redStop.includes(sentence)) {
+    fail(`principles/red-is-a-stop.md must lock which branches red covers (ADR-0024): missing "${sentence}"`);
+  }
+}
+if (!principleIndex.includes('any branch another step is stacked on')) {
+  fail('principles/README.md must name the branches red-is-a-stop covers (ADR-0024)');
 }
 
 // Conventions index ↔ files.
@@ -794,6 +824,34 @@ for (const sentence of [
     fail(`skills/bids-register/SKILL.md must lock the bids register rule: missing "${sentence}"`);
   }
 }
+for (const sentence of ['duplicate check', '`pursuing`', 'outcome-sweep']) {
+  if (!bidsRegister.includes(sentence)) {
+    fail(`skills/bids-register/SKILL.md must lock stage and duplicate rules (ADR-0026): missing "${sentence}"`);
+  }
+}
+if (!read('templates/ops/bids-register.md').includes('| Stage |')) {
+  fail('templates/ops/bids-register.md must carry the Stage column (ADR-0026)');
+}
+
+// ops-capture writes each event once, records decisions as Proposed only,
+// and never sends (ADR-0026). The policy list is at its cap of 10.
+const opsCapture = read('skills/ops-capture/SKILL.md');
+for (const sentence of [
+  'idempotent',
+  'Status Proposed',
+  'pull request a director merges',
+  'Never reply, send, forward or post',
+  'Never overwrite, reorder or delete another owner\'s lines',
+  'No amounts',
+]) {
+  if (!opsCapture.includes(sentence)) {
+    fail(`skills/ops-capture/SKILL.md must lock the capture rule (ADR-0026): missing "${sentence}"`);
+  }
+}
+if (!burndownSkill.includes('Do not duplicate captured lines')) {
+  fail('skills/daily-burndown/SKILL.md must consolidate captured lines (ADR-0026)');
+}
+
 if (!read('templates/ops/bid-submission.md').includes('Zip sha256')) {
   fail('templates/ops/bid-submission.md must record the zip sha256');
 }

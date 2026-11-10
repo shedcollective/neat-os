@@ -9,11 +9,15 @@ description: >-
 
 Collect the day's work activity from the asker's connected sources and write one day file plus a refreshed in-flight board into `<ops-record>`. Apply [conventions/agent-work-logging.md](../../conventions/agent-work-logging.md).
 
+When [`ops-capture`](../ops-capture/SKILL.md) runs during the day, the day file may already hold captured lines. This run consolidates those lines and does not rediscover the items they came from.
+
 This is **not** a launch playbook. Do not run it from `init`, `gather`, or `learn`. Locate neat-os the same way those playbooks do (`resolve-consume.sh` / `require('@shedcollective/neat-os').resolveConsume()`). **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 ## Settings
 
 The routine supplies these values, named as in [conventions/routine-settings.md](../../conventions/routine-settings.md): `<ops-record>`, `<timezone>`, `<connectors>`, `<write-rule>`, and `<quiet-when-empty>`. If a required setting is missing, ask once and stop.
+
+When the record runs `ops-capture`, the wrapper also names its `<capture-marker>` (default `capture/YYYY/MM/processed.md`). Without it, there are no captured lines to consolidate.
 
 ## When to use
 
@@ -35,6 +39,7 @@ The routine supplies these values, named as in [conventions/routine-settings.md]
 - Write the **shared day body** only. The default is Agency state, project sections, Agency, Sources unavailable. Fill **by project**, not by source type, unless the bot passport names other top-level sections (for example by discipline). When it does, those headings replace the project block. Agency state stays first. Sources unavailable stays last. OS does not forbid named top-level sections. Leave later perspective detail for `enhance-daily-update`, which appends into the same sections.
 - When there is nothing work-related to report, follow `<quiet-when-empty>`: stay quiet, or write an explicit empty stub.
 - One line per fact. Do not invent holidays, absences, or leave from a misread message.
+- **Do not duplicate captured lines.** An item whose source id is in `<capture-marker>` is already logged. Do not write it again. Keep every captured fact. Two captured lines about the same thread may be merged into one line that keeps both facts. Never overwrite another owner's lines.
 
 ## Day shape
 
@@ -53,12 +58,13 @@ When the passport names top-level sections, keep Agency state first and Sources 
 
 1. **Resolve the date** in `<timezone>` (default: today). Build the day path the record uses, typically `burndown/YYYY/MM/YYYY-MM-DD.md`.
 2. **Confirm `<ops-record>`** (clone or remote). Stop if it is missing.
-3. **Collect work activity** for that local day from `<connectors>`: version control pushes and pull requests, team channels, Slack Connect / external client channels when the team uses them, the asker's work-related direct messages, calendar meetings (including OOO / holiday calendars), meeting notes, work email, and tickets that moved.
-4. **Draft the day file** from the template, or from the passport Day file table when it has rows. Agency state first. Sources unavailable last.
-5. **Refresh the in-flight board** in that record: project, what is in flight, owner, done when, blocked.
-6. **Commit** the day file and the in-flight board per `<write-rule>` (normally direct to the default branch for those two paths). Never rewrite history. Prefer merge commits on feature branches ([conventions/git.md](../../conventions/git.md)).
-7. **Voice:** British English, short active sentences. Lead with the decision, the owner, and the next move. Do not name bots ([conventions/writing.md](../../conventions/writing.md), [neutral-reference.md](../../conventions/neutral-reference.md)).
+3. **Read what was captured.** When `<capture-marker>` is set, read today's entries and the existing day file. Treat each listed source id as logged.
+4. **Collect work activity** for that local day from `<connectors>`: version control pushes and pull requests, team channels, Slack Connect / external client channels when the team uses them, the asker's work-related direct messages, calendar meetings (including OOO / holiday calendars), meeting notes, work email, and tickets that moved. Skip items already logged in step 3.
+5. **Draft the day file** from the template, or from the passport Day file table when it has rows. Agency state first. Sources unavailable last. When the day file already exists, keep its lines and add to them. Do not rebuild it from scratch.
+6. **Refresh the in-flight board** in that record: project, what is in flight, owner, done when, blocked.
+7. **Commit** the day file and the in-flight board per `<write-rule>` (normally direct to the default branch for those two paths). Never rewrite history. Prefer merge commits on feature branches ([conventions/git.md](../../conventions/git.md)).
+8. **Voice:** British English, short active sentences. Lead with the decision, the owner, and the next move. Do not name bots ([conventions/writing.md](../../conventions/writing.md), [agent-work-logging.md](../../conventions/agent-work-logging.md)).
 
 ## Stop
 
-The playbook is complete when the day file and in-flight board are written (or when it stayed quiet because there was nothing to report), or when a required source or record was missing and that was stated. It is not complete if personal material, billing amounts, secrets, or invented leave facts were written into the record.
+The playbook is complete when the day file and in-flight board are written (or when it stayed quiet because there was nothing to report), or when a required source or record was missing and that was stated. It is not complete if personal material, billing amounts, secrets, or invented leave facts were written into the record, or if a captured line was written a second time or dropped.

@@ -24,6 +24,8 @@ bash scripts/check
 
 `npm test` runs the same command. It runs four scripts in order: structure, policy, the neutral reference, then smoke. The same command runs locally, in CI, and for agents. Do not weaken an assertion to make a documentation edit pass. It needs Node 22 and bash, and no npm dependencies.
 
+A pull request does not record release notes. Those notes are written in the GitHub Release at tag time ([release.md](release.md)).
+
 ## Adding a file
 
 Decide which kind of mechanism it is before you create it. The six kinds are defined in [schema/README.md](../schema/README.md). If a file is none of the six, it probably should not exist.
@@ -37,9 +39,13 @@ Decide which kind of mechanism it is before you create it. The six kinds are def
 | Script | Deterministic code: the same input gives the same output. It has `--help`, exits non-zero on failure, and prompts only when a terminal is attached. Prefer a script to prose whenever software can do the job ([encode-lessons-in-structure](../principles/encode-lessons-in-structure.md)). Scripts live in `skills/*/scripts/` or `scripts/`. |
 | Agent | A subagent with its own context. Do not add an `agents/` folder until there is a demonstrated need. |
 
-Two things are deliberately not on that list. Project knowledge (a product repository's `AGENTS.md` and `.agents/`) is filled by `gather` and belongs to that repository. Decisions belong in `docs/decisions/` as architecture decision records. Do not edit an accepted record except to change its Status. To reverse a decision, write a new record that links back.
+Two things are deliberately not on that list. Project knowledge (a product repository's `AGENTS.md` and `.agents/`) is filled by `gather` and belongs to that repository. Until v1, the reason for a rule change goes in the pull request body, and the rule carries a short Why. The records in [docs/decisions/](decisions/README.md) stay as history.
+
+[PURPOSE.md](../PURPOSE.md) is not one of those kinds. It states what neat-os is for. A director owns it, and it changes only by pull request.
 
 State a rule once and have other files point at it by path. When in doubt, delete.
+
+A new rule or proposal states which aim of [PURPOSE.md](../PURPOSE.md) it serves.
 
 Stack packs are playbook-shaped files under [`stacks/<name>/`](../stacks/). They are company stack guidance, read from the resolved tree, not a seventh mechanism ([ADR-0013](decisions/0013-stack-packs-in-shed-os.md)).
 
