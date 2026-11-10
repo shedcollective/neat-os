@@ -92,9 +92,9 @@ function scan(rel, text, options = {}) {
     if (!phraseExempt && /\b(ask|tell|ping)\s+me\b/i.test(line)) add('ask/tell/ping me');
     if (!phraseExempt && /\bmy\s+(pr|repo|agent)\b/i.test(line)) add('my pr/repo/agent');
 
-    // A letter prefix and a number of at least two digits. One-digit forms
+    // An uppercase prefix and a number of at least two digits. One-digit forms
     // such as utf-8 and PSR-4 are standards, not keys.
-    for (const match of line.matchAll(/\b([A-Za-z]{2,10})-(\d{2,})\b/g)) {
+    for (const match of line.matchAll(/\b([A-Z]{2,10})-(\d{2,})\b/g)) {
       if (!KEY_PREFIXES.has(match[1].toUpperCase())) add(`ticket key ${match[0]}`);
     }
   });
@@ -195,7 +195,15 @@ function selfTest() {
   assertCase('plain name is left to review', scan('notes.md', 'Work for Northwind this week.'), false);
   assertCase('allowed keys', scan('t', 'GH-42 ADR-0016 ACME-123 TICKET-99 acme-42'), false);
   assertCase('ticket key', scan('t', 'see ZZ-99'), true);
+  const lowerPrefix = scan('t', 'zz-99');
+  const upperPrefix = scan('t', 'ZZ-99');
+  if (lowerPrefix.length !== 0 || upperPrefix.length === 0) {
+    throw new Error(
+      `check-neutral self-test lowercase prefix is not a key: ${lowerPrefix.join(' | ') || 'none'}; ${upperPrefix.join(' | ') || 'expected a hit'}`,
+    );
+  }
   assertCase('not a ticket key', scan('t', 'utf-8 psr-4 PSR-4 v0-1 feature/gh-19-v0-1-0-batch'), false);
+  assertCase('merge subject is not a ticket key', scan('t', 'merge: develop into feature/assurance-pack-comment-1511'), false);
   assertCase('not a slack id', scan('t', 'CODEOWNERS UNLICENSED GITHUB_WORKSPACE CANDIDATE'), false);
   assertCase('slack', scan('t', 'ping U0123456789'), true);
   assertCase('slack link', scan('t', 'see https://acme.slack.com/archives/general'), true);

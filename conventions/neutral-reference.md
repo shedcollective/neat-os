@@ -46,7 +46,7 @@ Writing is the first layer. [Write for a public reader](writing.md#write-for-a-p
 - Generic patterns need no list of names. The check flags a mailbox whose domain is not `example.*`, except in a commit message, plus a Slack id, a link to a Slack workspace, an Atlassian cloud host, a ticket key whose prefix is not `GH`, `ADR`, `ACME`, or `TICKET`, and the phrases in the previous section.
 - Review covers what those patterns cannot see: a client, a client company, or a client project named in plain words, or a Slack thread or other internal discussion quoted without a link the pattern can match. No list of those names is kept, because a list would need maintaining. The pull request template is the review step for that layer ([.github/pull_request_template.md](../.github/pull_request_template.md)).
 
-A Slack workspace link is a host under `slack.com` other than `api.slack.com`, which is Slack's public API documentation. A ticket key is a letter prefix and a number of at least two digits. A URL userinfo at `github.com` is the git transport, same as `git@github.com`.
+A Slack workspace link is a host under `slack.com` other than `api.slack.com`, which is Slack's public API documentation. A ticket key is an uppercase prefix and a number of at least two digits. A URL userinfo at `github.com` is the git transport, same as `git@github.com`.
 
 The check reads every file in the tree except binary files. It does not apply the generic patterns to `scripts/check-neutral.js`, because that file holds them.
 
