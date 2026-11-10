@@ -56,7 +56,7 @@ Each goal has a few one-line principles beneath it. The index is [principles/REA
   </picture>
 </p>
 
-The six kinds of mechanism are defined in [schema/README.md](schema/README.md). Project knowledge lives in the product repository. Decisions live as ADRs. Reviewer agents are not in the tree yet.
+The six kinds of mechanism are defined in [schema/README.md](schema/README.md). Project knowledge lives in the product repository. New architecture decision records are paused until v1 ([docs/decisions/](docs/decisions/README.md)). Reviewer agents are not in the tree yet.
 
 ## Two ways in
 
@@ -153,7 +153,7 @@ Work lands on `develop`. A release-prep pull request sets the version. Prepare r
 | [CHANGELOG.md](CHANGELOG.md) | What changed in each version, including the move from shed-os |
 | [docs/faq.md](docs/faq.md) | Problems we have hit and their fixes |
 | [docs/contributing.md](docs/contributing.md) | How to change neat-os |
-| [docs/decisions/](docs/decisions/README.md) | Why locked behaviour is the way it is |
+| [docs/decisions/](docs/decisions/README.md) | Why locked behaviour is the way it is. New records are paused until v1 |
 
 Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of mechanism that make up neat-os (principle, convention, playbook, skill, script, agent) are defined in [schema/README.md](schema/README.md). How pages are written is locked in [conventions/writing.md](conventions/writing.md).
 
