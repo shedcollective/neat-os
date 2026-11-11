@@ -586,6 +586,31 @@ for (const sentence of [
   }
 }
 
+// Pull request titles stay [KEY] Verb: Title, including the no-ticket form.
+// Commit subjects stay a different shape. The policy list is at its cap of 10.
+for (const sentence of [
+  '[<KEY>] <Verb>: <Title>',
+  'When there is no ticket, omit the key and the brackets.',
+  'Do not title a commit with the pull request shape.',
+]) {
+  if (!gitConvention.includes(sentence)) {
+    fail(`conventions/git.md must lock the pull request title: missing "${sentence}"`);
+  }
+}
+if (!read('templates/AGENTS.md').includes('[<KEY>] <Verb>: <Title>') || !read('templates/AGENTS.md').includes('omit the key and the brackets')) {
+  fail('templates/AGENTS.md must show the pull request title shape, including a pull request with no ticket');
+}
+if (!read('conventions/tickets.md').includes('[<KEY>] <Verb>: <Title>') || !read('conventions/tickets.md').includes('omit the key and the brackets')) {
+  fail('conventions/tickets.md must point at the pull request title shape, including a pull request with no ticket');
+}
+if (!read('docs/contributing.md').includes('<Verb>: <Title>')) {
+  fail('docs/contributing.md must show the pull request title shape');
+}
+const releaseWorkflow = read('.github/workflows/prepare-release.yml');
+if (!releaseWorkflow.includes('Chore: Release ${VERSION}') || releaseWorkflow.includes('chore: Release')) {
+  fail('prepare-release must title its pull request Chore: Release when there is no ticket');
+}
+
 // Principles index ↔ leaves.
 const goals = new Set(['README.md', 'kaizen.md', 'determinism.md', 'parallelism.md']);
 const principleDir = path.join(root, 'principles');
