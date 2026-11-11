@@ -54,7 +54,7 @@ Copy these steps into the todo list. A skipped step stays in the list with a `sk
 
    GitHub baseline, when archives come from GitHub: `github.com`, `api.github.com`, `codeload.github.com`, `objects.githubusercontent.com`, `raw.githubusercontent.com`.
 
-4. **Scaffold.** When `.cursor/environment.json` is missing, copy `templates/environment.json`. When it exists, keep fields already set and point `install` at `bash .agents/scripts/setup.sh` and `start` at `bash .agents/scripts/start.sh`. `repositoryDependencies` may list `github.com/shedcollective/neat-os` so the token can read neat-os. It does not clone neat-os. If the schema rejects a field, drop that field and record the error. Do not add a `$schema` key.
+4. **Scaffold.** When `.cursor/environment.json` is missing, copy `templates/environment.json`. When it exists, keep fields already set and point `install` at `bash .agents/scripts/setup.sh` and `start` at `bash .agents/scripts/start.sh`. `repositoryDependencies` may list `github.com/shedcollective/neat-os`. What that setting does is in [docs/cursor-environments.md](../../docs/cursor-environments.md). If the schema rejects a field, drop that field and record the error. Do not add a `$schema` key.
 
    Copy `templates/setup.sh`, `templates/start.sh`, and `templates/resolve-helper-dir.sh` to `.agents/scripts/` and mark them executable. `setup.sh` is the slow idempotent install (toolchains, lockfiles). `start.sh` is the fast boot (services, and a lockfile reinstall only when the hash changes). One script per extra concern, beside those two. Do not bake a lockfile hash into a script. Do not start a daemon in `setup.sh`. Processes do not survive the snapshot.
 
@@ -75,7 +75,7 @@ Copy these steps into the todo list. A skipped step stays in the list with a `sk
 
 7. **Verify.** On a clean run, time the install, confirm the guard printed no clone, run the repo's test command, and run the health checks. A clone, a failed test, or an unhealthy service means this playbook is not done. Do not report success because the install eventually finished by cloning. Toolchain compiles belong in `setup.sh`. The snapshot pays that cost once. Do not compile on every boot.
 
-8. **Document.** Paste `templates/AGENTS.cloud-agents.md` into the product repo's `AGENTS.md` under the heading it already uses, or as `## Cloud agents`. Replace every `{{...}}` from the discovery notes. Delete secret rows and hosts this repo does not use. Names of secrets only. State that a secret or a network rule applies to agents started after the save.
+8. **Document.** Paste `templates/AGENTS.cloud-agents.md` into the product repo's `AGENTS.md` under the heading it already uses, or as `## Cloud agents`. Replace every `{{...}}` from the discovery notes. Delete secret rows and hosts this repo does not use. Names of secrets only. Leave the template sentence on secrets and network rules in place.
 
 ## Troubleshooting
 
@@ -92,7 +92,7 @@ Fix, in this order:
 
 The cloud agent's `GITHUB_TOKEN`, and `gh auth token`, are an app JWT. Composer rejects them. Do not point `COMPOSER_GITHUB_TOKEN` at either one. The guard exits before it calls Composer when the token matches them, starts with `eyJ`, or starts with `ghs_`.
 
-The secret is visible only to agents started after it was saved.
+Verify on a new agent.
 
 ### Blocked vendor downloads
 
@@ -123,11 +123,11 @@ bash "$H/wait-healthy.sh" --timeout 120 \
 
 Start from the hosts the scripts contact. Add a host only after a probe or a failed install shows it is required. Packagist (`repo.packagist.org`) stays closed when `composer.lock` already has dist URLs on GitHub. `registry.npmjs.org` belongs on the list only when `package-lock.json` points at it.
 
-A person saves the allowlist. The next new agent sees it. The agent that edited the files does not.
+A person saves the allowlist. Verify on a new agent.
 
 ### Stale VM
 
-After a secret or an allowlist change, start a new agent. The VM that is already running keeps the old environment, including a missing token and a missing host. A fresh Composer install that still clones is this symptom until that new agent runs.
+After a secret or an allowlist change, start a new agent. A fresh Composer install that still clones is this symptom until that new agent runs.
 
 ## Helpers
 
