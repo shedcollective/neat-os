@@ -190,7 +190,7 @@ Team and personal agents read playbooks from one shared checkout of `shedcollect
 
 `main` is the source of truth. It always equals the latest release tag. Only a release is merged to it.
 
-Each computer has one checkout. Exactly one named maintainer on that computer fetches and fast-forwards it on `main` at midnight local time and when a release lands. That maintainer never commits to the checkout. From that checkout:
+Each computer has one checkout. Exactly one named maintainer on that computer fetches and fast-forwards it on `main` at midnight local time and when a release lands. That maintainer never commits to the checkout. The named maintainer follows [`os-checkout-sync`](../skills/os-checkout-sync/SKILL.md). From that checkout:
 
 ```bash
 git fetch --tags --prune

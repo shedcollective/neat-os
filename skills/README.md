@@ -37,6 +37,7 @@ Adoption playbooks (`init`, `gather`, `learn`) bring a repository into neat-os (
 | [morning-brief](morning-brief/SKILL.md) | Composes one morning message per person from existing facts. |
 | [naming-and-voice](naming-and-voice/SKILL.md) | Proposes 2 to 3 naming options and tone-of-voice drafts, and recommends one. |
 | [ops-capture](ops-capture/SKILL.md) | Captures new email, shared threads, applied meeting proposals, and stated decisions into the private operations record. |
+| [os-checkout-sync](os-checkout-sync/SKILL.md) | Fetches and fast-forwards the shared checkout on `main`. Records the version beside the checkout. Reports only on failure, divergence, or a new release. |
 | [pin-majors-with-reasons](pin-majors-with-reasons/SKILL.md) | Upgrades dependencies and leaves a pinned major where it is. |
 | [project-update](project-update/SKILL.md) | Writes a short project status from the operations record and live connectors. |
 | [release](release/SKILL.md) | Cuts a git-flow release on a product repository from the Release slot, then stops before the production deploy. Runs only when a person names it. |
