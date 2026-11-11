@@ -564,6 +564,7 @@ for (const sentence of [
   'that documentation is the first commit',
   'follow the change from the first commit to the last',
   'does not stand on its own',
+  'force-push its own branch until review starts',
 ]) {
   if (!gitConvention.includes(sentence)) {
     fail(`conventions/git.md must lock commit shape (ADR-0014): missing "${sentence}"`);
