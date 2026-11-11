@@ -566,43 +566,10 @@ for (const sentence of [
   'that documentation is the first commit',
   'follow the change from the first commit to the last',
   'does not stand on its own',
-  'commit whenever is convenient',
-  'A work-in-progress commit is fine',
-  'Before the first push for review',
-  'An abandoned attempt does not appear',
-  'git add -p',
-  'interactive rebase',
-  'do not rewrite its history',
-  'A genuinely tiny change is one commit',
-  'a config or dependency change',
-  'bump the quantity validator the basket calls',
+  'force-push its own branch until review starts',
 ]) {
   if (!gitConvention.includes(sentence)) {
     fail(`conventions/git.md must lock commit shape (ADR-0014): missing "${sentence}"`);
-  }
-}
-// A work-in-progress commit during the work is allowed. The final history is
-// what a reviewer reads, so the convention must not require a commit as soon
-// as a concern stands on its own.
-if (
-  gitConvention.includes('Commit each concern when it is done') ||
-  gitConvention.includes('as soon as the concern stands on its own')
-) {
-  fail('conventions/git.md must not require a commit as soon as a concern stands on its own');
-}
-
-// The guides name the final-history rule and link the example. The example
-// stays in conventions/git.md. A guide must not require a commit as soon as a
-// concern stands on its own.
-for (const rel of ['AGENTS.md', 'templates/AGENTS.md', 'docs/contributing.md']) {
-  const guide = read(rel);
-  for (const sentence of ['commit whenever is convenient', 'Before the first push for review', '#commits']) {
-    if (!guide.includes(sentence)) {
-      fail(`${rel} must point at the commit history rule: missing "${sentence}"`);
-    }
-  }
-  if (guide.includes('Commit each concern when it is done') || guide.includes('as soon as the concern stands on its own')) {
-    fail(`${rel} must not require a commit as soon as a concern stands on its own`);
   }
 }
 
