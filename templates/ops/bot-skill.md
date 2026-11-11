@@ -21,7 +21,7 @@ Names and meanings are in `<neat-os-path>/conventions/routine-settings.md`. Dele
 
 | Setting | Value |
 | --- | --- |
-| `<neat-os-path>` | `/home/box/shared/neat-os` on Grok Bot computers; `/<shared>/neat-os` on other computers |
+| `<neat-os-path>` | `/home/box/shared/neat-os` |
 | `<ops-record>` | `<org>/<ops-repo>` |
 | `<timezone>` | `<IANA zone>` |
 | `<destination>` | `<the asker's chat, or #<channel>>` |
