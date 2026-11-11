@@ -1,6 +1,7 @@
 <!-- Shape: conventions/writing.md#pull-request-bodies. A filled example is in that section. Delete unused prompts and this comment.
      A stacked step keeps the first line required by conventions/git.md.
-     A pull request into develop includes the closing keyword from conventions/tickets.md. -->
+     A pull request into develop includes the closing keyword from conventions/tickets.md.
+     The body does not record branch state such as behind or conflicting. GitHub shows that, and it goes stale. -->
 
 Replace this paragraph. Say what changes in practice, and why a reviewer should accept it. Do not list files.
 
@@ -21,4 +22,5 @@ Verified: name what was run or inspected, the result, and what was not verified.
 
 ## Review
 
-- [ ] Confirm this change names no client, no client company, and no client project, and quotes no Slack thread or other internal discussion ([conventions/neutral-reference.md](../conventions/neutral-reference.md)).
+- [ ] Confirm this change names no client, no client company, and no client project, and quotes no Slack thread or other internal discussion ([conventions/neutral-reference.md](https://github.com/shedcollective/neat-os/blob/develop/conventions/neutral-reference.md)).
+- [ ] Confirm prose comments state current behaviour and its constraint, responsibility headers that this change makes false are updated, and a replaced design removes the superseded path and its outdated comments ([conventions/code-comments.md](../conventions/code-comments.md)).

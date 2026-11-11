@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Locate a neat-os knowledge root for launch skills (init, gather, learn).
+ * Locate a neat-os knowledge root for the adoption playbooks (init, gather, learn).
  *
  * Locked order — stop at the first hit:
  *   1. NEAT_OS_ROOT (absolute path, valid os tree). SHED_OS_ROOT is a deprecated fallback.

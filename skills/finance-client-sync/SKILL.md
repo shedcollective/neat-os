@@ -3,14 +3,12 @@ name: finance-client-sync
 description: >-
   Weekly sync of client records between the private operations record and the
   director's accounting tool. Tool name, token, and account come from the
-  passport. Not a launch playbook.
+  passport.
 ---
 
 # finance-client-sync
 
 Keep client records in `<ops-record>` and the accounting tool aligned. Usable by any director. The tool's name, token, and account stay in the passport or wrapper.
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 A team bot does not run this routine without a filled bot passport ([docs/team-setup.md](../../docs/team-setup.md#team-bots)). A first-time create-missing run is [`finance-client-backfill`](../finance-client-backfill/SKILL.md). A lookup is [`finance-lookup`](../finance-lookup/SKILL.md).
 

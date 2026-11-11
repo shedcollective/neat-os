@@ -5,7 +5,7 @@ description: Scaffold only — copy the gist IDE spread structure (AGENTS.md, `.
 
 # init
 
-Scaffold the **IDE spread structure** into a **target git repository**. Copy the gist-shaped templates (`AGENTS.md`, `.agents/README.md` Agent Guide, docs / features / proposals slots). Leave placeholders **unfilled**. Ensure a neat-os consume path so agents can resolve launch skills.
+Scaffold the **IDE spread structure** into a **target git repository**. Copy the gist-shaped templates (`AGENTS.md`, `.agents/README.md` Agent Guide, docs / features / proposals slots). Leave placeholders **unfilled**. Ensure a neat-os consume path so agents can resolve adoption playbooks (`init`, `gather`, `learn`).
 
 This is **not** an evidence scan. Do **not** write Docker/Make/stack prose into the guide. Do **not** invent client facts. Do **not** copy company skills or templates into `.agents/skills/`.
 
@@ -24,7 +24,7 @@ Do not invent a Packages registry or `NODE_AUTH_TOKEN`. Install from git (`file:
 
 ## Locate neat-os (locked resolve order)
 
-When finding the neat-os root or running launch skills (`init`, later `gather` / `learn`), resolve in this order and **stop at the first hit**. Use `skills/init/scripts/resolve-consume.sh` (or `require('@shedcollective/neat-os').resolveConsume()`). Do **not** invent a different order.
+When finding the neat-os root or running adoption playbooks (`init`, `gather`, `learn`), resolve in this order and **stop at the first hit**. Use `skills/init/scripts/resolve-consume.sh` (or `require('@shedcollective/neat-os').resolveConsume()`). Do **not** invent a different order.
 
 1. **`NEAT_OS_ROOT`** — env var, **absolute** path to a tree that contains `skills/` and `templates/`. If unset or invalid, continue.
 2. **Node install** — `node_modules/@shedcollective/neat-os` (walk up from cwd / project root), or `require.resolve('@shedcollective/neat-os/package.json')` from the project root.

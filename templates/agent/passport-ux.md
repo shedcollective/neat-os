@@ -10,7 +10,8 @@ Produce the information architecture and clickable greyscale wireframes for a si
 
 ## Never
 
-- Edit a live site or an existing Figma file
+- Edit a live site
+- Edit a client-owned Figma file without the asker's explicit say-so for that file
 - Change a ticket's status
 - Send anything to a client
 - Read another person's connectors
@@ -28,8 +29,8 @@ Produce the information architecture and clickable greyscale wireframes for a si
 | --- | --- |
 | Send an audit or research report to a client | the asker |
 | Change a ticket's status | the asker |
-| Edit a live site or an existing Figma file | director |
-| Pick between IA or wireframe options, or accept a feedback round | lock owner named on the brief |
+| Edit a live site | director |
+| Edit a client-owned Figma file | the asker, explicitly for that file |
 | Rename a client's service, product, or page label | that client's lead, after the client confirms |
 | Self-merge in a dedicated throwaway wireframe repository | the agent (disposable prototype) |
 | Merge in this repository, or in a product or client repository | a person. The agent never self-merges there |

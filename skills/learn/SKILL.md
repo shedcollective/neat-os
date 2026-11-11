@@ -19,7 +19,7 @@ This is **not** `gather`. Do not fill the Agent Guide, evidence passport, or `.a
 
 - **Propose only.** Do not merge, push, or publish skills to `shedcollective/neat-os`, `neat-os-tool-*`, or any other org skill store. Do not auto-elevate. Do not create a `neat-os-platform-*` repository.
 - **Not gather.** Do not run `light-scan.sh` or write Docker/Make/stack prose into project slots.
-- Launch skills live in neat-os. Locate the tree the same way `init` does (`resolve-consume.sh` / `require('@shedcollective/neat-os').resolveConsume()`): `NEAT_OS_ROOT`, then `node_modules/@shedcollective/neat-os`, then `vendor/shedcollective/neat-os`, then sibling `../neat-os`. `SHED_OS_ROOT` and the shed-os package paths still resolve and are deprecated (`docs/consume.md`). **Do not** search the public web for neat-os. Do not copy launch skills into this repo’s `.agents/skills/`. Drafts go in `.agents/proposals/` only.
+- Adoption playbooks (`init`, `gather`, `learn`) live in neat-os. Drafts go in `.agents/proposals/` only.
 - Do not invent patterns the git history (and readable files) do not support.
 - **Company drafts are project-agnostic.** A draft destined for neat-os or a stack pack is company-wide guidance. Do not name a client, a product repository, a local path, or a ticket from the repo under audit. Do not include evidence tables of those files. Project-specific facts belong in this repo's Agent Guide, not in the draft.
 

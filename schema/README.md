@@ -29,7 +29,7 @@ If you know what a piece of knowledge is for but not which kind of file it shoul
 Type is read from location and shape, not from a list kept here. `scripts/check-structure.js` derives the skill set from `skills/*/` and asserts each frontmatter `name` equals its directory, so adding a mechanism never edits this page.
 
 - Every `skills/<name>/SKILL.md` is a **playbook** or a **skill**; the `SKILL.md` frontmatter is the discovery unit for both. It is a playbook if its body is an ordered step list with a *Stop* criterion, a skill if it is a single capability. A `scripts/` directory beside it holds the **scripts** it delegates to; a playbook with no `scripts/` is deterministic through the convention it applies and the tool the runner already has (a ticket system, a package manager).
-- The **launch playbooks** are the ones a product repo runs to adopt neat-os; they are named in [ADR-0002](../docs/decisions/0002-launch-skill-split.md) and asserted present by `check-structure`. Every other entry under `skills/` is on-demand.
+- The **adoption playbooks (`init`, `gather`, `learn`)** are the ones a product repo runs to adopt neat-os; they are named in [ADR-0002](../docs/decisions/0002-launch-skill-split.md) and asserted present by `check-structure`. Every other entry under `skills/` is on-demand.
 - Every `conventions/<topic>.md` listed in `conventions/README.md` is a **convention**.
 - Every `principles/<slug>.md` listed in `principles/README.md` under a goal is a **principle**. Kaizen, Determinism and Parallelism are the three *goals* the principles serve, not principles themselves.
 - `scripts/check*` and anything under `skills/*/scripts/` are **scripts**.

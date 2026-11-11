@@ -3,14 +3,12 @@ name: finance-client-backfill
 description: >-
   Create missing client records in the director's accounting tool from the
   private operations record. Tool name, token, and account come from the
-  passport. Not a launch playbook.
+  passport.
 ---
 
 # finance-client-backfill
 
 Create client records that exist in `<ops-record>` but not yet in the accounting tool. Usable by any director. The tool's name, token, and account stay in the passport or wrapper.
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 A team bot does not run this routine without a filled bot passport ([docs/team-setup.md](../../docs/team-setup.md#team-bots)). Weekly catch-up is [`finance-client-sync`](../finance-client-sync/SKILL.md). A lookup is [`finance-lookup`](../finance-lookup/SKILL.md).
 

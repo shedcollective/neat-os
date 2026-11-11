@@ -1,6 +1,6 @@
 # The playbooks
 
-`init`, `gather`, and `learn` bring a repository into neat-os and keep it there. `ticket` puts work into Jira in a shape the client can read. Two more playbooks live beside them: `assurance` and `pin-majors-with-reasons`. Each is a playbook: an ordered list of steps with a stopping point, written in the `SKILL.md` format that Cursor discovers, and stored under [`skills/`](../skills/). The split between the first three is locked by [ADR-0002](decisions/0002-launch-skill-split.md), `ticket` by [ADR-0012](decisions/0012-ticket-playbook-writes-jira-not-the-repo.md), and the kinds of file are defined in [schema/README.md](../schema/README.md).
+`init`, `gather`, and `learn` bring a repository into neat-os and keep it there. `ticket` puts work into Jira in a shape the client can read. Each is a playbook: an ordered list of steps with a stopping point, written in the `SKILL.md` format that Cursor discovers. The list is [skills/README.md](../skills/README.md). The split between the first three is locked by [ADR-0002](decisions/0002-launch-skill-split.md), `ticket` by [ADR-0012](decisions/0012-ticket-playbook-writes-jira-not-the-repo.md), and the kinds of file are defined in [schema/README.md](../schema/README.md).
 
 | Playbook | Does | Refuses to |
 | --- | --- | --- |
@@ -65,20 +65,11 @@ The ticket describes the problem and the outcome, not the build. The developer w
 
 For an OS repository the same playbook writes a GitHub Issue with `gh issue create`, because that is where OS tickets live ([conventions/tickets.md](../conventions/tickets.md)). neat-os ships the playbook only, not a Jira client. The agent needs Jira or `gh` access from its own environment.
 
-## `assurance` and `pin-majors-with-reasons`
+## Other playbooks
 
-These two are playbooks, and they are not part of adoption. `assurance` reads one pull request on a product repository and posts an evidence pack. It does not implement the change. `pin-majors-with-reasons` upgrades dependencies and leaves a pinned major where it is. Their steps are in [`skills/assurance/SKILL.md`](../skills/assurance/SKILL.md) and [`skills/pin-majors-with-reasons/SKILL.md`](../skills/pin-majors-with-reasons/SKILL.md).
+`assurance` reads one pull request on a product repository and posts an evidence pack. It does not implement the change. `pin-majors-with-reasons` upgrades dependencies and leaves a pinned major where it is. They are not part of adoption.
 
-
-## Agency operations playbooks
-
-`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`, `ops-capture`, `bids-register`, `finance-client-backfill`, `finance-client-sync`, and `finance-lookup` are on-demand playbooks for shared operations work. They are not part of product-repo adoption. Their map, the work-logging convention, and the burndown day template are in [agency-ops.md](agency-ops.md).
-
-`daily-digest` is also an on-demand agency operations playbook. It runs after the day file is written and turns it into a short end-of-day post. `morning-brief` is the weekday morning message for one person (Needs you, Today, Meetings, Health, Pipeline on Mondays). It does not replace `daily-digest`. The composition rule is in [agency-ops.md](agency-ops.md).
-
-## Design and UX playbooks
-
-`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, and `design-handoff` are on-demand playbooks for the design agent. `design-qa` is an on-demand playbook for the assurance role. `ux-audit`, `research-synthesis`, and `wireframes` are on-demand playbooks for the UX agent. They are not part of product-repo adoption. The rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md).
+Agency operations, design, and UX playbooks are on demand and are not part of product-repo adoption. The operations map is [agency-ops.md](agency-ops.md). Design and UX rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md). Every playbook is listed in [skills/README.md](../skills/README.md).
 
 ## Order on a product repository
 
