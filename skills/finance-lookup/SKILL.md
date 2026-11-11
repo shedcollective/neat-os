@@ -2,14 +2,12 @@
 name: finance-lookup
 description: >-
   Look up a client, invoice, or balance in the director's accounting tool.
-  Tool name, token, and account come from the passport. Not a launch playbook.
+  Tool name, token, and account come from the passport.
 ---
 
 # finance-lookup
 
 Answer a director's question from the accounting tool: a client, an invoice, or a balance. Usable by any director. The tool's name, token, and account stay in the passport or wrapper.
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 A team bot does not run this routine without a filled bot passport ([docs/team-setup.md](../../docs/team-setup.md#team-bots)). Creating missing contacts is [`finance-client-backfill`](../finance-client-backfill/SKILL.md). A weekly sync is [`finance-client-sync`](../finance-client-sync/SKILL.md).
 

@@ -38,23 +38,12 @@ Interview is **chat Q&A that patches files**. It is not a second repo scan.
 
 ## Dual-mode consume
 
-Locate neat-os the **same locked way `init` does** (`resolve-consume.sh` / `require('@shedcollective/neat-os').resolveConsume()`). Copying skills into the client is **not** a consume path.
-
-Stop at the first hit:
-
-1. **`NEAT_OS_ROOT`** (absolute, valid tree)
-2. **`node_modules/@shedcollective/neat-os`** (walk up or `require.resolve`) — Local/IDE git pin
-3. **`vendor/shedcollective/neat-os`** — Composer; PHP metadata only
-4. **`../neat-os`** — Cloud Agent sibling / local OS development
-
-`SHED_OS_ROOT`, `node_modules/@shedcollective/shed-os`, `vendor/shedcollective/shed-os`, and `../shed-os` still resolve when the neat-os name is absent. Each prints a deprecation warning.
-
-**Do not** search the public web for “neat-os” or invent install steps. If 1–4 miss, tell the human how to install (git pin / sibling) and stop.
+Locate neat-os as [docs/consume.md](../../docs/consume.md#running-a-playbook) describes. Copying skills into the client is **not** a consume path.
 
 | Mode | When | How agents resolve skills / this scan |
 | --- | --- | --- |
 | **Installed dep** | Local / IDE / often a single clone | Node: `require('@shedcollective/neat-os').skillsDir` after `file:` / `github:shedcollective/neat-os#vX.Y.Z` → `node_modules/`. Composer `vendor/` is PHP metadata only. |
-| **Sibling / live tree** | Cloud Agents (multi-repo: client + neat-os). Proven. | `NEAT_OS_ROOT` or `../neat-os/skills` **after** 1–3 miss. Run `skills/gather/scripts/light-scan.sh` from that tree. |
+| **Sibling / live tree** | Cloud Agents (multi-repo: client + neat-os). Proven. | `NEAT_OS_ROOT` or `../neat-os/skills` only after the earlier hits in that order miss. Run `skills/gather/scripts/light-scan.sh` from that tree. |
 
 Do not invent a Packages registry, `NODE_AUTH_TOKEN`, or DeployHQ secrets.
 
