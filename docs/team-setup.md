@@ -89,4 +89,4 @@ The passport lists every skill (OS playbook, passport enhancement, or bot-only) 
 
 Design and UX agent rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md). The playbooks are listed in [skills/README.md](../skills/README.md). `design-qa` belongs to the assurance role.
 
-The wrapper reads playbooks from the shared checkout on `main` ([routine-settings.md](../conventions/routine-settings.md)). It does not pin a tag.
+The wrapper reads playbooks from the shared checkout on `main` ([routine-settings.md](../conventions/routine-settings.md)). It does not pin a tag. It does not fetch, pull, or fast-forward the checkout.

@@ -190,7 +190,7 @@ Team and personal agents read playbooks from one shared checkout of `shedcollect
 
 `main` is the source of truth. It always equals the latest release tag. Only a release is merged to it.
 
-Each host has one checkout. A named maintainer keeps it on `main`, nightly and on demand when a release lands. From that checkout:
+Each computer has one checkout. Exactly one named maintainer on that computer fetches and fast-forwards it on `main` at midnight local time and when a release lands. That maintainer never commits to the checkout. From that checkout:
 
 ```bash
 git fetch --tags --prune
@@ -200,14 +200,16 @@ git merge --ff-only origin/main
 
 If the fast-forward fails, stop. Do not merge another branch into that checkout.
 
-The agent's configuration holds one value, the absolute path `<neat-os-path>`, and no playbook text. The agent does not keep a saved copy, does not keep a copy in its skill store, and does not fetch a playbook from the web. If the checkout is missing, off `main`, or behind the latest release, the agent says so and stops for that run. Every output records `neat-os vX.Y.Z (sha)` in the file, not in chat. The run steps are in [templates/ops/bot-skill.md](../templates/ops/bot-skill.md).
+Every other agent only reads the checkout. It never fetches, pulls, or fast-forwards it, and it keeps no copy of its own. The agent's configuration holds one value, the absolute path `<neat-os-path>`, and no playbook text. The agent does not keep a saved copy, does not keep a copy in its skill store, and does not fetch a playbook from the web. If the checkout is missing, off `main`, or behind the latest release, the agent says so and stops for that run. Every output records `neat-os vX.Y.Z (sha)` in the file, not in chat. The run steps are in [templates/ops/bot-skill.md](../templates/ops/bot-skill.md).
+
+On Grok Bot computers, `<neat-os-path>` is `/home/box/shared/neat-os`. Every agent on that computer shares that checkout. Other computers keep the placeholder `/<shared>/neat-os` and replace it with the absolute path of the checkout.
 
 ### One-off migration
 
-Paste the note below into each team or personal agent. Replace `<neat-os-path>` with the absolute path of the checkout on that host. After the agent has deleted its saved copies, the note is not part of the steady state. The configuration keeps the path.
+Paste the note below into each team or personal agent. Replace `<neat-os-path>` with the absolute path of the checkout on that computer. On Grok Bot computers that path is `/home/box/shared/neat-os`. After the agent has deleted its saved copies, the note is not part of the steady state. The configuration keeps the path.
 
 ```text
-Read neat-os only from <neat-os-path>, the one shared checkout on main. Delete every saved copy of a playbook, including any copy in this agent's skill store. Do not fetch playbooks from the web. On every run, confirm the checkout is on main and at the latest release tag. If it is missing, off main, or behind the latest release, say so and stop. Write neat-os vX.Y.Z (sha) in the file, not in chat.
+Read neat-os only from <neat-os-path>, the one shared checkout on main. Delete every saved copy of a playbook, including any copy in this agent's skill store. Do not fetch playbooks from the web. Do not fetch, pull, or fast-forward the checkout. On every run, confirm the checkout is on main and at the latest release tag. If it is missing, off main, or behind the latest release, say so and stop. Write neat-os vX.Y.Z (sha) in the file, not in chat.
 ```
 
 Do not put a client, a project, a person, or a token in the note.

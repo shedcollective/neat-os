@@ -9,7 +9,7 @@ description: >-
 
 1. Resolve `<neat-os-path>`. If that path is missing, say `neat-os is not at <neat-os-path>. Stop.` and stop. Do not search the web. Do not copy playbooks. Do not read a saved copy or a copy in this agent's skill store.
 2. If the checkout is not on `main` (`git -C <neat-os-path> rev-parse --abbrev-ref HEAD`), say `neat-os at <neat-os-path> is not on main. Stop.` and stop.
-3. If `HEAD` is not the latest release tag (the first line of `git -C <neat-os-path> tag -l 'v*' --sort=-v:refname`), say `neat-os at <neat-os-path> is behind the latest release. Stop.` and stop. Do not fetch.
+3. If `HEAD` is not the latest release tag (the first line of `git -C <neat-os-path> tag -l 'v*' --sort=-v:refname`), say `neat-os at <neat-os-path> is behind the latest release. Stop.` and stop. Do not fetch. Do not pull or fast-forward the checkout.
 4. Follow `<neat-os-path>/skills/<playbook>/SKILL.md`. Do not restate the playbook's steps here.
 5. Write `neat-os vX.Y.Z (sha)` in the file, not in chat. `vX.Y.Z` is `git -C <neat-os-path> describe --tags --exact-match`. `sha` is `git -C <neat-os-path> rev-parse --short HEAD`.
 
@@ -21,7 +21,7 @@ Names and meanings are in `<neat-os-path>/conventions/routine-settings.md`. Dele
 
 | Setting | Value |
 | --- | --- |
-| `<neat-os-path>` | `/<shared>/neat-os` |
+| `<neat-os-path>` | `/home/box/shared/neat-os` on Grok Bot computers; `/<shared>/neat-os` on other computers |
 | `<ops-record>` | `<org>/<ops-repo>` |
 | `<timezone>` | `<IANA zone>` |
 | `<destination>` | `<the asker's chat, or #<channel>>` |
