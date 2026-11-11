@@ -10,7 +10,7 @@
 - Release branches from `develop` → `main` (and back to `develop`)
 - Hotfixes from `main`
 
-A release tag is reachable from the production branch. In this repository that branch is `main`. A product repository that uses another name, such as `master`, records it in the Release slot of `.agents/project.md`. A tag that exists only on the integration branch is not a release. The default branch is often the integration branch, so a tag or a published release that does not name the production branch lands there instead. The `release` playbook checks this before it stops ([../skills/release/SKILL.md](../skills/release/SKILL.md)). How this repository is tagged is [../docs/release.md](../docs/release.md).
+A product repository tags its release with the `release` playbook ([../skills/release/SKILL.md](../skills/release/SKILL.md)).
 
 Agents branch from `develop` and open PRs **into `develop` only**. Humans merge. When the ticket is a GitHub Issue, the pull request that targets `develop` includes `Closes #<n>` in its body ([tickets.md](tickets.md)).
 

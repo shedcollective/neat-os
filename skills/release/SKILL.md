@@ -52,7 +52,7 @@ A blank value, `awaiting interview`, `to confirm`, `{{to confirm}}`, or `TODO / 
 
 - **Ask for the semver.** Use the runner's structured question (choices in the chat). Do not ask in prose, and do not guess. A version already written in the chat is not a confirmation. Show the latest tag and the current version-file values in the prompt. Offer the next patch and the next minor from that tag. The person can type another version. Do not start until they answer. If the proposed semver is equal to or lower than the current version in any configured version file, abort and report both values. Do not start the release.
 - **Ask for the notes.** Show the draft in a second structured question and wait. One choice approves the draft as written. The other means the person will edit the notes in chat. Do not finish until that edited text arrives. If the drafted release notes are empty, abort and report. Do not ask for approval of an empty list, and do not finish.
-- **The tag lands on the production branch.** After finish, the tag commit and the release merge are reachable from `origin/<production branch>`. A tag that exists only on the integration branch is not a release ([conventions/git.md](../../conventions/git.md)). The default branch is often that integration branch. Verify. Then stop.
+- **The tag lands on the production branch.** After finish, the tag commit and the release merge are reachable from `origin/<production branch>`. A tag that exists only on the integration branch is not a release. The default branch is often that integration branch, so a tag or a published release that does not name the production branch lands there instead. Verify. Then stop.
 - **Never force-push** the production branch or the integration branch. `git flow release finish -f <file> -p` uses `-f` as the notes file and `-p` to push. Those flags are not `--force`.
 - **Never skip hooks.** Do not pass `--no-verify`. If the finish hook fails, fix the version files or the lock, commit those files, and finish again.
 - **Never finish** when a version file is not `<semver>`, or when the lock refresh still produces a diff.
@@ -158,7 +158,3 @@ Copy this list into the todo list. A skipped step stays, with a `skip:` reason.
 ## Stop
 
 The playbook is complete when the tag and the release merge are on `origin/<production branch>`, the integration branch has the tag back-merge, and the person has been told they deploy. It is also complete when it stopped because the slot was unanswered, the proposed version was equal to or lower than a current version, the drafted release notes are empty, git-flow did not match, a hook or lock check failed, or finish failed halfway. It is not complete if a deploy was started, a hook was skipped, or a tag was left only on the integration branch without that being reported.
-
-## Source
-
-Elevation draft: [.agents/proposals/2026-10-20-release.md](../../.agents/proposals/2026-10-20-release.md). The production-branch tag rule is [conventions/git.md](../../conventions/git.md).
