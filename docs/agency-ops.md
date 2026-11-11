@@ -1,6 +1,6 @@
 # Agency operations
 
-neat-os is the agency rulebook for Shed agents, not only the coding-agent install. Coding playbooks, listed in [skills/README.md](../skills/README.md), adopt and run product repositories. The playbooks on this page cover shared **operations** work: day digests, event capture, morning briefs, perspective add-ons, project status, client briefs, meeting preparation, the bids register, and director finance lookups.
+neat-os is the agency rulebook for Shed agents, not only the coding-agent install. Coding playbooks, listed in [skills/README.md](../skills/README.md), adopt and run product repositories. The playbooks on this page cover shared **operations** work: day digests, event capture, morning briefs, perspective add-ons, project status, client briefs, meeting preparation, the bids register, director finance lookups, and the named maintainer's shared checkout.
 
 Living operational state (day files, in-flight boards, client folders) stays in a **private** operations repository. This public repository holds the locked rules and the playbooks only. Nothing sensitive belongs here: no client names, no client companies or projects, no internal project state, no Slack or internal discussion, no billing figures, and no credentials ([neutral-reference.md](../conventions/neutral-reference.md), [never-store-secrets.md](../conventions/never-store-secrets.md), [agent-work-logging.md](../conventions/agent-work-logging.md)).
 
@@ -28,6 +28,14 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 | [`finance-client-sync`](../skills/finance-client-sync/SKILL.md) | Weekly sync of client records between the operations record and the accounting tool. | Write a token. Delete a client. Copy amounts into a shared file. |
 | [`finance-lookup`](../skills/finance-lookup/SKILL.md) | Looks up a client, invoice, or balance for a director. | Write a token. Invent a figure. Copy amounts into a shared digest. |
 
+### Maintainer
+
+This playbook belongs to the named neat-os maintainer on each computer.
+
+| Playbook | Does | Refuses to |
+| --- | --- | --- |
+| [`os-checkout-sync`](../skills/os-checkout-sync/SKILL.md) | Nightly, and when a release lands: clones the shared checkout on `main` if it is missing, then fetches tags and fast-forwards `main` only. Records `neat-os vX.Y.Z (sha)` in a version file beside the checkout. Reports only on failure, divergence, being off `main`, being behind the latest release, or a new release. | Commit, reset, force-push, or rewrite the checkout. Fetch when the runner is not the named maintainer. Switch a checkout that is off `main` or has diverged. |
+
 ## Template
 
 | File | Job |
@@ -40,7 +48,7 @@ Living operational state (day files, in-flight boards, client folders) stays in 
 
 ## Routines
 
-Each person runs these playbooks from their own agent through a thin wrapper ([templates/ops/bot-skill.md](../templates/ops/bot-skill.md)) that supplies the settings in [routine-settings.md](../conventions/routine-settings.md), including the shared checkout on `main`. `morning-brief` is the weekday morning message: one per person, instead of separate health, digest, day-plan, and meeting-prep brief messages. `daily-digest` still runs after the day's `daily-burndown` and `enhance-daily-update` runs have written the day file. `bids-register` is a daily default-branch commit owned by the operations lead. It also runs when the bid-running agent reports a submission or an outcome, and as a weekly outcome sweep. A passport can name more than one source, for example the bid-running agent's report and the operations lead's own sent mail, so a proposal emailed straight to a prospect is not missed. `ops-capture` runs on an event or as a frequent sweep through the working day, owned by the operations lead, and commits each event straight to the default branch.
+Each person runs these playbooks from their own agent through a thin wrapper ([templates/ops/bot-skill.md](../templates/ops/bot-skill.md)) that supplies the settings in [routine-settings.md](../conventions/routine-settings.md), including the shared checkout on `main`. `morning-brief` is the weekday morning message: one per person, instead of separate health, digest, day-plan, and meeting-prep brief messages. `daily-digest` still runs after the day's `daily-burndown` and `enhance-daily-update` runs have written the day file. `bids-register` is a daily default-branch commit owned by the operations lead. It also runs when the bid-running agent reports a submission or an outcome, and as a weekly outcome sweep. A passport can name more than one source, for example the bid-running agent's report and the operations lead's own sent mail, so a proposal emailed straight to a prospect is not missed. `ops-capture` runs on an event or as a frequent sweep through the working day, owned by the operations lead, and commits each event straight to the default branch. The named maintainer runs `os-checkout-sync` at midnight local time and when a release lands.
 
 ## Decision rule
 
