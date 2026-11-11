@@ -7,18 +7,17 @@ description: >-
 
 # <Wrapper title>
 
-1. Resolve `<neat-os-path>`. If that path is missing, say `neat-os is not at <neat-os-path>. Stop.` and stop. Do not search the web. Do not copy playbooks.
-2. Check the pin (`vX.Y.Z`). A release tag: continue. `main`: say that this is a stopgap, then continue. `develop` or any other branch: say so and stop.
-3. Confirm the checkout at `<neat-os-path>` is that pin (`git -C <neat-os-path> describe --tags --exact-match`). If the command fails or the tag does not match, say `neat-os at <neat-os-path> is not at vX.Y.Z. Stop.` and stop.
-4. Follow `<neat-os-path>/skills/<playbook>/SKILL.md`. The public copy of that file at this pin is [`skills/<playbook>/SKILL.md`](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/skills/<playbook>/SKILL.md). Do not restate the playbook's steps here.
+1. Resolve `<neat-os-path>`. If that path is missing, say `neat-os is not at <neat-os-path>. Stop.` and stop. Do not search the web. Do not copy playbooks. Do not read a saved copy or a copy in this agent's skill store.
+2. If the checkout is not on `main` (`git -C <neat-os-path> rev-parse --abbrev-ref HEAD`), say `neat-os at <neat-os-path> is not on main. Stop.` and stop.
+3. If `HEAD` is not the latest release tag (the first line of `git -C <neat-os-path> tag -l 'v*' --sort=-v:refname`), say `neat-os at <neat-os-path> is behind the latest release. Stop.` and stop. Do not fetch.
+4. Follow `<neat-os-path>/skills/<playbook>/SKILL.md`. Do not restate the playbook's steps here.
+5. Write `neat-os vX.Y.Z (sha)` in the file, not in chat. `vX.Y.Z` is `git -C <neat-os-path> describe --tags --exact-match`. `sha` is `git -C <neat-os-path> rev-parse --short HEAD`.
 
-TODO: how neat-os is placed at `<neat-os-path>` is not this wrapper. Tracked in [issue #15](https://github.com/shedcollective/neat-os/issues/15).
-
-The pin rule is [conventions/routine-settings.md](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/conventions/routine-settings.md). How to bump the tag is [docs/consume.md](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/docs/consume.md#move-a-wrapper-pin). [ADR-0022](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/docs/decisions/0022-wrapper-shared-path.md).
+The rule is `<neat-os-path>/conventions/routine-settings.md`. How the checkout stays current is `<neat-os-path>/docs/consume.md`. The agent's configuration holds `<neat-os-path>` and no playbook text.
 
 ## Settings
 
-Names and meanings are in [conventions/routine-settings.md](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/conventions/routine-settings.md). Delete rows the playbook does not use. Add the playbook's own settings below them.
+Names and meanings are in `<neat-os-path>/conventions/routine-settings.md`. Delete rows the playbook does not use. Add the playbook's own settings below them.
 
 | Setting | Value |
 | --- | --- |

@@ -701,14 +701,11 @@ if (!read('skills/meeting-prep/SKILL.md').includes('morning-brief')) {
   fail('skills/meeting-prep/SKILL.md must point scheduled briefs at morning-brief');
 }
 
-// Wrapper templates pin a release tag, never a branch (ADR-0021).
-// check-policy.js is at its cap of ten, so this lives here with the
-// release-tag-on-main guard rather than as a prose policy.
-function wrapperPinRefAllowed(ref) {
-  if (ref === 'vX.Y.Z') return true;
-  return /^v\d+\.\d+\.\d+$/.test(ref);
-}
-
+// Team and personal agents read one shared checkout of neat-os on main.
+// The phrases are the rule in conventions/routine-settings.md.
+// check-policy.js is at its cap of ten, so the lock stays in this file.
+// A release-tag pin and a blob/vX.Y.Z link are rejected.
+// The templates must not point the checkout at issue #15.
 function githubBlobRefs(text) {
   const refs = [];
   const re = /github\.com\/shedcollective\/neat-os\/(?:blob|raw|tree)\/([^/#?\s)]+)/g;
@@ -719,59 +716,33 @@ function githubBlobRefs(text) {
   return refs;
 }
 
-for (const [ref, allowed] of [
-  ['v0.5.0', true],
-  ['vX.Y.Z', true],
-  ['v1.2.3', true],
-  ['develop', false],
-  ['main', false],
-  ['master', false],
-  ['HEAD', false],
-  ['release/0.5.0', false],
-]) {
-  if (wrapperPinRefAllowed(ref) !== allowed) {
-    fail(`wrapper pin classifier (ADR-0021): ${ref} should be ${allowed ? 'allowed' : 'forbidden'}`);
+function rejectRetiredCheckoutPin(rel, text) {
+  if (githubBlobRefs(text).length || text.includes('blob/vX.Y.Z/')) {
+    fail(`${rel} must not pin a GitHub ref; agents read the shared checkout on main`);
+  }
+  if (text.includes('issue #15')) {
+    fail(`${rel} must not leave the checkout to issue #15`);
+  }
+  if (text.includes('Pin a release tag') || text.includes('`main` is a stopgap only')) {
+    fail(`${rel} must not pin a release tag or treat main as a stopgap`);
   }
 }
 
 const wrapperTemplate = read('templates/ops/bot-skill.md');
-if (!wrapperTemplate.includes('say so and stop')) {
-  fail('templates/ops/bot-skill.md must stop when the pin is a branch (ADR-0021)');
-}
-if (!wrapperTemplate.includes('blob/vX.Y.Z/')) {
-  fail('templates/ops/bot-skill.md must pin GitHub playbook links to vX.Y.Z (ADR-0021)');
-}
-if (/Pin `main` or a release tag/.test(wrapperTemplate)) {
-  fail('templates/ops/bot-skill.md must not treat main as a first-class pin (ADR-0021)');
-}
-if (!wrapperTemplate.includes('<neat-os-path>')) {
-  fail('templates/ops/bot-skill.md must read playbooks from <neat-os-path> (ADR-0022)');
-}
-if (!wrapperTemplate.includes('neat-os is not at <neat-os-path>. Stop.')) {
-  fail('templates/ops/bot-skill.md must stop when <neat-os-path> is missing (ADR-0022)');
-}
-if (!wrapperTemplate.includes('is not at vX.Y.Z. Stop.')) {
-  fail('templates/ops/bot-skill.md must stop when the checkout is not the pin (ADR-0022)');
-}
-if (!wrapperTemplate.includes('issue #15')) {
-  fail('templates/ops/bot-skill.md must leave how the shared path is populated to issue #15 (ADR-0022)');
-}
-
-const wrapperPinFiles = [
-  'templates/ops/bot-skill.md',
-  'templates/agent/passport.md',
-];
-for (const rel of wrapperPinFiles) {
-  const text = rel === 'templates/ops/bot-skill.md' ? wrapperTemplate : read(rel);
-  const refs = githubBlobRefs(text);
-  for (const ref of refs) {
-    if (!wrapperPinRefAllowed(ref)) {
-      fail(`${rel} pins a branch or non-tag ref "${ref}"; pin a release tag (ADR-0021)`);
-    }
+rejectRetiredCheckoutPin('templates/ops/bot-skill.md', wrapperTemplate);
+for (const sentence of [
+  'neat-os is not at <neat-os-path>. Stop.',
+  'is not on main. Stop.',
+  'is behind the latest release. Stop.',
+  'Do not fetch.',
+  'neat-os vX.Y.Z (sha)',
+  'in the file, not in chat',
+  'no playbook text',
+  'skill store',
+]) {
+  if (!wrapperTemplate.includes(sentence)) {
+    fail(`templates/ops/bot-skill.md must lock the shared checkout on main: missing "${sentence}"`);
   }
-}
-if (!githubBlobRefs(wrapperTemplate).length) {
-  fail('templates/ops/bot-skill.md must contain a GitHub blob pin (ADR-0021)');
 }
 
 const passportTemplate = read('templates/agent/passport.md');
@@ -794,8 +765,17 @@ if (!passportTemplate.includes('Skip a row when a wrapper for that triple alread
 if (!/private operations record/.test(passportTemplate) || !/never in neat-os/.test(passportTemplate)) {
   fail('templates/agent/passport.md must say filled passports live in the private operations record, never in neat-os');
 }
-if (!passportTemplate.includes('Pin a release tag')) {
-  fail('templates/agent/passport.md Pin must require a release tag (ADR-0021)');
+rejectRetiredCheckoutPin('templates/agent/passport.md', passportTemplate);
+for (const sentence of [
+  'does not pin a release tag',
+  'behind the latest release',
+  'neat-os vX.Y.Z (sha)',
+  'in the file, not in chat',
+  'no playbook text',
+]) {
+  if (!passportTemplate.includes(sentence)) {
+    fail(`templates/agent/passport.md Pin must lock the shared checkout on main: missing "${sentence}"`);
+  }
 }
 if (!/^## Team bots$/m.test(read('docs/team-setup.md'))) {
   fail('docs/team-setup.md must say every team bot has a bot passport before it runs a routine');
@@ -854,40 +834,93 @@ for (const [rel, refuse] of [
 
 const routineSettings = read('conventions/routine-settings.md');
 for (const sentence of [
-  'Pin a release tag',
-  '`main` is a stopgap only',
-  '`develop` and other branches never',
+  '`main` is the source of truth',
+  'always equals the latest release tag',
+  'does not pin a tag',
+  'one shared checkout',
+  'named maintainer',
+  'nightly and on demand',
+  'git fetch --tags --prune',
+  'fast-forward of `main`',
+  'skill store',
+  'ad-hoc web fetch',
+  'no playbook text',
+  'neat-os vX.Y.Z (sha)',
+  'in the file, not in chat',
+  'behind the latest release',
+  '## Why',
+  'Not chosen',
 ]) {
   if (!routineSettings.includes(sentence)) {
-    fail(`conventions/routine-settings.md must lock wrapper pins (ADR-0021): missing "${sentence}"`);
+    fail(`conventions/routine-settings.md must lock the shared checkout on main: missing "${sentence}"`);
   }
 }
-if (/Pin `main` or a release tag/.test(routineSettings)) {
-  fail('conventions/routine-settings.md must not treat main as a first-class pin (ADR-0021)');
+for (const retired of [
+  'Pin a release tag',
+  '`main` is a stopgap only',
+  'How the path is populated is not this convention',
+]) {
+  if (routineSettings.includes(retired)) {
+    fail(`conventions/routine-settings.md must not keep the retired tag pin: "${retired}"`);
+  }
 }
-
 if (!routineSettings.includes('<neat-os-path>')) {
-  fail('conventions/routine-settings.md must name <neat-os-path> (ADR-0022)');
-}
-if (!routineSettings.includes('issue #15')) {
-  fail('conventions/routine-settings.md must leave how the shared path is populated to issue #15 (ADR-0022)');
+  fail('conventions/routine-settings.md must name <neat-os-path>');
 }
 
 const consumeDocs = read('docs/consume.md');
-if (!/^## Move a wrapper pin$/m.test(consumeDocs)) {
-  fail('docs/consume.md must document how to bump a wrapper pin (ADR-0021)');
+if (!/^## Agents$/m.test(consumeDocs)) {
+  fail('docs/consume.md must document how team and personal agents read the shared checkout');
+}
+if (/^## Move a wrapper pin$/m.test(consumeDocs)) {
+  fail('docs/consume.md must not keep the retired wrapper pin section');
+}
+if (!/^### One-off migration$/m.test(consumeDocs)) {
+  fail('docs/consume.md must include the one-off migration note');
 }
 for (const sentence of [
-  'one pull request for that wrapper',
-  'Pick one wrapper as the canary',
-  'revert that pull request to roll back',
+  'git fetch --tags --prune',
+  'git merge --ff-only origin/main',
+  'neat-os vX.Y.Z (sha)',
+  'in the file, not in chat',
+  'skill store',
+  'Delete every saved copy',
+  '<neat-os-path>',
+  'named maintainer',
 ]) {
   if (!consumeDocs.includes(sentence)) {
-    fail(`docs/consume.md must lock the wrapper upgrade path (ADR-0021): missing "${sentence}"`);
+    fail(`docs/consume.md Agents must lock the shared checkout: missing "${sentence}"`);
   }
 }
-if (!consumeDocs.includes('<neat-os-path>')) {
-  fail('docs/consume.md must say wrappers read from <neat-os-path> (ADR-0022)');
+for (const retired of ['Pick one wrapper as the canary', 'stopgap', 'move-a-wrapper-pin']) {
+  if (consumeDocs.includes(retired)) {
+    fail(`docs/consume.md must not keep the retired wrapper pin: "${retired}"`);
+  }
+}
+
+const releaseDocs = read('docs/release.md');
+for (const sentence of [
+  'What your agent must do',
+  'Leave that section with no steps when the release needs nothing from an agent',
+  'consume.md#agents',
+  'fast-forwards the shared checkout',
+]) {
+  if (!releaseDocs.includes(sentence)) {
+    fail(`docs/release.md must lock the shared-checkout release step: missing "${sentence}"`);
+  }
+}
+for (const retired of ['move-a-wrapper-pin', 'stopgap']) {
+  if (releaseDocs.includes(retired)) {
+    fail(`docs/release.md must not keep the retired wrapper pin: "${retired}"`);
+  }
+}
+
+const teamSetup = read('docs/team-setup.md');
+if (!teamSetup.includes('shared checkout on `main`') || teamSetup.includes('issue #15')) {
+  fail('docs/team-setup.md must point team bots at the shared checkout on main');
+}
+if (read('docs/agency-ops.md').includes('move-a-wrapper-pin') || read('docs/agency-ops.md').includes('pins a release tag')) {
+  fail('docs/agency-ops.md must not keep the retired wrapper pin');
 }
 
 const burndownSkill = read('skills/daily-burndown/SKILL.md');
