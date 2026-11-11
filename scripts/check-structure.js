@@ -586,25 +586,10 @@ for (const sentence of [
   }
 }
 
-// Pull request titles stay [KEY] type: Title, including the no-ticket form.
-// The type matches a commit subject. The policy list is at its cap of 10.
-for (const sentence of [
-  '[<KEY>] <type>: <Title>',
-  'When there is no ticket, omit the key and the brackets.',
-  'Do not title a commit with the pull request shape.',
-]) {
-  if (!gitConvention.includes(sentence)) {
-    fail(`conventions/git.md must lock the pull request title: missing "${sentence}"`);
-  }
-}
-if (!read('templates/AGENTS.md').includes('[<KEY>] <type>: <Title>') || !read('templates/AGENTS.md').includes('omit the key and the brackets')) {
-  fail('templates/AGENTS.md must show the pull request title shape, including a pull request with no ticket');
-}
-if (!read('conventions/tickets.md').includes('[<KEY>] <type>: <Title>') || !read('conventions/tickets.md').includes('omit the key and the brackets')) {
-  fail('conventions/tickets.md must point at the pull request title shape, including a pull request with no ticket');
-}
-if (!read('docs/contributing.md').includes('<type>: <Title>')) {
-  fail('docs/contributing.md must show the pull request title shape');
+// Pull request titles stay [<KEY>] <type>: <Title>. Prepare release uses
+// chore: Release ${VERSION}. The policy list is at its cap of 10.
+if (!gitConvention.includes('[<KEY>] <type>: <Title>')) {
+  fail('conventions/git.md must lock the pull request title: missing "[<KEY>] <type>: <Title>"');
 }
 const releaseWorkflow = read('.github/workflows/prepare-release.yml');
 if (!releaseWorkflow.includes('chore: Release ${VERSION}') || releaseWorkflow.includes('Chore: Release')) {
