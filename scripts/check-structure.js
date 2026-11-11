@@ -586,10 +586,10 @@ for (const sentence of [
   }
 }
 
-// Pull request titles stay [KEY] Type: Title, including the no-ticket form.
-// Commit subjects stay a different shape. The policy list is at its cap of 10.
+// Pull request titles stay [KEY] type: Title, including the no-ticket form.
+// The type matches a commit subject. The policy list is at its cap of 10.
 for (const sentence of [
-  '[<KEY>] <Type>: <Title>',
+  '[<KEY>] <type>: <Title>',
   'When there is no ticket, omit the key and the brackets.',
   'Do not title a commit with the pull request shape.',
 ]) {
@@ -597,18 +597,18 @@ for (const sentence of [
     fail(`conventions/git.md must lock the pull request title: missing "${sentence}"`);
   }
 }
-if (!read('templates/AGENTS.md').includes('[<KEY>] <Type>: <Title>') || !read('templates/AGENTS.md').includes('omit the key and the brackets')) {
+if (!read('templates/AGENTS.md').includes('[<KEY>] <type>: <Title>') || !read('templates/AGENTS.md').includes('omit the key and the brackets')) {
   fail('templates/AGENTS.md must show the pull request title shape, including a pull request with no ticket');
 }
-if (!read('conventions/tickets.md').includes('[<KEY>] <Type>: <Title>') || !read('conventions/tickets.md').includes('omit the key and the brackets')) {
+if (!read('conventions/tickets.md').includes('[<KEY>] <type>: <Title>') || !read('conventions/tickets.md').includes('omit the key and the brackets')) {
   fail('conventions/tickets.md must point at the pull request title shape, including a pull request with no ticket');
 }
-if (!read('docs/contributing.md').includes('<Type>: <Title>')) {
+if (!read('docs/contributing.md').includes('<type>: <Title>')) {
   fail('docs/contributing.md must show the pull request title shape');
 }
 const releaseWorkflow = read('.github/workflows/prepare-release.yml');
-if (!releaseWorkflow.includes('Chore: Release ${VERSION}') || releaseWorkflow.includes('chore: Release')) {
-  fail('prepare-release must title its pull request Chore: Release when there is no ticket');
+if (!releaseWorkflow.includes('chore: Release ${VERSION}') || releaseWorkflow.includes('Chore: Release')) {
+  fail('prepare-release must title its pull request chore: Release when there is no ticket');
 }
 
 // Principles index ↔ leaves.
