@@ -1,30 +1,32 @@
-## Cloud agents
+## Cursor Cloud specific instructions
 
 Install and start for the Cursor Cloud Agent Environment. How an Environment differs from the GitHub App is in neat-os [docs/cursor-environments.md](https://github.com/shedcollective/neat-os/blob/develop/docs/cursor-environments.md). This section is this repo's install, hosts, and services.
 
-A secret or a network rule reaches only agents and VMs started after the change. A long-running agent VM keeps the previous environment. Verify on an agent started after the save.
+A credential a script reads is a Runtime Secret. An install-time secret is team or environment scope, because a user secret is not available during a Build. A secret reaches only an agent started after the save. An allowlist change applies to an agent that is already running.
+
+`start.sh` runs `refresh_dependencies` because the feature branch is checked out on top of a Build and may change the lockfiles.
+
+Check that services are healthy before running tests. `start` may not block the agent.
+
+Prefer OIDC to a long-lived cloud key. See [Cloud agent security and network](https://cursor.com/docs/cloud-agent/security-network).
 
 ### Secrets
 
-Names only. Values stay in Cursor Team secrets as Runtime Secrets. Do not write a token into this repo.
+Names only. Values stay in Cursor secrets. Do not write a token into this repo.
 
 | Name | Used for |
 | --- | --- |
-| `COMPOSER_GITHUB_TOKEN` | Composer GitHub OAuth, built in memory as `COMPOSER_AUTH`. Not the injected `GITHUB_TOKEN`, and not `gh auth token`. |
+| {{name}} | {{used for}} |
 
-Delete a row this repo does not use. `COMPOSER_GITHUB_TOKEN` is a fine-grained personal access token with public-repo read, owned by an account outside the organisation.
+Delete a row this repo does not use.
 
 ### Network hosts
 
-Least trust: only the hosts setup and start contact. A metadata registry stays closed when every lockfile dist URL is already on a host in this table.
+Least trust: only the hosts setup and start contact. A metadata registry stays closed when every lockfile dist URL is already on a host in this table. On a strict allowlist, include `cloud-agent-artifacts.s3.us-east-1.amazonaws.com` exactly. Do not use a wildcard.
 
 | Host | Why |
 | --- | --- |
-| `github.com` | Git |
-| `api.github.com` | GitHub API, Composer rate limit, and GitHub archive dist URLs |
-| `codeload.github.com` | GitHub archive downloads |
-| `objects.githubusercontent.com` | Release assets |
-| `raw.githubusercontent.com` | Raw files a script fetches |
+| {{host}} | {{why}} |
 
 ### Services
 

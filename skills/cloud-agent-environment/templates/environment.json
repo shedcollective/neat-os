@@ -1,7 +1,4 @@
 {
   "install": "bash .agents/scripts/setup.sh",
-  "start": "bash .agents/scripts/start.sh",
-  "repositoryDependencies": [
-    "github.com/shedcollective/neat-os"
-  ]
+  "start": "bash .agents/scripts/start.sh"
 }

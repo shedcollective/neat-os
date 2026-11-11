@@ -63,10 +63,27 @@ if (environmentJson.install !== 'bash .agents/scripts/setup.sh' || environmentJs
 if (environmentJson.$schema) {
   throw new Error('environment.json template must not set $schema');
 }
+if (!environmentJson.start) {
+  throw new Error('environment.json template must keep a start field');
+}
+if (Object.prototype.hasOwnProperty.call(environmentJson, 'repositoryDependencies')) {
+  throw new Error('environment.json template must not set repositoryDependencies');
+}
+
+const setupSh = fs.readFileSync(path.join(templateDir, 'setup.sh'), 'utf8');
+if (/probe-hosts\.sh[\s\S]*github\.com/.test(setupSh)) {
+  throw new Error('setup.sh template must not probe GitHub hosts by default');
+}
 
 const agentsSection = fs.readFileSync(path.join(templateDir, 'AGENTS.cloud-agents.md'), 'utf8');
-if (!agentsSection.includes('COMPOSER_GITHUB_TOKEN') || !agentsSection.includes('{{service}}')) {
-  throw new Error('AGENTS cloud-agents template must name the Composer secret and leave a service placeholder');
+if (agentsSection.includes('COMPOSER_GITHUB_TOKEN') || !agentsSection.includes('{{service}}')) {
+  throw new Error('AGENTS template must leave a service placeholder and must not default a Composer secret');
+}
+if (!agentsSection.includes('## Cursor Cloud specific instructions')) {
+  throw new Error('AGENTS template heading must be Cursor Cloud specific instructions');
+}
+if (fs.existsSync(path.join(helperDir, 'extract-image-dist.sh'))) {
+  throw new Error('extract-image-dist.sh must not ship with this playbook');
 }
 
 const resolvedHelpers = runHelper(path.join(templateDir, 'resolve-helper-dir.sh'), [root]).trim();

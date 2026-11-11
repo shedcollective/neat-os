@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Install step for .cursor/environment.json. Idempotent. Must exit.
-# Toolchains and lockfile installs belong here. Long-running processes belong in start.sh.
-# A snapshot keeps files and drops processes. Do not delete package-manager caches.
+# Dependencies, toolchains, and cache warming belong here.
+# System packages and compilers belong in the base image, not in start.sh.
+# Do not delete package-manager caches.
 set -euo pipefail
 
 usage() {
@@ -26,29 +27,19 @@ cd "$(dirname "$0")/../.."
 
 H="$(bash "$(dirname "$0")/resolve-helper-dir.sh")"
 
-# Least trust: probe only the hosts this install contacts. Add a host when a
-# lockfile dist URL or a toolchain download uses it. Leave a metadata registry
-# off this list when every dist URL is already on a host here.
-# GitHub baseline for lockfiles whose archives come from GitHub:
-bash "$H/probe-hosts.sh" \
-  github.com \
-  api.github.com \
-  codeload.github.com \
-  objects.githubusercontent.com \
-  raw.githubusercontent.com
+# Probe only the hosts this install contacts. Add a host when a lockfile
+# dist URL or a toolchain download uses it. Leave a metadata registry off
+# this list when every dist URL is already on a host here. The unfilled
+# template has no hosts, so it does not probe.
 
 install_dependencies() {
   # Replace this body from the lockfiles in this repo.
   # The installer is the one named in conventions/lockfile.md.
   # Do not bake a lockfile hash into this file. The stamp lives outside the worktree.
-  #
-  # Composer, when composer.lock dist URLs are on GitHub:
-  #   bash "$H/install-if-lockfile-changed.sh" \
-  #     --lockfile composer.lock -- \
-  #     bash "$H/guard-no-source-fallback.sh" --composer -- \
-  #     composer install --prefer-dist --no-interaction --no-progress
+  # If this repo uses Composer, follow neat-os skills/cloud-agent-environment/stacks/composer.md.
   #
   # npm, when package-lock.json is the lockfile (allow registry.npmjs.org only if the lockfile uses it):
+  #   bash "$H/probe-hosts.sh" registry.npmjs.org
   #   bash "$H/install-if-lockfile-changed.sh" \
   #     --lockfile package-lock.json -- \
   #     bash "$H/guard-no-source-fallback.sh" -- \
