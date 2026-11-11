@@ -1,6 +1,6 @@
 # keep-human-gates
 
-Humans merge, release, deploy and approve destructive or hard-to-reverse actions, and no reply is never approval. A gate is automated only once it has become chore rather than value, and that is a human decision recorded in the pull request that automates the gate.
+Humans merge, release, deploy and approve destructive or hard-to-reverse actions, and silence is not approval. A gate is automated only once it has become chore rather than value, and that is a human decision recorded in the pull request that automates the gate.
 
 **Applies when** a playbook reaches a merge, tag, release, deployment, credential, client communication, or a deletion outside the agreed scope; when an agent is tempted to "just merge" a green stack; when a gate has had no reply.
 

@@ -28,7 +28,7 @@ Read this index at the start of any multi-step task. Open a principle when its *
 
 | Principle | Rule |
 | --- | --- |
-| [keep-human-gates](keep-human-gates.md) | Humans merge, release and approve destructive actions; no reply is never approval, and a gate is automated only once it is chore rather than value. |
+| [keep-human-gates](keep-human-gates.md) | Humans merge, release and approve destructive actions; silence is not approval, and a gate is automated only once it is chore rather than value. |
 | [surface-conflicts](surface-conflicts.md) | When instructions conflict or scope changes materially, stop and surface it; do not guess and do not block silently. |
 
 ## Adding a principle
