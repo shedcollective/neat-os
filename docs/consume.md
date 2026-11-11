@@ -1,12 +1,12 @@
 # Install neat-os in a product repository
 
-"Consume" is the word this repository uses for installing neat-os so that an agent working in a product repository can find the playbooks, principles, and conventions. This page holds the install recipes, and the recipe for moving a wrapper pin. The root README and the package READMEs point here and do not repeat them.
+"Consume" is the word this repository uses for installing neat-os so that an agent working in a product repository can find the playbooks, principles, and conventions. This page holds the install recipes, and how team and personal agents read the shared checkout. The root README and the package READMEs point here and do not repeat them.
 
 Access for the git pin is GitHub read access to `shedcollective/neat-os`. The same SSH key or token that clones the product repository installs neat-os from git, for both Node and Composer.
 
 The Node package is `@shedcollective/neat-os`, defined by the root [`package.json`](../package.json). The Composer package is `shedcollective/neat-os`, defined by the root [`composer.json`](../composer.json). One release tag versions both. See [release.md](release.md).
 
-A product repository installs the Node package from GitHub Packages. Agents and Cloud Agents keep the git pin. The token a Cloud Agent receives gets a 403 from the npm registry. Do not create a Packages token for an agent. Composer stays on a VCS repository entry. See [ADR-0019](decisions/0019-publish-github-packages.md).
+A product repository installs the Node package from GitHub Packages. An agent working in that repository, and a Cloud Agent, keeps the git pin. The token a Cloud Agent receives gets a 403 from the npm registry. Do not create a Packages token for an agent. Composer stays on a VCS repository entry. See [ADR-0019](decisions/0019-publish-github-packages.md).
 
 ## Pick the situation that matches yours
 
@@ -134,6 +134,10 @@ One SSH key, or one token in `~/.composer/auth.json`, covers every product repos
 
 The root [`composer.json`](../composer.json) is the Composer source of truth. [`packages/composer/`](../packages/composer/) is the library code, not the entry point. Pin the release version day to day. Use `dev-develop` only for unreleased work. Moving an existing pin is in [Move to a new tagged release](#move-to-a-new-tagged-release).
 
+## Running a playbook
+
+Resolve neat-os in the locked order in [How agents find neat-os](#how-agents-find-neat-os) and stop at the first hit. Do not search the public web for neat-os. Do not copy playbooks into a product repository. Copying files into `.agents/skills/` is not an install; see [Pick the situation that matches yours](#pick-the-situation-that-matches-yours).
+
 ## How agents find neat-os
 
 An agent that needs the neat-os root, or needs to run `init`, `gather`, or `learn`, searches these locations in order and stops at the first hit. The order is implemented in [`skills/init/scripts/resolve-consume.sh`](../skills/init/scripts/resolve-consume.sh) and in `require('@shedcollective/neat-os').resolveConsume()`, and is locked by [ADR-0003](decisions/0003-resolve-order.md).
@@ -145,7 +149,7 @@ An agent that needs the neat-os root, or needs to run `init`, `gather`, or `lear
 
 If the current directory is itself a neat-os tree, the resolver reports mode `checkout`. That happens only when working in this repository. Product repositories never see it.
 
-If all four miss, the agent tells the person how to install neat-os (a git dependency or a sibling checkout) and stops. It does not search the web and does not invent install steps.
+If all four miss, the agent tells the person how to install neat-os (a git dependency or a sibling checkout) and stops. It does not invent install steps. [Running a playbook](#running-a-playbook) is the rule against searching the public web and against copying playbooks into the product repository.
 
 ## Move to a new tagged release
 
@@ -180,24 +184,43 @@ Pin an exact tag. `npm ci` and `composer install` install the locked commit, so 
 
 After the pin moves, update the product repository's guide only where [`templates/AGENTS.md`](../templates/AGENTS.md) or a [convention](../conventions/README.md) changed a sentence that the guide copied. Do not write the release version into that repository's `AGENTS.md` or `.agents/project.md`. The pin is `package.json`. The [Company knowledge](../templates/.agents/project.md#company-knowledge) slot records the consume mode, not the tag.
 
-## Move a wrapper pin
+## Agents
 
-A wrapper is not a product repository. It reads playbooks from `<neat-os-path>` at a pinned release tag ([templates/ops/bot-skill.md](../templates/ops/bot-skill.md), [ADR-0022](decisions/0022-wrapper-shared-path.md)). The pin rule is in [routine-settings.md](../conventions/routine-settings.md) ([ADR-0021](decisions/0021-wrapper-release-tag-pins.md)). After a release, bump that tag. How the shared path is populated is not this page ([issue #15](https://github.com/shedcollective/neat-os/issues/15)).
+Team and personal agents read playbooks from one shared checkout of `shedcollective/neat-os` on `main`. They do not pin a tag, and they do not install neat-os into an agent skill store. An agent working in a product repository still uses the install on this page and the [resolve order](#how-agents-find-neat-os). The rule for the shared checkout is [routine-settings.md](../conventions/routine-settings.md).
 
-1. Pick one wrapper as the canary. Change its pin from the old tag to the new tag (`vX.Y.Z`).
-2. Open one pull request for that wrapper. A person reviews and merges.
-3. Watch one run. If it fails, revert that pull request to roll back.
-4. Repeat for each remaining wrapper, one pull request each.
+`main` is the source of truth. It always equals the latest release tag. Only a release is merged to it.
 
-Do not pin `develop`. Do not pin `main` except as a stopgap until the next tag. Filled wrappers live outside this repository. This page does not list them.
+Each computer has one checkout. Exactly one named maintainer on that computer fetches and fast-forwards it on `main` at midnight local time and when a release lands. That maintainer never commits to the checkout. The named maintainer follows [`os-checkout-sync`](../skills/os-checkout-sync/SKILL.md). From that checkout:
+
+```bash
+git fetch --tags --prune
+git switch main
+git merge --ff-only origin/main
+```
+
+If the fast-forward fails, stop. Do not merge another branch into that checkout.
+
+Every other agent only reads the checkout. It never fetches, pulls, or fast-forwards it, and it keeps no copy of its own. The agent's configuration holds one value, the absolute path `<neat-os-path>`, and no playbook text. The agent does not keep a saved copy, does not keep a copy in its skill store, and does not fetch a playbook from the web. If the checkout is missing, off `main`, or behind the latest release, the agent says so and stops for that run. Every output records `neat-os vX.Y.Z (sha)` in the file, not in chat. The run steps are in [templates/ops/bot-skill.md](../templates/ops/bot-skill.md).
+
+`<neat-os-path>` is `/home/box/shared/neat-os`. Every agent on the computer shares that checkout.
+
+### One-off migration
+
+Paste the note below into each team or personal agent. Replace `<neat-os-path>` with `/home/box/shared/neat-os`. After the agent has deleted its saved copies, the note is not part of the steady state. The configuration keeps the path.
+
+```text
+Read neat-os only from <neat-os-path>, the one shared checkout on main. Delete every saved copy of a playbook, including any copy in this agent's skill store. Do not fetch playbooks from the web. Do not fetch, pull, or fast-forward the checkout. On every run, confirm the checkout is on main and at the latest release tag. If it is missing, off main, or behind the latest release, say so and stop. Write neat-os vX.Y.Z (sha) in the file, not in chat.
+```
+
+Do not put a client, a project, a person, or a token in the note.
 
 ## Access
 
-An agent needs GitHub read access to `shedcollective/neat-os`, through the organisation's team permissions, over HTTPS or SSH. Cloud Agents use the token of the Cursor GitHub App installation. That token cannot read GitHub Packages (403). Do not create a Packages token for an agent. Agents install with the git pin on this page. A person or CI that installs from the registry uses a token with `read:packages`, as in [GitHub Packages](#github-packages) ([ADR-0019](decisions/0019-publish-github-packages.md)).
+An agent needs GitHub read access to `shedcollective/neat-os`, through the organisation's team permissions, over HTTPS or SSH. Cloud Agents use the token of the Cursor GitHub App installation. That token cannot read GitHub Packages (403). Do not create a Packages token for an agent. An agent in a product repository installs with the git pin on this page. A team or personal agent reads the shared checkout ([Agents](#agents)) and does not pin a tag. A person or CI that installs from the registry uses a token with `read:packages`, as in [GitHub Packages](#github-packages) ([ADR-0019](decisions/0019-publish-github-packages.md)).
 
 ## Moving from shed-os
 
-Releases from 0.4.0 use the name neat-os. The version notes are in [CHANGELOG.md](../CHANGELOG.md). A repository that already pins shed-os changes three things, then refreshes the lockfile as in [Move to a new tagged release](#move-to-a-new-tagged-release).
+Releases from 0.4.0 use the name neat-os. The notes for a release are on its GitHub Release ([release.md](release.md)). A repository that already pins shed-os changes three things, then refreshes the lockfile as in [Move to a new tagged release](#move-to-a-new-tagged-release).
 
 1. Replace the git pin with `github:shedcollective/neat-os#vX.Y.Z`. In `package.json` that is `git+ssh://git@github.com/shedcollective/neat-os.git#vX.Y.Z`, and the package name is `@shedcollective/neat-os`.
 2. In Composer, replace `shedcollective/shed-os` with `shedcollective/neat-os` and point the VCS URL at `shedcollective/neat-os`. The PHP class is `Neat\Os\NeatOs`.

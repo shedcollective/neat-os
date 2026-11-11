@@ -57,7 +57,7 @@ The `repositoryDependencies` setting in `.cursor/environment.json` widens the ag
 | Default branch | `develop` |
 | `main` | Pull requests only, no direct pushes, once the team is ready to enforce it |
 | Install | GitHub Packages or a git pin for Node, and Composer VCS for PHP. Agents use the git pin. See [consume.md](consume.md) ([ADR-0019](decisions/0019-publish-github-packages.md)). |
-| Agent files | Created by `init`, filled by `gather`, with `learn` run later when useful. See [launch-skills.md](launch-skills.md). |
+| Agent files | Created by `init`, filled by `gather`, with `learn` run later when useful. See [adoption.md](adoption.md). |
 | Skills | Read from the installed package. Never copied into `.agents/skills/`. |
 | Agent Guide | Kept rich and in the repository. `gather` fills it; `init` does not. |
 | First smoke test | Install only. No deploy, no edits to client content. One pull request that shows the install working is enough. |
@@ -87,6 +87,6 @@ Every team bot has a **bot passport** before it runs a routine. Copy [templates/
 
 The passport lists every skill (OS playbook, passport enhancement, or bot-only) and every routine. Install only the routines whose Owner is this passport's owner. Skip a routine when a wrapper for that owner, name, and schedule already exists. Two passports never share a wrapper path.
 
-Role-neutral examples for the design agent and the UX agent are [templates/agent/passport-design.md](../templates/agent/passport-design.md) and [templates/agent/passport-ux.md](../templates/agent/passport-ux.md). Copy one into the private record and fill the team's facts. Their rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md). Design playbooks are `design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, and `design-handoff`. `design-qa` belongs to the assurance role. UX playbooks are `ux-audit`, `research-synthesis`, and `wireframes`.
+Design and UX agent rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md). The playbooks are listed in [skills/README.md](../skills/README.md). `design-qa` belongs to the assurance role.
 
-The pin on that passport is a neat-os release tag. The wrapper that runs the routine uses the same pin and reads playbooks from `<neat-os-path>` at that tag ([routine-settings.md](../conventions/routine-settings.md), [ADR-0022](decisions/0022-wrapper-shared-path.md)). If the path or the tag is missing, the wrapper stops. How that path is populated is [issue #15](https://github.com/shedcollective/neat-os/issues/15).
+The wrapper reads playbooks from the shared checkout on `main` ([routine-settings.md](../conventions/routine-settings.md)). It does not pin a tag. It does not fetch, pull, or fast-forward the checkout. The named maintainer fast-forwards that checkout with [`os-checkout-sync`](../skills/os-checkout-sync/SKILL.md).

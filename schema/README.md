@@ -11,7 +11,7 @@ neat-os is built from six kinds of thing. Before adding a file, decide which kin
 | **Script** | Deterministic code. Same input, same output. The source of truth for "green". | Software can do or check the thing. Prefer this over prose every time it is possible. | `skills/*/scripts/`, `scripts/` | Executable with `--help`; exits non-zero on failure; no interactive prompts unless a TTY is present. |
 | **Agent** | A subagent definition with separate context, used for independent challenge or verification. | Separate context would improve challenge (reviewer, QA) rather than add ceremony. | `agents/` (not yet present; add only with a demonstrated need) | One file per role: job, boundary, what it must not do. |
 
-Two things that are *not* mechanisms: **project knowledge** (lives in the product repo's `AGENTS.md` and `.agents/`, filled by `gather`) and **decisions** (live in [`docs/decisions/`](../docs/decisions/README.md) as ADRs and explain why a mechanism exists).
+Two things that are *not* mechanisms: **project knowledge** (lives in the product repo's `AGENTS.md` and `.agents/`, filled by `gather`) and **decisions** (the records in [`docs/decisions/`](../docs/decisions/README.md) explain why a mechanism exists; new records are paused until v1). [PURPOSE.md](../PURPOSE.md) is not a mechanism either. It states what neat-os is for.
 
 ## Choosing by what the thing is for
 
@@ -29,7 +29,7 @@ If you know what a piece of knowledge is for but not which kind of file it shoul
 Type is read from location and shape, not from a list kept here. `scripts/check-structure.js` derives the skill set from `skills/*/` and asserts each frontmatter `name` equals its directory, so adding a mechanism never edits this page.
 
 - Every `skills/<name>/SKILL.md` is a **playbook** or a **skill**; the `SKILL.md` frontmatter is the discovery unit for both. It is a playbook if its body is an ordered step list with a *Stop* criterion, a skill if it is a single capability. A `scripts/` directory beside it holds the **scripts** it delegates to; a playbook with no `scripts/` is deterministic through the convention it applies and the tool the runner already has (a ticket system, a package manager).
-- The **launch playbooks** are the ones a product repo runs to adopt neat-os; they are named in [ADR-0002](../docs/decisions/0002-launch-skill-split.md) and asserted present by `check-structure`. Every other entry under `skills/` is on-demand.
+- The **adoption playbooks (`init`, `gather`, `learn`)** are the ones a product repo runs to adopt neat-os; they are named in [ADR-0002](../docs/decisions/0002-launch-skill-split.md) and asserted present by `check-structure`. Every other entry under `skills/` is on-demand.
 - Every `conventions/<topic>.md` listed in `conventions/README.md` is a **convention**.
 - Every `principles/<slug>.md` listed in `principles/README.md` under a goal is a **principle**. Kaizen, Determinism and Parallelism are the three *goals* the principles serve, not principles themselves.
 - `scripts/check*` and anything under `skills/*/scripts/` are **scripts**.
@@ -39,6 +39,7 @@ Type is read from location and shape, not from a list kept here. `scripts/check-
 ## Authoring rules (all mechanisms)
 
 - State a rule once. Other files point at it by path; they do not restate it.
+- A new rule or proposal states which aim of [PURPOSE.md](../PURPOSE.md) it serves.
 - Keep only prose that changes a decision. Tell the agent what to do; explain only when the rule is confusing without a reason.
 - When a rule can be a script, make it a script and delete the prose (see [encode-lessons-in-structure](../principles/encode-lessons-in-structure.md)).
 - When in doubt, delete.

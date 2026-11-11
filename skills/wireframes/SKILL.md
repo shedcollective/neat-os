@@ -12,8 +12,6 @@ description: >-
 
 Produce the information architecture (IA) and wireframes for a site or product. Follow [conventions/design-ux-agents.md](../../conventions/design-ux-agents.md#wireframe-projects).
 
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
-
 ## When to use
 
 - The asker wants a primary navigation, sitemap, page layouts, canonical and SEO rules, and a clickable wireframe for a new or rebuilt site.
@@ -27,7 +25,7 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 
 ## Steps
 
-1. **Intake.** Fill the card: client lead, lock owner, audience, deadline, the dedicated throwaway wireframe repository, the cloud agent model the asker wants, house style rules, confidential yes or no. Stop if the lock owner or the throwaway repository is missing.
+1. **Intake.** Fill the card: client lead, audience, deadline, the dedicated throwaway wireframe repository, the cloud agent model the asker wants, house style rules. Stop if the throwaway repository is missing.
 2. **Gather every source in full.** Structure documents, the client's service or product material, meeting transcripts, email threads, whiteboard exports with their images, and any earlier IA. Pass the full text to the cloud agent, not a summary. A summary loses the detail the reviewer will look for first. Ask the asker for anything you cannot open. Do not brief around a missing source.
 3. **Write the brief.** Goal, deliverables, hard constraints, conflict rules (which source wins for structure, for labels, for weight), success tests, and the sources. Read the brief back before you send it. Never send a placeholder or an empty follow-up.
 4. **Deliverables in the throwaway repository**:
@@ -45,7 +43,7 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 11. **Checks in the build.** Every internal link and anchor resolves. Every page names only components in the library. Banned words fail the build. The house style rules hold (for example no em dashes). Re-running the build gives no diff.
 12. **Open a pull request in the throwaway repository.** Use the branch preview for review. Report the pull request link, the preview link, the counts from step 5, what changed per page, the judgement calls, and the open items. In that dedicated throwaway repository, self-merge is allowed. Do not merge in this repository or in any product or client codebase. Never a product repository.
 13. **Feedback rounds.** Each round: add the feedback as a new lettered source, apply only what it asks, log the decisions, and hold anything the client floated but did not decide as an open item. A client sketch is a layout, not a cut list: keep sections it does not draw unless told to cut them. Locked IA decisions win over a new sketch; log the clash.
-14. **Independent review, once.** When the asker wants a fresh eye, run one or two reviewers with the same rubric (menu clarity, unit identity, link versus button, states, mobile, source coverage), then write one synthesis. Do not fan out many reviewers on the same question.
+14. **Independent review, once.** When the asker wants a fresh eye, run one or two reviewers with the same rubric (menu clarity, unit identity, link versus button, mobile, source coverage, and the whole-flow check in [`ux-audit`](../ux-audit/SKILL.md) step 2), then write one synthesis. Do not fan out many reviewers on the same question.
 15. **Client-facing report.** When asked, write it present tense, from the top: no change history, no decision numbers, an evidence note per section. Hand it to the asker as a new draft document. The client lead sends it.
 
 ## Stop

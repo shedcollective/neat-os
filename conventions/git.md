@@ -10,6 +10,8 @@
 - Release branches from `develop` → `main` (and back to `develop`)
 - Hotfixes from `main`
 
+A product repository tags its release with the `release` playbook ([../skills/release/SKILL.md](../skills/release/SKILL.md)).
+
 Agents branch from `develop` and open PRs **into `develop` only**. Humans merge. When the ticket is a GitHub Issue, the pull request that targets `develop` includes `Closes #<n>` in its body ([tickets.md](tickets.md)).
 
 ### PR titles
@@ -17,21 +19,35 @@ Agents branch from `develop` and open PRs **into `develop` only**. Humans merge.
 **Locked.** Every pull request title, stacked or not:
 
 ```
-[<KEY>] <type>: <description>
+[<KEY>] <type>: <Title>
 ```
 
 Stacked steps keep the same shape with an infix after the key:
 
 ```
-[<KEY>] (<step>/<total>) <type>: <description-of-step>
+[<KEY>] (<step>/<total>) <type>: <Title>
 ```
 
 - `<KEY>` is the ticket key in capitals (`GH-42`, `ACME-123`; see [tickets.md](tickets.md))
-- `<type>` is lowercase Conventional Commits: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`, or `style`
-- The description is sentence case
+- `<type>` is the lowercase Conventional Commits type a commit subject uses: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`, or `style`
+- `<Title>` is sentence case, and its first word starts with a capital letter
+- When there is no ticket, omit the key and the brackets. Do not invent a key, and do not write empty brackets. A stacked step with no ticket keeps the step count and omits the key: `(<step>/<total>) <type>: <Title>`.
 - Do not put the ticket in parentheses at the end of the title
 
+These titles show the shape. `GH-42` and `ACME-123` are placeholders from [tickets.md](tickets.md) and [neutral-reference.md](neutral-reference.md). They are not tickets in this repository.
+
+```
+[GH-42] feat: Checkout
+[ACME-123] fix: Homepage nav colour
+[GH-42] docs: Describe checkout in the guide
+fix: Homepage nav colour
+```
+
+The last line is a pull request with no ticket.
+
 Commits stay Conventional Commits (`feat|fix|chore|refactor|docs|test|style`), with the ticket key in the subject or footer per [tickets.md](tickets.md). Do not title a commit with the pull request shape.
+
+Why the key is in brackets: the title is the line a person reads in the list, and the line a neat-os release copies into its notes ([docs/release.md](../docs/release.md)). The brackets keep the ticket key separate from the type.
 
 ### Stacked PRs
 
@@ -39,7 +55,7 @@ Commits stay Conventional Commits (`feat|fix|chore|refactor|docs|test|style`), w
 
 **Step 0 is the feature branch.** Branched from `develop`, opened with a single empty commit (`git commit --allow-empty`) as a **Draft** PR into `develop`. It is the only PR in the stack that targets `develop`, and it is merged last, once every step is in.
 
-**Steps.** Step 1 branches from the feature branch; step *n* from step *n−1*. Each step PR targets the branch beneath it. Steps merge bottom-up into the feature branch (delete the step branch on merge so GitHub retargets the next step). Each step carries its own Conventional Commits type.
+**Steps.** Step 1 branches from the feature branch; step *n* from step *n−1*. Each step PR targets the branch beneath it. Steps merge bottom-up into the feature branch (delete the step branch on merge so GitHub retargets the next step). Each step title uses its own type from [PR titles](#pr-titles).
 
 `<step>/<total>` is the position in the stack and the stack size. If a step is split, retitle every step in the stack the same day.
 
@@ -48,26 +64,45 @@ Branch names are the lowercase slug form (no spaces, brackets or `/` inside the 
 Example, one feature in four steps. `GH-42` is the placeholder key from [tickets.md](tickets.md), not an issue in this repository:
 
 ```
-[GH-42] feat: checkout                                 feature/gh-42-checkout  → develop (draft)
-[GH-42] (1/4) feat: add the basket                     feature/gh-42-1-basket  → feature/gh-42-checkout
-[GH-42] (2/4) feat: add the address step               feature/gh-42-2-address → feature/gh-42-1-basket
-[GH-42] (3/4) docs: describe checkout in the guide     feature/gh-42-3-docs    → feature/gh-42-2-address
-[GH-42] (4/4) chore: prepare the release               feature/gh-42-4-release → feature/gh-42-3-docs
+[GH-42] feat: Checkout                                 feature/gh-42-checkout  → develop (draft)
+[GH-42] (1/4) feat: Add the basket                     feature/gh-42-1-basket  → feature/gh-42-checkout
+[GH-42] (2/4) feat: Add the address step               feature/gh-42-2-address → feature/gh-42-1-basket
+[GH-42] (3/4) docs: Describe checkout in the guide     feature/gh-42-3-docs    → feature/gh-42-2-address
+[GH-42] (4/4) chore: Prepare the release               feature/gh-42-4-release → feature/gh-42-3-docs
 ```
 
 Humans merge every PR in the stack, steps included; review happens per step and the feature-branch merge is the final gate. Nothing in a stack targets `main`.
 
-**A pending merge never blocks the next step.** The agent branches step *n+1* from the head of step *n* as soon as step *n* is merge-ready (PR open, CI green, evidence posted) and continues. When step *n* merges, the agent rebases the open steps above it. When `develop` moves, it merges `develop` into the feature branch and rebases the steps. Keeping a stack merge-ready is agent work; pressing merge is not.
+**A pending merge never blocks the next step.** Waiting on a person, such as a pending merge or review, never blocks. Red always does ([red-is-a-stop](../principles/red-is-a-stop.md)). The agent branches step *n+1* from the head of step *n* as soon as step *n* is merge-ready (PR open, CI green, evidence posted) and continues. When any step in a stack goes red, the agent fixes that step before adding or rebasing any step above it. Steps below the red one are unaffected. A step that merged on green and later goes red counts as red on its target branch. Red on `develop` remains the first task. When step *n* merges, the agent rebases the open steps above it that are not stacked on red. When `develop` moves and is green, it merges `develop` into the feature branch and rebases the steps that are not stacked on red. Keeping a stack merge-ready is agent work; pressing merge is not.
 
-A single, unstacked PR uses plain Conventional Commits with the key: `feat(gather): … (GH-42)`.
+Why a red step stops the steps above it: [ADR-0024](../docs/decisions/0024-red-stops-a-stack.md).
+
+A single, unstacked pull request uses the locked title in [PR titles](#pr-titles). Commits keep the `(GH-42)` form in [tickets.md](tickets.md#where-the-key-goes).
 
 ### Commits
 
 **Locked.** Each commit is one concern, so a reviewer can read it on its own. The message says what changed and why. A pull request may hold several commits. Do not put the whole piece of work into one commit because those commits land together. Do not split so thinly that an intermediate commit does not stand on its own.
 
+While working, commit whenever is convenient. A work-in-progress commit is fine. What matters is the shape of the history a reviewer reads, not when the commits were made.
+
+An agent may reshape and force-push its own branch until review starts, so each commit is one concern. An abandoned attempt, such as a dependency that was tried and then removed, does not appear. Once a person is reviewing, do not rewrite the branch history. Add new commits for feedback.
+
+A genuinely tiny change is one commit. That is one concern in a few lines, such as a wording fix in one file. Do not split that change, and do not add a commit so the count looks larger.
+
 When a piece of work is recorded as several commits, order them so a reviewer can follow the change from the first commit to the last. When the work includes documentation, that documentation is the first commit. After that, a commit comes before the commits that depend on it.
 
+A typical fix that also refactors, adds a test, and includes a config or dependency change is four commits in the history a reviewer reads. `GH-42` is the placeholder key from [tickets.md](tickets.md), not an issue in this repository. The refactor comes first, then the behaviour change, then the test that covers it, then the config or dependency change. When one of them would not stand without an earlier commit, that earlier commit comes first. When the work also changes a guide, that documentation commit is first, before these four:
+
+```
+refactor: extract the quantity check so the fix can land on its own (GH-42)
+fix: reject a negative quantity before the basket saves (GH-42)
+test: cover a negative quantity on the basket (GH-42)
+chore: bump the quantity validator the basket calls (GH-42)
+```
+
 Subjects stay Conventional Commits (`feat|fix|chore|refactor|docs|test|style`), with the ticket key per [tickets.md](tickets.md).
+
+Who the author is, and that a co-author trailer is allowed, is [attribution.md](attribution.md).
 
 Stacked pull requests split review. They do not put each commit in its own pull request.
 
@@ -79,6 +114,7 @@ Why this shape is locked: [ADR-0014](../docs/decisions/0014-commit-shape-for-rev
 | --- | --- |
 | Workflow is git-flow | Here (do not ask in `gather`) |
 | This repo’s integration branch is actually named `develop` | Project `.agents/`. Confirm only if it might differ |
+| This repo’s production branch is `main`. A product repo may use another name | Project `.agents/project.md` Release slot |
 | Ticket prefix (Jira key, or `GH` for OS repos) | Project `.agents/` ([tickets.md](tickets.md) says which system) |
 | Feature branch / plan-file naming for *this* ticket scheme | Project `AGENTS.md` (template already has the pattern) |
 

@@ -1,6 +1,6 @@
 # 0016 — The public tree is a neutral reference
 
-**Status:** Accepted
+**Status:** Partially superseded by 0023
 **Date:** 2026-10-08
 
 ## Context

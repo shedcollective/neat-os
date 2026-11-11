@@ -10,6 +10,8 @@
 
 neat-os is the shared knowledge that Shed's AI agents work from. It is an operating standard: the fixed set of rules and procedures the agents run on, whichever project they are working in. It is a git repository that every Shed product repository installs. It holds the principles agents apply while deciding, the engineering conventions every Shed repo shares, the playbooks, the template files those playbooks copy, the ADRs that record why a locked behaviour exists, and the stack packs under [`stacks/`](stacks/). Everything lives in this repository so a Cursor Cloud Agent can read it with a git checkout and nothing else.
 
+[PURPOSE.md](PURPOSE.md) states what neat-os is for. A director owns it, and it changes only by pull request.
+
 `init` leaves an empty stack-pack slot. `gather` points a product repo at the matching pack. Tool-specific knowledge will live in separate `neat-os-tool-*` repositories later. They are not part of this one. Together with neat-os they are the OS repos. Everything else at Shed is a product repo.
 
 It is also the agency rulebook for shared operations playbooks. Living operational state stays in a private operations repository; the rules and playbooks stay here ([docs/agency-ops.md](docs/agency-ops.md)).
@@ -54,7 +56,7 @@ Each goal has a few one-line principles beneath it. The index is [principles/REA
   </picture>
 </p>
 
-The six kinds of mechanism are defined in [schema/README.md](schema/README.md). Project knowledge lives in the product repository. Decisions live as ADRs. Reviewer agents are not in the tree yet.
+The six kinds of mechanism are defined in [schema/README.md](schema/README.md). Project knowledge lives in the product repository. New architecture decision records are paused until v1 ([docs/decisions/](docs/decisions/README.md)). Reviewer agents are not in the tree yet.
 
 ## Two ways in
 
@@ -66,7 +68,7 @@ The six kinds of mechanism are defined in [schema/README.md](schema/README.md). 
   </picture>
 </p>
 
-Pin a release tag (`#vX.Y.Z`) for a product repository. `#develop` is for unreleased work. How a release happens is in [docs/release.md](docs/release.md). First install, moving an existing install, and moving from shed-os are in [docs/consume.md](docs/consume.md), and nowhere else.
+Pin a release tag (`#vX.Y.Z`) for a product repository. `#develop` is for unreleased work. How a release happens is in [docs/release.md](docs/release.md). First install, moving an existing install, how team and personal agents read the shared checkout, and moving from shed-os are in [docs/consume.md](docs/consume.md), and nowhere else.
 
 ### On your computer, in the Cursor IDE
 
@@ -108,14 +110,7 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 
 ## The playbooks
 
-- `init` creates the `AGENTS.md` and `.agents/` files in a product repository from the templates. It leaves every placeholder empty.
-- `gather` fills those files from evidence in the repository, then interviews you for what the tree cannot show, starting with the client and the product. It is not finished until those two are real answers.
-- `learn` reads recent commits and merges and drafts proposals for what could become a shared principle or playbook. It never publishes them. A person opens that pull request.
-- `ticket` creates a Jira Task from a brief, or enhances an existing one, in the shape and tone the client can read ([conventions/ticket-content.md](conventions/ticket-content.md)). It writes to Jira only, never to the repository.
-- `assurance` reads one pull request against its ticket and posts an evidence pack. It does not implement, push, approve, or merge.
-- `pin-majors-with-reasons` upgrades dependencies by blast radius and does not take a pinned major on a routine bump.
-
-`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`, `daily-digest`, `morning-brief`, `bids-register`, `finance-client-backfill`, `finance-client-sync`, `finance-lookup`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design playbooks (`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, `design-handoff`), the assurance playbook `design-qa`, and UX playbooks (`ux-audit`, `research-synthesis`, `wireframes`) follow [conventions/design-ux-agents.md](conventions/design-ux-agents.md). All playbooks are under [skills/](skills/).
+The playbooks are listed in [skills/README.md](skills/README.md). What the adoption playbooks (`init`, `gather`, `learn`) and `ticket` do is described in [docs/adoption.md](docs/adoption.md). Agency operations playbooks are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design and UX rules are [conventions/design-ux-agents.md](conventions/design-ux-agents.md).
 
 `daily-digest` turns the day file into a short end-of-day post for a team channel. `morning-brief` composes one morning message per person and replaces separate morning health, digest, day-plan, and meeting-prep brief messages. Agency operations playbooks take their inputs from the settings in [conventions/routine-settings.md](conventions/routine-settings.md).
 
@@ -125,11 +120,11 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/concept-5-releases-pinning-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="docs/assets/readme/concept-5-releases-pinning-light.svg">
-    <img alt="Work happens on develop. A release/X.Y.Z branch is cut from develop and merged into main by a person, who publishes the vX.Y.Z GitHub Release with changelog notes. Product repos pin a tag (or #develop for unreleased work), so several repos can sit on different tags: in the example, repo A is on v1.0.0, repo B on v1.1.0 and repo C on v1.2.0. A person moves a pin by hand: new tag, update the dependency, commit the lockfile. Grey cubes mark steps a person does." src="docs/assets/readme/concept-5-releases-pinning-light.svg" width="100%">
+    <img alt="Work happens on develop. A release/X.Y.Z branch is cut from develop and merged into main by a person, who publishes the vX.Y.Z GitHub Release. The notes are the merged pull request titles, plus a migration note when consumers must change something. Product repos pin a tag (or #develop for unreleased work), so several repos can sit on different tags: in the example, repo A is on v1.0.0, repo B on v1.1.0 and repo C on v1.2.0. A person moves a pin by hand: new tag, update the dependency, commit the lockfile. Grey cubes mark steps a person does." src="docs/assets/readme/concept-5-releases-pinning-light.svg" width="100%">
   </picture>
 </p>
 
-Work lands on `develop`. A release-prep pull request sets the version. Prepare release opens `release/X.Y.Z` into `main` and a draft Release. A person merges that pull request with a merge commit and publishes the draft. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
+Work lands on `develop`. A release-prep pull request sets the version. Prepare release opens `release/X.Y.Z` into `main` and a draft Release. A person merges that pull request with a merge commit and publishes the draft. The Release notes are the merged pull request titles, plus a migration note when consumers must change something. Product repositories pin that tag. `#develop` is for unreleased work. Several product repositories can sit on different tags. A person moves a pin by changing the tag, updating the dependency, and committing the lockfile. Node runs `npm update`. Composer runs `composer update`. The steps are in [docs/release.md](docs/release.md) and [docs/consume.md](docs/consume.md).
 
 ### Working on neat-os itself
 
@@ -141,18 +136,18 @@ Work lands on `develop`. A release-prep pull request sets the version. Prepare r
 
 | Page | What it covers |
 | --- | --- |
+| [PURPOSE.md](PURPOSE.md) | What neat-os is for |
 | [docs/README.md](docs/README.md) | Where documentation lives and the full map |
-| [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, moving an existing install, and moving from shed-os |
-| [docs/launch-skills.md](docs/launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` do, and where `assurance` and `pin-majors-with-reasons` live |
+| [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, running a playbook, moving an existing install, and moving from shed-os |
+| [docs/adoption.md](docs/adoption.md) | What the adoption playbooks (`init`, `gather`, `learn`) and `ticket` do. The list of playbooks is [skills/README.md](skills/README.md) |
 | [docs/cursor-environments.md](docs/cursor-environments.md) | The GitHub App, Cloud Agent Environments, and how they differ |
 | [docs/team-setup.md](docs/team-setup.md) | Cursor and GitHub administration for the team |
-| [docs/release.md](docs/release.md) | How neat-os is released on `shedcollective/neat-os` |
-| [CHANGELOG.md](CHANGELOG.md) | What changed in each version, including the move from shed-os |
+| [docs/release.md](docs/release.md) | How neat-os is released on `shedcollective/neat-os`. Notes are on the GitHub Release |
 | [docs/faq.md](docs/faq.md) | Problems we have hit and their fixes |
 | [docs/contributing.md](docs/contributing.md) | How to change neat-os |
-| [docs/decisions/](docs/decisions/README.md) | Why locked behaviour is the way it is |
+| [docs/decisions/](docs/decisions/README.md) | Why locked behaviour is the way it is. New records are paused until v1 |
 
-Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of mechanism that make up neat-os (principle, convention, playbook, skill, script, agent) are defined in [schema/README.md](schema/README.md). How pages are written is locked in [conventions/writing.md](conventions/writing.md).
+Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of mechanism that make up neat-os (principle, convention, playbook, skill, script, agent) are defined in [schema/README.md](schema/README.md). How pages are written is locked in [conventions/writing.md](conventions/writing.md). Prose comments are locked in [conventions/code-comments.md](conventions/code-comments.md).
 
 ## What neat-os does not do
 

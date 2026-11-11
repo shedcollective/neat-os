@@ -2,18 +2,29 @@
 'use strict';
 
 /**
- * Neutral-reference check (ADR-0016, conventions/neutral-reference.md).
+ * Neutral-reference check (ADR-0016, ADR-0023). conventions/neutral-reference.md.
  *
- * Scans the tree for names a public reference must not carry. Not a policy
- * entry: scripts/check-policy.js is capped at 10.
+ * Keeps Shed's business out of what this repository publishes. Scans the tree
+ * and, on a pull_request event, the pull request title, the body, the branch
+ * name, and the commit messages in that pull request only. It does not read
+ * commit authors or committers, or commits outside the pull request range.
+ * Not a policy entry: scripts/check-policy.js is capped at 10.
  *
- * On a GitHub Actions pull_request event the check also reads the pull
- * request body and the commit messages in that pull request. The platform
- * wraps the author text in CURSOR_AGENT_PR_BODY_BEGIN / END and appends a
- * footer after the end marker. Only the text between the markers is checked.
- * A body without the markers is checked in full.
+ * There is no list of client, client company, or client project names. A list
+ * would need maintaining. Generic patterns cover what they can see. A plain
+ * name, or a quote from Slack or another internal discussion, is review. The
+ * pull request template asks the reviewer to confirm that.
  *
- * This file is not scanned. It holds the patterns.
+ * A mailbox in a commit message is not a hit, in the body or on a trailer
+ * line. The mailbox pattern still applies to files, the pull request title,
+ * the pull request body, and the branch name. The other generic patterns still
+ * apply to commit messages.
+ *
+ * The platform wraps the pull request body in CURSOR_AGENT_PR_BODY_BEGIN / END
+ * and appends a footer after the end marker. Only the text between the markers
+ * is checked. A body without the markers is checked in full.
+ *
+ * This file holds the generic patterns, so the tree scan skips it.
  */
 
 const fs = require('fs');
@@ -48,7 +59,9 @@ function emailAllowed(address) {
   return example !== -1 && example < labels.length - 1;
 }
 
-function scan(rel, text) {
+function scan(rel, text, options = {}) {
+  const skipEmail = options.skipEmail === true;
+  const emailOnly = options.emailOnly === true;
   const hits = [];
   const phraseExempt = PHRASE_EXEMPT.has(rel);
   const lines = String(text).split('\n');
@@ -59,39 +72,39 @@ function scan(rel, text) {
       hits.push(`${rel}:${lineNo} ${rule}${excerpt ? `: ${excerpt}` : ''}`);
     };
 
-    for (const match of line.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)) {
-      if (!emailAllowed(match[0])) add('email');
+    if (!skipEmail) {
+      for (const match of line.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)) {
+        if (!emailAllowed(match[0])) add('email');
+      }
     }
+    // A branch slug is misread by the other generic patterns. The mailbox
+    // pattern is the generic layer that applies to it.
+    if (emailOnly) return;
     // A Slack id is an uppercase token that contains a digit. A word such as
     // CODEOWNERS or UNLICENSED is not one.
     if (/(?<![A-Za-z0-9])[CDUW](?=[A-Z0-9]*\d)[A-Z0-9]{8,11}(?![A-Za-z0-9])/.test(line)) add('slack id');
+    // Any host under slack.com is a workspace, except Slack's public API docs.
+    for (const match of line.matchAll(/(?<![A-Za-z0-9.-])((?:[A-Za-z0-9-]+\.)+slack\.com)(?![A-Za-z0-9-])/gi)) {
+      if (match[1].toLowerCase() !== 'api.slack.com') add('slack link');
+    }
     if (/[A-Za-z0-9.-]+\.atlassian\.net/i.test(line)) add('atlassian host');
 
-    const handle = /(^|[^A-Za-z0-9@])@([A-Za-z0-9][A-Za-z0-9-]{0,38})/g;
-    for (const match of line.matchAll(handle)) {
-      const login = match[2];
-      const after = line.slice(match.index + match[0].length);
-      if (/^\/[A-Za-z0-9][A-Za-z0-9._-]*/.test(after)) continue;
-      // Publisher scope, including the split path form and @shedcollective:registry.
-      if (login.toLowerCase() === 'shedcollective') continue;
-      // CSS at-rules in SVG and stylesheets are not logins.
-      if (login.toLowerCase() === 'media' || login.toLowerCase() === 'keyframes') continue;
-      // userinfo@host in a URL, such as a token at github.com. Not a mention.
-      if (after.startsWith('.')) continue;
-      add('handle');
-    }
-
-    if (!phraseExempt && /co-authored-by/i.test(line)) add('co-author trailer');
     if (!phraseExempt && /\b(ask|tell|ping)\s+me\b/i.test(line)) add('ask/tell/ping me');
     if (!phraseExempt && /\bmy\s+(pr|repo|agent)\b/i.test(line)) add('my pr/repo/agent');
 
-    // A letter prefix and a number of at least two digits. One-digit forms
+    // An uppercase prefix and a number of at least two digits. One-digit forms
     // such as utf-8 and PSR-4 are standards, not keys.
-    for (const match of line.matchAll(/\b([A-Za-z]{2,10})-(\d{2,})\b/g)) {
+    for (const match of line.matchAll(/\b([A-Z]{2,10})-(\d{2,})\b/g)) {
       if (!KEY_PREFIXES.has(match[1].toUpperCase())) add(`ticket key ${match[0]}`);
     }
   });
   return hits;
+}
+
+function commitHits(item) {
+  const label = `commit ${(item.sha || '').slice(0, 7)}`;
+  const message = (item.commit && item.commit.message) || '';
+  return scan(label, message, { skipEmail: true });
 }
 
 function walk(dir, out = []) {
@@ -131,7 +144,14 @@ async function pullRequestHits() {
   const pr = event.pull_request;
   if (!pr) return [];
 
-  const hits = scan('pull request body', authorBody(pr.body || ''));
+  // Slack ids, ticket keys, and chatter phrases misread a branch slug.
+  // The mailbox pattern still applies to it.
+  const branch = (pr.head && pr.head.ref) || '';
+  const hits = [
+    ...scan('pull request title', pr.title || ''),
+    ...scan('pull request body', authorBody(pr.body || '')),
+    ...scan('pull request branch', branch, { emailOnly: true }),
+  ];
   const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
   if (!token || !repo || !pr.number) {
@@ -153,11 +173,7 @@ async function pullRequestHits() {
       throw new Error(`check-neutral: could not read pull request commits (${response.status}) ${detail.slice(0, 200)}`);
     }
     const data = await response.json();
-    for (const item of data) {
-      const sha = (item.sha || '').slice(0, 7);
-      const message = (item.commit && item.commit.message) || '';
-      hits.push(...scan(`commit ${sha}`, message));
-    }
+    for (const item of data) hits.push(...commitHits(item));
     url = data.length < 100 ? '' : nextLink(response.headers.get('link'));
   }
   return hits;
@@ -174,20 +190,59 @@ function selfTest() {
   assertCase('example mailbox', scan('t', 'write dev@example.com and a@example.org'), false);
   assertCase('mailbox', scan('t', 'write dev@elsewhere.test'), true);
   assertCase('git ssh', scan('t', 'git@github.com'), false);
-  assertCase('scope', scan('t', "require('@shedcollective/neat-os') and @acme/site"), false);
-  assertCase('login placeholder', scan('t', 'assign @<login>'), false);
-  assertCase('handle', scan('t', 'assign @someone'), true);
-  assertCase('css at-rule', scan('t', '@media screen { @keyframes spin {} }'), false);
+  assertCase('publisher scope and url host', scan('t', "path.join('@shedcollective', 'neat-os') and " + '${GH_TOKEN}@github.com'), false);
+  assertCase('people may be named', scan('t', 'Reviewed by @someone, @<login>, and a named person.'), false);
+  assertCase('plain name is left to review', scan('notes.md', 'Work for Northwind this week.'), false);
   assertCase('allowed keys', scan('t', 'GH-42 ADR-0016 ACME-123 TICKET-99 acme-42'), false);
   assertCase('ticket key', scan('t', 'see ZZ-99'), true);
+  const lowerPrefix = scan('t', 'zz-99');
+  const upperPrefix = scan('t', 'ZZ-99');
+  if (lowerPrefix.length !== 0 || upperPrefix.length === 0) {
+    throw new Error(
+      `check-neutral self-test lowercase prefix is not a key: ${lowerPrefix.join(' | ') || 'none'}; ${upperPrefix.join(' | ') || 'expected a hit'}`,
+    );
+  }
   assertCase('not a ticket key', scan('t', 'utf-8 psr-4 PSR-4 v0-1 feature/gh-19-v0-1-0-batch'), false);
+  assertCase('merge subject is not a ticket key', scan('t', 'merge: develop into feature/assurance-pack-comment-1511'), false);
   assertCase('not a slack id', scan('t', 'CODEOWNERS UNLICENSED GITHUB_WORKSPACE CANDIDATE'), false);
-  assertCase('publisher scope and url host', scan('t', "path.join('@shedcollective', 'neat-os') and " + '${GH_TOKEN}@github.com'), false);
   assertCase('slack', scan('t', 'ping U0123456789'), true);
+  assertCase('slack link', scan('t', 'see https://acme.slack.com/archives/general'), true);
+  assertCase('slack app link', scan('t', 'open app.slack.com/client'), true);
+  assertCase('slack public docs', scan('t', 'https://api.slack.com/methods and https://slack.com/help'), false);
   assertCase('atlassian', scan('t', 'https://acme.atlassian.net/browse/ACME-1'), true);
   assertCase('phrases', scan('t', 'please ask me about my repo'), true);
-  assertCase('convention may name the phrase', scan('conventions/neutral-reference.md', 'Do not write ask me or Co-authored-by'), false);
-  assertCase('trailer', scan('t', 'Co-authored-by: A <a@example.com>'), true);
+  assertCase('convention may name the phrase', scan('conventions/neutral-reference.md', 'Do not write ask me'), false);
+  assertCase(
+    'commit trailer mailbox',
+    commitHits({ sha: 'abcdef1', commit: { message: 'docs: record the rule (GH-38)\n\nCo-authored-by: Example Person <someone@realdomain.test>\n' } }),
+    false,
+  );
+  assertCase(
+    'commit body mailbox',
+    commitHits({ sha: 'abcdef3', commit: { message: 'docs: record the rule (GH-38)\n\nWrite to someone@realdomain.test about the change.\n' } }),
+    false,
+  );
+  assertCase('pull request body mailbox', scan('pull request body', 'Write to someone@realdomain.test about the change.'), true);
+  assertCase('pull request title mailbox', scan('pull request title', 'Note someone@realdomain.test'), true);
+  assertCase('branch mailbox', scan('pull request branch', 'feature/someone@realdomain.test', { emailOnly: true }), true);
+  assertCase('branch slug is not a ticket key', scan('pull request branch', 'feature/zz-99-login', { emailOnly: true }), false);
+  assertCase(
+    'commit chatter',
+    commitHits({ sha: 'abcdef4', commit: { message: 'docs: record the rule (GH-38)\n\nplease ask me\n' } }),
+    true,
+  );
+  assertCase(
+    'commit identity is not read',
+    commitHits({
+      sha: 'abcdef0',
+      commit: {
+        message: 'docs: record the rule (GH-38)\n',
+        author: { name: 'Example Developer', email: 'dev@elsewhere.test' },
+        committer: { name: 'Example Bot', email: 'bot@elsewhere.test' },
+      },
+    }),
+    false,
+  );
   const wrapped = `${BEGIN}\nACME-1 is fine\n${END}\nCo-authored-by: Bot <bot@elsewhere.test>\nplease ask me`;
   assertCase('platform footer', scan('pull request body', authorBody(wrapped)), false);
   assertCase('unmarked body', scan('pull request body', authorBody('please ask me')), true);
@@ -197,7 +252,9 @@ function help() {
   console.log(`Usage: node scripts/check-neutral.js
 
 Scans the repository for the neutral-reference rules in conventions/neutral-reference.md.
-In a GitHub Actions pull_request job, the pull request body and its commit messages are scanned too.
+In a GitHub Actions pull_request job, the pull request title, the body, the branch name, and the commit messages in that pull request are checked too.
+A mailbox in a commit message is not a hit. The mailbox pattern still applies to files, the title, the body, and the branch name.
+There is no list of client names. A plain name is left to review.
 `);
 }
 

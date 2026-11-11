@@ -7,9 +7,9 @@ How to change neat-os. People merge. Agents open the pull request and keep CI gr
 The rules are locked in [conventions/git.md](../conventions/git.md). In short:
 
 - Branch from `develop` and open pull requests into `develop` only.
-- For a large change, use a stack: a feature branch holds the whole change, each step branches from the previous step and targets it, and the title is `[GH-n] (<step>/<total>) <type>: <description>`.
+- For a large change, use a stack: a feature branch holds the whole change, each step branches from the previous step and targets it, and the title is `[GH-n] (<step>/<total>) <type>: <Title>` ([conventions/git.md](../conventions/git.md#pr-titles)).
 - Merge with merge commits, not squash ([ADR-0005](decisions/0005-merge-commits-not-squash.md)). `learn` reads merge history, and a squash erases it.
-- Write commit messages as Conventional Commits (`feat`, `fix`, `chore`, `refactor`, `docs`, `test`, `style`) with the ticket key. Commit shape (one concern, what and why, documentation first, then an order a reviewer can follow) is locked in [conventions/git.md](../conventions/git.md) ([ADR-0014](decisions/0014-commit-shape-for-review.md)).
+- Write commit messages as Conventional Commits (`feat`, `fix`, `chore`, `refactor`, `docs`, `test`, `style`) with the ticket key. An agent may reshape and force-push its own branch until review starts ([conventions/git.md](../conventions/git.md#commits), [ADR-0014](decisions/0014-commit-shape-for-review.md)).
 - A release is `develop` merged to `main` and tagged. Agents do not tag `main`. See [release.md](release.md).
 
 ## Tickets
@@ -24,6 +24,8 @@ bash scripts/check
 
 `npm test` runs the same command. It runs four scripts in order: structure, policy, the neutral reference, then smoke. The same command runs locally, in CI, and for agents. Do not weaken an assertion to make a documentation edit pass. It needs Node 22 and bash, and no npm dependencies.
 
+A pull request does not record release notes. Those notes are written in the GitHub Release at tag time ([release.md](release.md)).
+
 ## Adding a file
 
 Decide which kind of mechanism it is before you create it. The six kinds are defined in [schema/README.md](../schema/README.md). If a file is none of the six, it probably should not exist.
@@ -32,20 +34,24 @@ Decide which kind of mechanism it is before you create it. The six kinds are def
 | --- | --- |
 | Principle | One judgement rule that changed a real decision in shipped work and cannot be checked by software. Create `principles/<slug>.md` with the sections *Applies when*, *The decision it changes*, and *Source*, and add it under a goal in `principles/README.md`. Keep the set small, and delete a principle that stops changing behaviour ([ADR-0018](decisions/0018-no-numeric-principle-cap.md)). Candidates usually arrive as `learn` proposals, and a person elevates them. |
 | Convention | A fact every Shed repository shares, such as git-flow or which ticket system to use. Create `conventions/<topic>.md` and list it in `conventions/README.md`. Playbooks read it, and `gather` must not ask about it. |
-| Playbook | An ordered sequence whose failure mode is a skipped step. Launch playbooks are `init`, `gather`, and `learn`. On-demand playbooks also live under `skills/<name>/SKILL.md` (today: [`pin-majors-with-reasons`](../skills/pin-majors-with-reasons/SKILL.md), [`assurance`](../skills/assurance/SKILL.md)). The frontmatter has `name` and `description`; the body has *When to use*, *Steps*, and *Stop*. |
+| Playbook | An ordered sequence whose failure mode is a skipped step. It lives at `skills/<name>/SKILL.md` and is listed in [skills/README.md](../skills/README.md). The frontmatter has `name` and `description`; the body has *When to use*, *Steps*, and *Stop*. |
 | Skill | A capability a playbook step invokes. Same `SKILL.md` shape. Keep it short. |
 | Script | Deterministic code: the same input gives the same output. It has `--help`, exits non-zero on failure, and prompts only when a terminal is attached. Prefer a script to prose whenever software can do the job ([encode-lessons-in-structure](../principles/encode-lessons-in-structure.md)). Scripts live in `skills/*/scripts/` or `scripts/`. |
 | Agent | A subagent with its own context. Do not add an `agents/` folder until there is a demonstrated need. |
 
-Two things are deliberately not on that list. Project knowledge (a product repository's `AGENTS.md` and `.agents/`) is filled by `gather` and belongs to that repository. Decisions belong in `docs/decisions/` as architecture decision records. Do not edit an accepted record except to change its Status. To reverse a decision, write a new record that links back.
+Two things are deliberately not on that list. Project knowledge (a product repository's `AGENTS.md` and `.agents/`) is filled by `gather` and belongs to that repository. Until v1, the reason for a rule change goes in the pull request body, and the rule carries a short Why. The records in [docs/decisions/](decisions/README.md) stay as history.
+
+[PURPOSE.md](../PURPOSE.md) is not one of those kinds. It states what neat-os is for. A director owns it, and it changes only by pull request.
 
 State a rule once and have other files point at it by path. When in doubt, delete.
+
+A new rule or proposal states which aim of [PURPOSE.md](../PURPOSE.md) it serves.
 
 Stack packs are playbook-shaped files under [`stacks/<name>/`](../stacks/). They are company stack guidance, read from the resolved tree, not a seventh mechanism ([ADR-0013](decisions/0013-stack-packs-in-shed-os.md)).
 
 ## Writing
 
-Every page a person reads follows [conventions/writing.md](../conventions/writing.md): write for a developer who has only the repository, one page does one job, plain words, one name per thing. The root [README.md](../README.md) is the entry point and pages under `docs/` go deeper. Install recipes appear only in [consume.md](consume.md). No page links to notes kept outside the repository ([ADR-0008](decisions/0008-repo-is-source-of-truth.md)).
+Every page a person reads follows [conventions/writing.md](../conventions/writing.md): write for a developer who has only the repository, one page does one job, plain words, one name per thing. Prose comments follow [conventions/code-comments.md](../conventions/code-comments.md). The root [README.md](../README.md) is the entry point and pages under `docs/` go deeper. Install recipes appear only in [consume.md](consume.md). No page links to notes kept outside the repository ([ADR-0008](decisions/0008-repo-is-source-of-truth.md)).
 
 ## Out of bounds
 

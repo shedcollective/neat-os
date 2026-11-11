@@ -1,19 +1,22 @@
 # Release
 
-Releases of neat-os happen on `shedcollective/neat-os`. `develop` is the integration branch and always holds the newest reviewed work. A release is a git tag on `main`, published as a GitHub Release. That tag is what product repositories pin, for both Node and Composer. The notes for a release come from [CHANGELOG.md](../CHANGELOG.md).
+Releases of neat-os happen on `shedcollective/neat-os`. `develop` is the integration branch and always holds the newest reviewed work. A release is a git tag on `main`, published as a GitHub Release. That tag is what product repositories pin, for both Node and Composer. The notes are written in that GitHub Release at tag time, from the titles of the pull requests merged to `develop` since the previous tag. When consumers must change something, the Release also carries a migration note, and it always carries a section titled `What your agent must do`. Leave that section with no steps when the release needs nothing from an agent.
 
 People merge and people release ([keep-human-gates](../principles/keep-human-gates.md)). Agents prepare the pull request. They do not tag `main`.
+
+Product repositories release with the [`release` playbook](../skills/release/SKILL.md); this page covers neat-os itself.
 
 Product repositories pin a release. The git pin is `github:shedcollective/neat-os#vX.Y.Z`. A product repository may instead install the same version from GitHub Packages. Both recipes are in [consume.md](consume.md). [ADR-0017](decisions/0017-consume-via-github-packages.md) is partially superseded by [ADR-0019](decisions/0019-publish-github-packages.md): publishing is on, and agents still install from git. `.github/workflows/publish-npm.yml` publishes the Release tag to GitHub Packages. The licence is MIT.
 
 ## Steps
 
-1. Open a release-prep pull request into `develop`. It sets the version in the root `package.json`, `packages/npm/package.json`, and the root `composer.json`, and it moves the matching section in [CHANGELOG.md](../CHANGELOG.md) off the unreleased heading. Merge that pull request. Feature work still arrives on `develop` through reviewed pull requests ([conventions/git.md](../conventions/git.md)).
-2. Run Prepare release (`.github/workflows/prepare-release.yml`) on `develop`. The input is the version `X.Y.Z`, with no leading `v`. The workflow checks that `develop` is already at that version. If it is not, the run fails. The release-prep pull request is still required. When the check passes, the workflow creates `release/X.Y.Z` from `develop`, opens a pull request into `main`, and creates a draft Release `vX.Y.Z` whose target is the branch `main`. It does not merge and it does not publish. The draft notes are the `X.Y.Z` section of [CHANGELOG.md](../CHANGELOG.md). Before it finishes, the workflow reads the draft back and fails unless the Release is still a draft and its target is the branch `main`.
+1. Open a release-prep pull request into `develop`. It sets the version in the root `package.json`, `packages/npm/package.json`, and the root `composer.json`. Merge that pull request. Feature work still arrives on `develop` through reviewed pull requests ([conventions/git.md](../conventions/git.md)).
+2. Run Prepare release (`.github/workflows/prepare-release.yml`) on `develop`. The input is the version `X.Y.Z`, with no leading `v`. The workflow checks that `develop` is already at that version. If it is not, the run fails. The release-prep pull request is still required. When the check passes, the workflow creates `release/X.Y.Z` from `develop`, opens a pull request into `main`, and creates a draft Release `vX.Y.Z` whose target is the branch `main`. It does not merge and it does not publish. The draft notes are the titles of the pull requests merged to `develop` since the previous tag. When consumers must change something, add a migration note to that draft before publishing, and add a section titled `What your agent must do`. Leave that section with no steps when the release needs nothing from an agent. Before it finishes, the workflow reads the draft back and fails unless the Release is still a draft and its target is the branch `main`.
 3. Merge that pull request into `main` with a merge commit, not a squash.
 4. Publish the draft Release only after that pull request is merged. GitHub creates the tag `vX.Y.Z` when the draft is published. The tag points at the tip of `main` at that moment. Publishing before the merge tags the previous tip of `main`, which does not contain the release commit. The tag must match the version in the three manifests from step 1. Composer ignores a tag whose `composer.json` declares a different version.
 5. Confirm `release-smoke` and `publish-npm` passed on that Release. `release-smoke` installs the tag from git into a scratch project and asserts the skills folder exists and `resolveConsume().mode` is `node_modules`. `publish-npm` publishes that tag to GitHub Packages. Both jobs fetch the full history and fail before that work when the tag commit is not reachable from `main`.
-6. Merge `main` back into `develop` so the release commit is not missing from the integration branch.
+6. On each computer, the named maintainer fast-forwards the shared checkout so `main` matches this release. That maintainer never commits to the checkout. Follow [`os-checkout-sync`](../skills/os-checkout-sync/SKILL.md). The commands are in [consume.md](consume.md#agents). Every other agent only reads that checkout on the next run. They do not fetch, pull, or fast-forward it, and they do not pin a tag.
+7. Merge `main` back into `develop` so the release commit is not missing from the integration branch.
 
 Product repositories then pin the tag: `git+ssh://git@github.com/shedcollective/neat-os.git#vX.Y.Z` for Node, or the version with no leading `v` for Composer. A repository that already pins neat-os changes the tag and refreshes the lockfile in the same commit. The steps are in [consume.md](consume.md#move-to-a-new-tagged-release). Moving from a shed-os pin is in [consume.md](consume.md#moving-from-shed-os).
 
@@ -68,8 +71,10 @@ If a tag or Release landed on the wrong commit:
 ```bash
 gh release delete vX.Y.Z --cleanup-tag --yes   # when a Release exists
 git push origin --delete vX.Y.Z               # when only the tag exists
-gh release create vX.Y.Z --target main --title "vX.Y.Z" --notes "…"
+gh release create vX.Y.Z --draft --target main --title "vX.Y.Z" --notes "…"
 ```
+
+Check that the draft targets `main`, then publish it, the same as in [Publish the draft](#publish-the-draft).
 
 ## Who does what
 
@@ -78,6 +83,7 @@ gh release create vX.Y.Z --target main --title "vX.Y.Z" --notes "…"
 | Contributors and agents | Branch from `develop` and open pull requests into `develop`. Stacked pull requests follow [conventions/git.md](../conventions/git.md#stacked-prs). |
 | People | Merge the release-prep pull request, run Prepare release, merge the `main` pull request with a merge commit, publish the draft Release, confirm `release-smoke` and `publish-npm`, and merge `main` back into `develop`. |
 | Product repositories | Pin a release tag. Moving an existing pin, including the lockfile, is in [consume.md](consume.md#move-to-a-new-tagged-release). |
-| Wrappers | Pin a release tag. `main` is a stopgap only. Moving the pin is in [consume.md](consume.md#move-a-wrapper-pin) ([ADR-0021](decisions/0021-wrapper-release-tag-pins.md)). |
+| Maintainer | Exactly one named maintainer per computer. After the Release is published, fetch and fast-forward that computer's shared checkout with [`os-checkout-sync`](../skills/os-checkout-sync/SKILL.md). Never commit to it ([consume.md](consume.md#agents)). |
+| Team and personal agents | Read playbooks from that checkout on `main`. Do not fetch, pull, or fast-forward it. Do not pin a tag ([routine-settings.md](../conventions/routine-settings.md)). |
 
 Branch protection on `main` is a decision for the team, not a step on this page. Publishing runs from `.github/workflows/publish-npm.yml` when the Release is published.

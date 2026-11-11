@@ -2,9 +2,10 @@
 'use strict';
 
 /**
- * Policy lint: a short, declared list of prose invariants, each backed by an
- * ADR in docs/decisions/. This is the only place neat-os pins wording.
- * Add an entry only with an ADR; prefer a structural check when one is possible
+ * Policy lint: a short, declared list of prose invariants. Existing entries
+ * cite an ADR in docs/decisions/. This is the only place neat-os pins wording.
+ * Add an entry only with a reason in the pull request. The adr field still
+ * names an existing record. Prefer a structural check when one is possible
  * (principles/encode-lessons-in-structure.md).
  */
 
@@ -112,8 +113,16 @@ const policies = [
     adr: '0003',
     check() {
       const problems = [];
-      for (const rel of SKILLS) {
+      // Stated once: the locked-order section of the consume page, and init, which implements it.
+      // The consume page mentions a sibling checkout earlier, as one install situation, not as the order.
+      const orderText = (rel) => {
         const text = read(rel);
+        if (rel !== 'docs/consume.md') return text;
+        const start = text.indexOf('## How agents find neat-os');
+        return start < 0 ? '' : text.slice(start);
+      };
+      for (const rel of ['docs/consume.md', 'skills/init/SKILL.md']) {
+        const text = orderText(rel);
         const n = text.indexOf('node_modules/@shedcollective/neat-os');
         const s = text.indexOf('../neat-os');
         if (n < 0 || s < 0 || n > s) problems.push(`${rel} must mention node_modules before ../neat-os`);
@@ -132,7 +141,8 @@ const policies = [
     id: 'no-web-search-for-neat-os',
     adr: '0003',
     check() {
-      const bad = [...SKILLS, 'AGENTS.md', 'templates/AGENTS.md'].filter((rel) => !/search the public web/i.test(read(rel)));
+      const required = ['docs/consume.md', 'skills/init/SKILL.md', 'AGENTS.md', 'templates/AGENTS.md'];
+      const bad = required.filter((rel) => !/search the public web/i.test(read(rel)));
       return bad.length ? `missing web-search prohibition in: ${bad.join(', ')}` : '';
     },
   },

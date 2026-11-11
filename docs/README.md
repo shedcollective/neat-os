@@ -1,19 +1,19 @@
 # Documentation
 
-This repository is the source of truth for how neat-os works, why it works that way, and how it is released. Discussion happens in GitHub Issues, changes arrive as pull requests, and decisions are recorded under [decisions/](decisions/README.md). Notes kept anywhere else are drafts until they are written here, and no page in this repository links out to them ([ADR-0008](decisions/0008-repo-is-source-of-truth.md)).
+This repository is the source of truth for how neat-os works, why it works that way, and how it is released. Discussion happens in GitHub Issues, and changes arrive as pull requests. New records under [decisions/](decisions/README.md) are paused until v1. Notes kept anywhere else are drafts until they are written here, and no page in this repository links out to them ([ADR-0008](decisions/0008-repo-is-source-of-truth.md)).
 
 Each page does one job. If two pages seem to say the same thing, one of them is wrong and should point at the other instead.
 
 | Page | Job |
 | --- | --- |
-| [consume.md](consume.md) | Install neat-os in a product repository, move an existing install, move a wrapper pin, and move from shed-os. The only place the install recipes appear. |
-| [launch-skills.md](launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` each do, and where `assurance` and `pin-majors-with-reasons` live |
+| [consume.md](consume.md) | Install neat-os in a product repository, run a playbook, move an existing install, how team and personal agents read the shared checkout, and move from shed-os. The only place the install recipes appear. |
+| [adoption.md](adoption.md) | What the adoption playbooks (`init`, `gather`, `learn`) and `ticket` do. The list of playbooks is [skills/README.md](../skills/README.md) |
 | [agency-ops.md](agency-ops.md) | Agency operations playbooks and the work-logging convention; private record stays out of this tree |
 | [cursor-environments.md](cursor-environments.md) | The Cursor GitHub App, Cloud Agent Environments, and the install, kept apart |
 | [team-setup.md](team-setup.md) | Cursor team and GitHub organisation settings, the steps for a new or existing project, and the bot passport rule for team bots |
 | [release.md](release.md) | How a change on `develop` becomes a tagged release on `main` |
 | [faq.md](faq.md) | Problems we have hit, with the fix for each |
 | [contributing.md](contributing.md) | How to change neat-os: branching, the required check, and which kind of file to add |
-| [decisions/](decisions/README.md) | Architecture decision records. Why a locked behaviour exists |
+| [decisions/](decisions/README.md) | Architecture decision records, paused until v1. The index is the history |
 
 Start at the root [README.md](../README.md). Agents working in this repository read [AGENTS.md](../AGENTS.md). How these pages are written is locked in [conventions/writing.md](../conventions/writing.md).

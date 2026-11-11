@@ -3,15 +3,12 @@ name: morning-brief
 description: >-
   Compose one morning message per person from Needs you, Today, Meetings,
   Health, and Pipeline (Mondays). Replaces separate morning health, digest,
-  day-plan, and meeting-prep brief messages. Adds no new facts. Not a launch
-  playbook.
+  day-plan, and meeting-prep brief messages. Adds no new facts.
 ---
 
 # morning-brief
 
 Compose **one** morning message for the asker, from facts that already exist. This replaces separate morning health, digest, day-plan, and meeting-prep brief messages. It does **not** replace [`daily-digest`](../daily-digest/SKILL.md), which remains the end-of-day team post. Meeting follow-up still uses [`meeting-prep`](../meeting-prep/SKILL.md) mode `proposals`.
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 The composition rule sits with `daily-digest` on [docs/agency-ops.md](../../docs/agency-ops.md).
 
@@ -85,7 +82,7 @@ When every section is empty (nothing needs the person, health is green, no day-p
 - **Adds no new facts.** Distil, do not dump. Skip quiet projects and routine ticket moves.
 - **Urgent alerts stay immediate.** A red production build still alerts at once. This playbook does not delay that alert and does not replace it. If a red is still open when the brief runs, **Health** or **Needs you** may mention it.
 - The person's own connectors only (`<connectors>`). Never another person's.
-- No billing amounts, secrets, personal material, or bot names. British English ([writing.md](../../conventions/writing.md), [agent-work-logging.md](../../conventions/agent-work-logging.md), [neutral-reference.md](../../conventions/neutral-reference.md)).
+- No billing amounts, secrets, personal material, or bot names. British English ([writing.md](../../conventions/writing.md), [agent-work-logging.md](../../conventions/agent-work-logging.md)).
 - Deliver only to `<destination>`.
 
 ## Steps

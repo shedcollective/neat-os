@@ -1,6 +1,6 @@
 # keep-human-gates
 
-Humans merge, release, deploy and approve destructive or hard-to-reverse actions. A gate is automated only once it has become chore rather than value, and that is a human decision recorded as an ADR.
+Humans merge, release, deploy and approve destructive or hard-to-reverse actions. A gate is automated only once it has become chore rather than value, and that is a human decision recorded in the pull request that automates the gate.
 
 **Applies when** a playbook reaches a merge, tag, release, deployment, credential, client communication, or a deletion outside the agreed scope; when an agent is tempted to "just merge" a green stack.
 

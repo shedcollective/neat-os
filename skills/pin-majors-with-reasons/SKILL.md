@@ -9,7 +9,7 @@ Upgrade dependencies without treating `yarn outdated`, `npm outdated`, or an aut
 
 Pins for this repo live in **`.agents/dependencies/pins.md`**. That file is the source of truth. Do not keep a second pin table in the Agent Guide.
 
-This is **not** a launch playbook. Do not run it from `init`, `gather`, or `learn`. Locate it the same way as those playbooks (`resolve-consume.sh` / `require('@shedcollective/neat-os').skillsDir`). **Do not** search the public web for neat-os. **Do not** copy it into `.agents/skills/`.
+Do not run it from `init`, `gather`, or `learn`.
 
 ## When to use
 

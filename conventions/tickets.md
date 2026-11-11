@@ -18,10 +18,10 @@ If OS work is commercially scheduled (a pilot promised to a client by a date), t
 ## Where the key goes
 
 - Branch: lowercase key, e.g. `feature/acme-123-checkout-fix`, `feature/gh-42-taxonomy`
-- Commit / single PR title: Conventional Commits with the key in the subject or footer (`feat(gather): … (GH-42)`)
-- Stacked PRs: feature branch `[GH-42] feat: <description>`, steps `[GH-42] (<step>/<total>) <type>: <description-of-step>` (see [git.md](git.md#stacked-prs))
+- Commit: Conventional Commits with the key in the subject or footer (`feat(gather): … (GH-42)`)
+- Stacked PRs: feature branch `[GH-42] feat: <Title>`, steps `[GH-42] (<step>/<total>) <type>: <Title>` (see [git.md](git.md#stacked-prs))
 - GitHub Issues only: the pull request that targets `develop` includes a closing keyword in its body (`Closes #<n>`) so the issue's Development section lists the PR and merging into `develop` closes the issue. A bracketed title or a commit footer is not enough. Stacked step PRs keep `part of #<issue>` and do not use a closing keyword. Do not put a closing keyword on a Jira-keyed product-repo PR.
-- PR title: `[GH-42] feat: <description>`; stacked steps `[GH-42] (<step>/<total>) <type>: <description-of-step>` (see [git.md](git.md#pr-titles))
+- PR title: `[<KEY>] <type>: <Title>`. When there is no ticket, omit the key and the brackets. The types and the examples are in [git.md](git.md#pr-titles).
 - Feature plan: `.agents/features/<key>-overview.md` with the key lowercase (`acme-123-overview.md`, `gh-42-overview.md`)
 
 ## Project vs company

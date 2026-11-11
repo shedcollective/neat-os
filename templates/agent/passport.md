@@ -32,7 +32,7 @@ One row per skill this bot may run. Kind is **OS playbook**, **passport enhancem
 | `<enhancement>` | passport enhancement |
 | `<local>` | bot-only |
 
-- **OS playbook**: a `skills/<name>/SKILL.md` in neat-os at the pin. The wrapper follows it as written.
+- **OS playbook**: a `skills/<name>/SKILL.md` in the shared checkout on `main`. The wrapper follows it as written.
 - **passport enhancement**: an OS playbook plus extra steps or settings that are true only for this bot. Those extras live in this passport or in the wrapper's Local rules. Do not copy the playbook.
 - **bot-only**: a skill that is not an OS playbook. It lives with this bot. Do not copy it into neat-os from here.
 
@@ -48,18 +48,18 @@ A routine is identified by **owner**, **name**, and **schedule**. Skip a row whe
 
 ## Day file
 
-The default day shape is [templates/ops/burndown-day.md](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/templates/ops/burndown-day.md): Agency state first, then by project, Agency, Sources unavailable. A passport may replace the project block with its own top-level sections, for example by discipline. Agency state stays first. Sources unavailable stays last. Leave the table empty to keep the default.
+The default day shape is `<neat-os-path>/templates/ops/burndown-day.md`: Agency state first, then by project, Agency, Sources unavailable. A passport may replace the project block with its own top-level sections, for example by discipline. Agency state stays first. Sources unavailable stays last. Leave the table empty to keep the default.
 
 | Heading | Meaning |
 | --- | --- |
 
 ## Pin
 
-The neat-os release tag this bot reads playbooks from. Pin a release tag (`vX.Y.Z`). `main` is a stopgap only. `develop` and other branches never.
+This bot does not pin a release tag. It reads playbooks from the one shared checkout on `main`. The value below is `<neat-os-path>`, the absolute path of that checkout, and the configuration holds no playbook text.
 
-`vX.Y.Z`
+`/home/box/shared/neat-os`
 
-How to bump the tag is in [docs/consume.md](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/docs/consume.md#move-a-wrapper-pin). The wrapper reads that pin from `<neat-os-path>` ([ADR-0022](https://github.com/shedcollective/neat-os/blob/vX.Y.Z/docs/decisions/0022-wrapper-shared-path.md)).
+On every run, confirm the checkout is on `main` and that `HEAD` is the latest release tag. If the checkout is missing, off `main`, or behind the latest release, say so and stop. Do not fetch, pull, or fast-forward the checkout. Keep no copy of it. Write `neat-os vX.Y.Z (sha)` in the file, not in chat. The steps are in `<neat-os-path>/templates/ops/bot-skill.md`. The rule is `<neat-os-path>/conventions/routine-settings.md`.
 
 ## Review
 

@@ -20,7 +20,7 @@ Read this index at the start of any multi-step task. Open a principle when its *
 | [evidence-before-done](evidence-before-done.md) | "Done" is a claim backed by evidence from the real artefact; name what was not verified. |
 | [never-invent-facts](never-invent-facts.md) | Client, stack and environment facts come from the tree or a human; unknowns are marked visibly, never guessed. |
 | [inspect-before-inventing](inspect-before-inventing.md) | Read the existing architecture and comparable code before creating a new pattern. |
-| [red-is-a-stop](red-is-a-stop.md) | A red required check on the integration branch is the first task; nothing new is branched, stacked or merged onto red. |
+| [red-is-a-stop](red-is-a-stop.md) | A red required check on the integration branch, or on any branch another step is stacked on, is a stop; nothing new is branched, stacked or merged onto red. |
 | [use-the-declared-runtime](use-the-declared-runtime.md) | If the Agent Guide names a runtime, run the toolchain through it; host binaries are not a substitute. |
 | [enqueue-external-side-effects](enqueue-external-side-effects.md) | When a repo already queues writes to an external system, new writes use that queue. |
 

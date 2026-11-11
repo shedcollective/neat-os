@@ -2,15 +2,13 @@
 name: brand-board-from-assets
 description: >-
   Read PDF or AI brand assets through the asker's own connectors, extract a
-  brand board into a new Figma file, and list open decisions. Never edit a
-  client-owned file or publish a library.
+  brand board into a new Figma file, and list open decisions. Never publish a
+  library.
 ---
 
 # brand-board-from-assets
 
 Turn supplied brand assets into a first-pass board and an open-decisions list. Follow [conventions/design-ux-agents.md](../../conventions/design-ux-agents.md).
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 ## When to use
 
@@ -24,11 +22,11 @@ This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do
 
 ## Steps
 
-1. Read the PDF or AI assets through the asker's own connectors. If the brief is confidential, follow the client-confidential rule in the convention. Stop if the assets are missing.
+1. Read the PDF or AI assets through the asker's own connectors. Stop if the assets are missing.
 2. Extract what the assets show: colour, type, spacing, logo, and imagery notes. Flag unknowns. Do not invent tokens ([never-invent-facts](../../principles/never-invent-facts.md)).
-3. Create a **new** Figma file. Set the file name at creation. The Figma connector cannot rename a file. Never edit a client-owned file. Never publish a library.
-4. List open decisions. Write them to the reply, and to `design/<brand>/open.md` by pull request. If the brief is confidential, record a link and the decision titles only.
+3. Create a **new** Figma file. Set the file name at creation. The Figma connector cannot rename a file. Do not edit a client-owned file unless the asker says so for that file ([Client-owned Figma files](../../conventions/design-ux-agents.md#client-owned-figma-files)). Never publish a library.
+4. List open decisions in the reply, and on the Jira ticket when one exists. Do not open a pull request to `design/<brand>/open.md` for that list.
 
 ## Stop
 
-Complete when the new Figma file exists and the open-decisions list is in the reply. Not complete if a client-owned file was edited, a library was published, or a guess was written as a token.
+Complete when the new Figma file exists and the open-decisions list is in the reply. Not complete if a client-owned file was edited without the asker's say-so, a library was published, a guess was written as a token, or a pull request was opened to the operations record.
