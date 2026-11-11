@@ -591,15 +591,18 @@ if (
   fail('conventions/git.md must not require a commit as soon as a concern stands on its own');
 }
 
-// The guides name the behaviour and link the example. The example stays in
-// conventions/git.md, so a guide that only restates "one concern" is not enough.
+// The guides name the final-history rule and link the example. The example
+// stays in conventions/git.md. A guide must not require a commit as soon as a
+// concern stands on its own.
 for (const rel of ['AGENTS.md', 'templates/AGENTS.md', 'docs/contributing.md']) {
   const guide = read(rel);
-  if (!guide.includes('Commit each concern when it is done')) {
-    fail(`${rel} must tell agents to commit each concern when it is done`);
+  for (const sentence of ['commit whenever is convenient', 'Before the first push for review', '#commits']) {
+    if (!guide.includes(sentence)) {
+      fail(`${rel} must point at the commit history rule: missing "${sentence}"`);
+    }
   }
-  if (!guide.includes('#commits')) {
-    fail(`${rel} must link the commit section in conventions/git.md`);
+  if (guide.includes('Commit each concern when it is done') || guide.includes('as soon as the concern stands on its own')) {
+    fail(`${rel} must not require a commit as soon as a concern stands on its own`);
   }
 }
 
