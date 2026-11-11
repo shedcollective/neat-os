@@ -858,6 +858,7 @@ for (const sentence of [
   '/home/box/shared/neat-os',
   '## Why',
   'Not chosen',
+  'os-checkout-sync',
 ]) {
   if (!routineSettings.includes(sentence)) {
     fail(`conventions/routine-settings.md must lock the shared checkout on main: missing "${sentence}"`);
@@ -900,6 +901,7 @@ for (const sentence of [
   'never fetches, pulls, or fast-forwards',
   '/home/box/shared/neat-os',
   '/<shared>/neat-os',
+  'os-checkout-sync',
 ]) {
   if (!consumeDocs.includes(sentence)) {
     fail(`docs/consume.md Agents must lock the shared checkout: missing "${sentence}"`);
@@ -918,6 +920,7 @@ for (const sentence of [
   'consume.md#agents',
   'fast-forwards the shared checkout',
   'never commits to the checkout',
+  'os-checkout-sync',
 ]) {
   if (!releaseDocs.includes(sentence)) {
     fail(`docs/release.md must lock the shared-checkout release step: missing "${sentence}"`);
@@ -938,6 +941,9 @@ if (!teamSetup.includes('does not fetch, pull, or fast-forward the checkout')) {
 }
 if (read('docs/agency-ops.md').includes('move-a-wrapper-pin') || read('docs/agency-ops.md').includes('pins a release tag')) {
   fail('docs/agency-ops.md must not keep the retired wrapper pin');
+}
+if (!read('docs/agency-ops.md').includes('os-checkout-sync')) {
+  fail('docs/agency-ops.md must list os-checkout-sync with the maintainer playbooks');
 }
 
 const burndownSkill = read('skills/daily-burndown/SKILL.md');
