@@ -566,15 +566,29 @@ for (const sentence of [
   'that documentation is the first commit',
   'follow the change from the first commit to the last',
   'does not stand on its own',
-  'Commit each concern when it is done',
-  'one commit at the end',
+  'commit whenever is convenient',
+  'A work-in-progress commit is fine',
+  'Before the first push for review',
+  'An abandoned attempt does not appear',
+  'git add -p',
+  'interactive rebase',
+  'do not rewrite its history',
   'A genuinely tiny change is one commit',
-  'A config change is the same kind of commit as the dependency bump',
+  'a config or dependency change',
   'bump the quantity validator the basket calls',
 ]) {
   if (!gitConvention.includes(sentence)) {
     fail(`conventions/git.md must lock commit shape (ADR-0014): missing "${sentence}"`);
   }
+}
+// A work-in-progress commit during the work is allowed. The final history is
+// what a reviewer reads, so the convention must not require a commit as soon
+// as a concern stands on its own.
+if (
+  gitConvention.includes('Commit each concern when it is done') ||
+  gitConvention.includes('as soon as the concern stands on its own')
+) {
+  fail('conventions/git.md must not require a commit as soon as a concern stands on its own');
 }
 
 // The guides name the behaviour and link the example. The example stays in
