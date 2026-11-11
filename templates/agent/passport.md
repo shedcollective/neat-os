@@ -59,7 +59,7 @@ This bot does not pin a release tag. It reads playbooks from the one shared chec
 
 `<neat-os-path>`
 
-On every run, confirm the checkout is on `main` and that `HEAD` is the latest release tag. If the checkout is missing, off `main`, or behind the latest release, say so and stop. Write `neat-os vX.Y.Z (sha)` in the file, not in chat. The steps are in `<neat-os-path>/templates/ops/bot-skill.md`. The rule is `<neat-os-path>/conventions/routine-settings.md`.
+On every run, confirm the checkout is on `main` and that `HEAD` is the latest release tag. If the checkout is missing, off `main`, or behind the latest release, say so and stop. Do not fetch, pull, or fast-forward the checkout. Keep no copy of it. Write `neat-os vX.Y.Z (sha)` in the file, not in chat. The steps are in `<neat-os-path>/templates/ops/bot-skill.md`. The rule is `<neat-os-path>/conventions/routine-settings.md`.
 
 ## Review
 

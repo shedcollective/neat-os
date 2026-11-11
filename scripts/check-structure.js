@@ -735,10 +735,13 @@ for (const sentence of [
   'is not on main. Stop.',
   'is behind the latest release. Stop.',
   'Do not fetch.',
+  'Do not pull or fast-forward the checkout.',
   'neat-os vX.Y.Z (sha)',
   'in the file, not in chat',
   'no playbook text',
   'skill store',
+  '/home/box/shared/neat-os',
+  '/<shared>/neat-os',
 ]) {
   if (!wrapperTemplate.includes(sentence)) {
     fail(`templates/ops/bot-skill.md must lock the shared checkout on main: missing "${sentence}"`);
@@ -772,6 +775,8 @@ for (const sentence of [
   'neat-os vX.Y.Z (sha)',
   'in the file, not in chat',
   'no playbook text',
+  'Do not fetch, pull, or fast-forward the checkout',
+  'Keep no copy of it',
 ]) {
   if (!passportTemplate.includes(sentence)) {
     fail(`templates/agent/passport.md Pin must lock the shared checkout on main: missing "${sentence}"`);
@@ -839,15 +844,18 @@ for (const sentence of [
   'does not pin a tag',
   'one shared checkout',
   'named maintainer',
-  'nightly and on demand',
+  'midnight local time',
   'git fetch --tags --prune',
   'fast-forward of `main`',
+  'never commits',
+  'never fetches, pulls, or fast-forwards',
   'skill store',
   'ad-hoc web fetch',
   'no playbook text',
   'neat-os vX.Y.Z (sha)',
   'in the file, not in chat',
   'behind the latest release',
+  '/home/box/shared/neat-os',
   '## Why',
   'Not chosen',
 ]) {
@@ -887,6 +895,11 @@ for (const sentence of [
   'Delete every saved copy',
   '<neat-os-path>',
   'named maintainer',
+  'midnight local time',
+  'never commits',
+  'never fetches, pulls, or fast-forwards',
+  '/home/box/shared/neat-os',
+  '/<shared>/neat-os',
 ]) {
   if (!consumeDocs.includes(sentence)) {
     fail(`docs/consume.md Agents must lock the shared checkout: missing "${sentence}"`);
@@ -904,6 +917,7 @@ for (const sentence of [
   'Leave that section with no steps when the release needs nothing from an agent',
   'consume.md#agents',
   'fast-forwards the shared checkout',
+  'never commits to the checkout',
 ]) {
   if (!releaseDocs.includes(sentence)) {
     fail(`docs/release.md must lock the shared-checkout release step: missing "${sentence}"`);
@@ -918,6 +932,9 @@ for (const retired of ['move-a-wrapper-pin', 'stopgap']) {
 const teamSetup = read('docs/team-setup.md');
 if (!teamSetup.includes('shared checkout on `main`') || teamSetup.includes('issue #15')) {
   fail('docs/team-setup.md must point team bots at the shared checkout on main');
+}
+if (!teamSetup.includes('does not fetch, pull, or fast-forward the checkout')) {
+  fail('docs/team-setup.md must say the wrapper does not fetch, pull, or fast-forward the checkout');
 }
 if (read('docs/agency-ops.md').includes('move-a-wrapper-pin') || read('docs/agency-ops.md').includes('pins a release tag')) {
   fail('docs/agency-ops.md must not keep the retired wrapper pin');
