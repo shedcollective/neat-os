@@ -566,9 +566,26 @@ for (const sentence of [
   'that documentation is the first commit',
   'follow the change from the first commit to the last',
   'does not stand on its own',
+  'Commit each concern when it is done',
+  'one commit at the end',
+  'A genuinely tiny change is one commit',
+  'A config change is the same kind of commit as the dependency bump',
+  'bump the quantity validator the basket calls',
 ]) {
   if (!gitConvention.includes(sentence)) {
     fail(`conventions/git.md must lock commit shape (ADR-0014): missing "${sentence}"`);
+  }
+}
+
+// The guides name the behaviour and link the example. The example stays in
+// conventions/git.md, so a guide that only restates "one concern" is not enough.
+for (const rel of ['AGENTS.md', 'templates/AGENTS.md', 'docs/contributing.md']) {
+  const guide = read(rel);
+  if (!guide.includes('Commit each concern when it is done')) {
+    fail(`${rel} must tell agents to commit each concern when it is done`);
+  }
+  if (!guide.includes('#commits')) {
+    fail(`${rel} must link the commit section in conventions/git.md`);
   }
 }
 
