@@ -96,13 +96,13 @@ git log --merges --first-parent <prev-tag>..HEAD --format='%s'
 
 Drop `Merge tag '…'` and `Merge branch 'release/…'`.
 
-Rewrite each remaining merge into one bullet. The key and the title come from the merged branch or the pull request. The type is the Conventional Commits type, with an initial capital. This shape is an example:
+Rewrite each remaining merge into one bullet. The key and the title come from the merged branch or the pull request. The type is the lowercase Conventional Commits type from that pull request title ([conventions/git.md](../../conventions/git.md#pr-titles)). This shape is an example:
 
 ```text
 Release 1.2.0
 
-- [ACME-123] Feat: Respect the parent publish state
-- [ACME-124] Chore: Update dependencies
+- [ACME-123] feat: Respect the parent publish state
+- [ACME-124] chore: Update dependencies
 ```
 
 `ACME-123` stands in for the key on that merge. Do not invent a key. If the branch and the pull request have no key, show the title and say the key was absent. If the drafted release notes are empty, abort and report. Squash-merge may have removed the merge signal. Do not back-fill bullets from individual commits, and do not finish with an empty list.

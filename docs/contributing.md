@@ -7,7 +7,7 @@ How to change neat-os. People merge. Agents open the pull request and keep CI gr
 The rules are locked in [conventions/git.md](../conventions/git.md). In short:
 
 - Branch from `develop` and open pull requests into `develop` only.
-- For a large change, use a stack: a feature branch holds the whole change, each step branches from the previous step and targets it, and the title is `[GH-n] (<step>/<total>) <type>: <description>`.
+- For a large change, use a stack: a feature branch holds the whole change, each step branches from the previous step and targets it, and the title is `[GH-n] (<step>/<total>) <type>: <Title>` ([conventions/git.md](../conventions/git.md#pr-titles)).
 - Merge with merge commits, not squash ([ADR-0005](decisions/0005-merge-commits-not-squash.md)). `learn` reads merge history, and a squash erases it.
 - Write commit messages as Conventional Commits (`feat`, `fix`, `chore`, `refactor`, `docs`, `test`, `style`) with the ticket key. An agent may reshape and force-push its own branch until review starts ([conventions/git.md](../conventions/git.md#commits), [ADR-0014](decisions/0014-commit-shape-for-review.md)).
 - A release is `develop` merged to `main` and tagged. Agents do not tag `main`. See [release.md](release.md).

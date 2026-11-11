@@ -19,21 +19,35 @@ Agents branch from `develop` and open PRs **into `develop` only**. Humans merge.
 **Locked.** Every pull request title, stacked or not:
 
 ```
-[<KEY>] <type>: <description>
+[<KEY>] <type>: <Title>
 ```
 
 Stacked steps keep the same shape with an infix after the key:
 
 ```
-[<KEY>] (<step>/<total>) <type>: <description-of-step>
+[<KEY>] (<step>/<total>) <type>: <Title>
 ```
 
 - `<KEY>` is the ticket key in capitals (`GH-42`, `ACME-123`; see [tickets.md](tickets.md))
-- `<type>` is lowercase Conventional Commits: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`, or `style`
-- The description is sentence case
+- `<type>` is the lowercase Conventional Commits type a commit subject uses: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`, or `style`
+- `<Title>` is sentence case, and its first word starts with a capital letter
+- When there is no ticket, omit the key and the brackets. Do not invent a key, and do not write empty brackets. A stacked step with no ticket keeps the step count and omits the key: `(<step>/<total>) <type>: <Title>`.
 - Do not put the ticket in parentheses at the end of the title
 
+These titles show the shape. `GH-42` and `ACME-123` are placeholders from [tickets.md](tickets.md) and [neutral-reference.md](neutral-reference.md). They are not tickets in this repository.
+
+```
+[GH-42] feat: Checkout
+[ACME-123] fix: Homepage nav colour
+[GH-42] docs: Describe checkout in the guide
+fix: Homepage nav colour
+```
+
+The last line is a pull request with no ticket.
+
 Commits stay Conventional Commits (`feat|fix|chore|refactor|docs|test|style`), with the ticket key in the subject or footer per [tickets.md](tickets.md). Do not title a commit with the pull request shape.
+
+Why the key is in brackets: the title is the line a person reads in the list, and the line a neat-os release copies into its notes ([docs/release.md](../docs/release.md)). The brackets keep the ticket key separate from the type.
 
 ### Stacked PRs
 
@@ -41,7 +55,7 @@ Commits stay Conventional Commits (`feat|fix|chore|refactor|docs|test|style`), w
 
 **Step 0 is the feature branch.** Branched from `develop`, opened with a single empty commit (`git commit --allow-empty`) as a **Draft** PR into `develop`. It is the only PR in the stack that targets `develop`, and it is merged last, once every step is in.
 
-**Steps.** Step 1 branches from the feature branch; step *n* from step *n−1*. Each step PR targets the branch beneath it. Steps merge bottom-up into the feature branch (delete the step branch on merge so GitHub retargets the next step). Each step carries its own Conventional Commits type.
+**Steps.** Step 1 branches from the feature branch; step *n* from step *n−1*. Each step PR targets the branch beneath it. Steps merge bottom-up into the feature branch (delete the step branch on merge so GitHub retargets the next step). Each step title uses its own type from [PR titles](#pr-titles).
 
 `<step>/<total>` is the position in the stack and the stack size. If a step is split, retitle every step in the stack the same day.
 
@@ -50,11 +64,11 @@ Branch names are the lowercase slug form (no spaces, brackets or `/` inside the 
 Example, one feature in four steps. `GH-42` is the placeholder key from [tickets.md](tickets.md), not an issue in this repository:
 
 ```
-[GH-42] feat: checkout                                 feature/gh-42-checkout  → develop (draft)
-[GH-42] (1/4) feat: add the basket                     feature/gh-42-1-basket  → feature/gh-42-checkout
-[GH-42] (2/4) feat: add the address step               feature/gh-42-2-address → feature/gh-42-1-basket
-[GH-42] (3/4) docs: describe checkout in the guide     feature/gh-42-3-docs    → feature/gh-42-2-address
-[GH-42] (4/4) chore: prepare the release               feature/gh-42-4-release → feature/gh-42-3-docs
+[GH-42] feat: Checkout                                 feature/gh-42-checkout  → develop (draft)
+[GH-42] (1/4) feat: Add the basket                     feature/gh-42-1-basket  → feature/gh-42-checkout
+[GH-42] (2/4) feat: Add the address step               feature/gh-42-2-address → feature/gh-42-1-basket
+[GH-42] (3/4) docs: Describe checkout in the guide     feature/gh-42-3-docs    → feature/gh-42-2-address
+[GH-42] (4/4) chore: Prepare the release               feature/gh-42-4-release → feature/gh-42-3-docs
 ```
 
 Humans merge every PR in the stack, steps included; review happens per step and the feature-branch merge is the final gate. Nothing in a stack targets `main`.

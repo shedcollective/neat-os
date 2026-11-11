@@ -102,6 +102,7 @@ jobs:
 
           The draft notes are the titles of the pull requests merged to develop since the previous tag. When consumers must change something, add a migration note to the draft before publishing.
           EOF
+          # No ticket on this pull request. Title shape: conventions/git.md#pr-titles
           gh pr create --base main --head "release/${VERSION}" --title "chore: Release ${VERSION}" --body-file "$body_file"
           # --target is the branch name. GitHub stores that name on the draft and
           # creates the tag from the branch tip when a person publishes the draft.

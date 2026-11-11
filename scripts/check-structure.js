@@ -585,6 +585,16 @@ for (const sentence of [
   }
 }
 
+// Pull request titles stay [<KEY>] <type>: <Title>. Prepare release uses
+// chore: Release ${VERSION}. The policy list is at its cap of 10.
+if (!gitConvention.includes('[<KEY>] <type>: <Title>')) {
+  fail('conventions/git.md must lock the pull request title: missing "[<KEY>] <type>: <Title>"');
+}
+const releaseWorkflow = read('.github/workflows/prepare-release.yml');
+if (!releaseWorkflow.includes('chore: Release ${VERSION}') || releaseWorkflow.includes('Chore: Release')) {
+  fail('prepare-release must title its pull request chore: Release when there is no ticket');
+}
+
 // Principles index ↔ leaves.
 const goals = new Set(['README.md', 'kaizen.md', 'determinism.md', 'parallelism.md']);
 const principleDir = path.join(root, 'principles');
