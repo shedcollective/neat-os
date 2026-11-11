@@ -83,7 +83,22 @@ A single, unstacked pull request uses the locked title in [PR titles](#pr-titles
 
 **Locked.** Each commit is one concern, so a reviewer can read it on its own. The message says what changed and why. A pull request may hold several commits. Do not put the whole piece of work into one commit because those commits land together. Do not split so thinly that an intermediate commit does not stand on its own.
 
+While working, commit whenever is convenient. A work-in-progress commit is fine. What matters is the shape of the history a reviewer reads, not when the commits were made.
+
+An agent may reshape and force-push its own branch until review starts, so each commit is one concern. An abandoned attempt, such as a dependency that was tried and then removed, does not appear. Once a person is reviewing, do not rewrite the branch history. Add new commits for feedback.
+
+A genuinely tiny change is one commit. That is one concern in a few lines, such as a wording fix in one file. Do not split that change, and do not add a commit so the count looks larger.
+
 When a piece of work is recorded as several commits, order them so a reviewer can follow the change from the first commit to the last. When the work includes documentation, that documentation is the first commit. After that, a commit comes before the commits that depend on it.
+
+A typical fix that also refactors, adds a test, and includes a config or dependency change is four commits in the history a reviewer reads. `GH-42` is the placeholder key from [tickets.md](tickets.md), not an issue in this repository. The refactor comes first, then the behaviour change, then the test that covers it, then the config or dependency change. When one of them would not stand without an earlier commit, that earlier commit comes first. When the work also changes a guide, that documentation commit is first, before these four:
+
+```
+refactor: extract the quantity check so the fix can land on its own (GH-42)
+fix: reject a negative quantity before the basket saves (GH-42)
+test: cover a negative quantity on the basket (GH-42)
+chore: bump the quantity validator the basket calls (GH-42)
+```
 
 Subjects stay Conventional Commits (`feat|fix|chore|refactor|docs|test|style`), with the ticket key per [tickets.md](tickets.md).
 
