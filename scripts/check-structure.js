@@ -65,8 +65,6 @@ const required = [
   'templates/ops/bids-register.md',
   'templates/ops/bid-submission.md',
   'templates/agent/passport.md',
-  'templates/agent/passport-design.md',
-  'templates/agent/passport-ux.md',
   'conventions/design-ux-agents.md',
   'templates/.agents/README.md',
   'templates/.agents/project.md',
@@ -751,8 +749,6 @@ if (!wrapperTemplate.includes('issue #15')) {
 const wrapperPinFiles = [
   'templates/ops/bot-skill.md',
   'templates/agent/passport.md',
-  'templates/agent/passport-design.md',
-  'templates/agent/passport-ux.md',
 ];
 for (const rel of wrapperPinFiles) {
   const text = rel === 'templates/ops/bot-skill.md' ? wrapperTemplate : read(rel);
@@ -822,36 +818,6 @@ for (const sentence of [
   if (!designUxConvention.includes(sentence)) {
     fail(`conventions/design-ux-agents.md must lock design and UX agent rules: missing "${sentence}"`);
   }
-}
-
-const passportHeadings = ['## Job', '## Never', '## Human gates', '## Sources', '## Skills', '## Routines', '## Day file', '## Pin', '## Review'];
-for (const rel of ['templates/agent/passport-design.md', 'templates/agent/passport-ux.md']) {
-  const text = read(rel);
-  for (const heading of passportHeadings) {
-    if (!text.includes(heading)) {
-      fail(`${rel} missing ${heading}`);
-    }
-  }
-  if (!/role-neutral example/.test(text) || !/never in neat-os/.test(text)) {
-    fail(`${rel} must say it is a role-neutral example and that filled passports never live in neat-os`);
-  }
-  if (!text.includes('`v0.5.0`')) {
-    fail(`${rel} must pin v0.5.0`);
-  }
-  if (!text.includes('Passport owner | director')) {
-    fail(`${rel} must name director as the passport owner role`);
-  }
-  if (!text.includes('<YYYY-MM-DD>')) {
-    fail(`${rel} Review date must stay a placeholder`);
-  }
-}
-
-const designPassport = read('templates/agent/passport-design.md');
-if (designPassport.includes('Canva')) {
-  fail('templates/agent/passport-design.md must not list Canva');
-}
-if (!designPassport.includes('2 to 3 Figma options')) {
-  fail('templates/agent/passport-design.md Job must be 2 to 3 Figma options');
 }
 
 for (const [rel, refuse] of [
