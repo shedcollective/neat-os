@@ -26,7 +26,7 @@ Adoption playbooks (`init`, `gather`, `learn`) bring a repository into neat-os (
 | [daily-burndown](daily-burndown/SKILL.md) | Writes the day's work digest into the private operations record and refreshes the in-flight board. |
 | [daily-digest](daily-digest/SKILL.md) | Turns the day's digest into a short end-of-day post and delivers it. |
 | [design-brief](design-brief/SKILL.md) | Collects brand, audience, format, deadline, and sources for a design request, and checks the asker's Figma seat. |
-| [design-handoff](design-handoff/SKILL.md) | Bundles the chosen option into the private operations record, and sends code work out as a ticket. |
+| [design-handoff](design-handoff/SKILL.md) | Puts the chosen option on the Jira ticket, with the Figma link, PNGs, and spec. |
 | [design-qa](design-qa/SKILL.md) | Compares a built page with its Figma frames and comments on the differences. Belongs to the assurance role. |
 | [enhance-daily-update](enhance-daily-update/SKILL.md) | Appends one person's perspective to the day's shared digest. |
 | [finance-client-backfill](finance-client-backfill/SKILL.md) | Creates missing client records in the director's accounting tool from the private operations record. |
