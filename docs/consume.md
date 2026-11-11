@@ -134,6 +134,10 @@ One SSH key, or one token in `~/.composer/auth.json`, covers every product repos
 
 The root [`composer.json`](../composer.json) is the Composer source of truth. [`packages/composer/`](../packages/composer/) is the library code, not the entry point. Pin the release version day to day. Use `dev-develop` only for unreleased work. Moving an existing pin is in [Move to a new tagged release](#move-to-a-new-tagged-release).
 
+## Running a playbook
+
+Resolve neat-os in the locked order in [How agents find neat-os](#how-agents-find-neat-os) and stop at the first hit. Do not search the public web for neat-os. Do not copy playbooks into a product repository. Copying files into `.agents/skills/` is not an install; see [Pick the situation that matches yours](#pick-the-situation-that-matches-yours).
+
 ## How agents find neat-os
 
 An agent that needs the neat-os root, or needs to run `init`, `gather`, or `learn`, searches these locations in order and stops at the first hit. The order is implemented in [`skills/init/scripts/resolve-consume.sh`](../skills/init/scripts/resolve-consume.sh) and in `require('@shedcollective/neat-os').resolveConsume()`, and is locked by [ADR-0003](decisions/0003-resolve-order.md).
@@ -145,7 +149,7 @@ An agent that needs the neat-os root, or needs to run `init`, `gather`, or `lear
 
 If the current directory is itself a neat-os tree, the resolver reports mode `checkout`. That happens only when working in this repository. Product repositories never see it.
 
-If all four miss, the agent tells the person how to install neat-os (a git dependency or a sibling checkout) and stops. It does not search the web and does not invent install steps.
+If all four miss, the agent tells the person how to install neat-os (a git dependency or a sibling checkout) and stops. It does not invent install steps. [Running a playbook](#running-a-playbook) is the rule against searching the public web and against copying playbooks into the product repository.
 
 ## Move to a new tagged release
 

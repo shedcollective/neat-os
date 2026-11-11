@@ -4,7 +4,7 @@ description: >-
   Daily, event and weekly idempotent job: read bids from a pipeline API, a
   daily export, bid-running-agent run logs, the bid-running agent's report, or
   the operations lead's own sent mail, and keep a markdown register by stage plus a folder of the redacted files
-  that were sent. Owned by the operations lead. Not a launch playbook.
+  that were sent. Owned by the operations lead.
 ---
 
 # bids-register
@@ -12,8 +12,6 @@ description: >-
 Keep a markdown register of bids in `<ops-record>`, one row per bid from the moment the bid-running agent starts work on it, with a Stage from pursuing to an outcome. Keep a folder of the files that were actually sent, for each successful submission. The run is daily, also runs on an event, and sweeps for outcomes weekly. It is **idempotent**: if nothing is new, it changes nothing. Commit straight to the default branch.
 
 The **operations lead** owns this playbook and answers queries about past bids from the register and the folders. There is no separate new-business agent.
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 A team bot does not run this routine without a filled bot passport ([docs/team-setup.md](../../docs/team-setup.md#team-bots)). The accounting tool is not this playbook (that is [`finance-lookup`](../finance-lookup/SKILL.md) and the other finance playbooks).
 

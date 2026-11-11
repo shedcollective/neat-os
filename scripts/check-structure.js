@@ -42,7 +42,7 @@ const required = [
   'schema/README.md',
   'docs/README.md',
   'docs/consume.md',
-  'docs/launch-skills.md',
+  'docs/adoption.md',
   'docs/cursor-environments.md',
   'docs/release.md',
   'docs/faq.md',
@@ -302,8 +302,8 @@ for (const rel of ['conventions/ticket-content.md', 'skills/ticket/SKILL.md']) {
     fail(`${rel} must not tell writers to keep an Original request section (ADR-0020)`);
   }
 }
-if (read('docs/launch-skills.md').includes('Original request')) {
-  fail('docs/launch-skills.md must not list an Original request section (ADR-0020)');
+if (read('docs/adoption.md').includes('Original request')) {
+  fail('docs/adoption.md must not list an Original request section (ADR-0020)');
 }
 if (!ticketConvention.includes('Done when')) {
   fail('conventions/ticket-content.md must lock the "Done when" acceptance criteria shape');

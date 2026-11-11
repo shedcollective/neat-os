@@ -3,15 +3,12 @@ name: morning-brief
 description: >-
   Compose one morning message per person from Needs you, Today, Meetings,
   Health, and Pipeline (Mondays). Replaces separate morning health, digest,
-  day-plan, and meeting-prep brief messages. Adds no new facts. Not a launch
-  playbook.
+  day-plan, and meeting-prep brief messages. Adds no new facts.
 ---
 
 # morning-brief
 
 Compose **one** morning message for the asker, from facts that already exist. This replaces separate morning health, digest, day-plan, and meeting-prep brief messages. It does **not** replace [`daily-digest`](../daily-digest/SKILL.md), which remains the end-of-day team post. Meeting follow-up still uses [`meeting-prep`](../meeting-prep/SKILL.md) mode `proposals`.
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 The composition rule sits with `daily-digest` on [docs/agency-ops.md](../../docs/agency-ops.md).
 

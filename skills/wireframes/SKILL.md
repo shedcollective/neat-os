@@ -12,8 +12,6 @@ description: >-
 
 Produce the information architecture (IA) and wireframes for a site or product. Follow [conventions/design-ux-agents.md](../../conventions/design-ux-agents.md#wireframe-projects).
 
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
-
 ## When to use
 
 - The asker wants a primary navigation, sitemap, page layouts, canonical and SEO rules, and a clickable wireframe for a new or rebuilt site.

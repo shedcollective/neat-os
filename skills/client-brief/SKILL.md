@@ -2,14 +2,12 @@
 name: client-brief
 description: >-
   Assemble a high-level client brief from the private operations CRM and live
-  connectors. No billing figures. Not a launch playbook.
+  connectors. No billing figures.
 ---
 
 # client-brief
 
 Prepare a brief for a client call, a handoff, or onboarding someone to a client account. Read the private operations record's client folder and recent work digests. Add live context from the asker's connectors.
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os.
 
 ## Settings
 

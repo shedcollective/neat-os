@@ -2,7 +2,7 @@
 name: daily-burndown
 description: >-
   Write the day's work digest into a private operations record and refresh the
-  in-flight board. Work sources only. Not a launch playbook.
+  in-flight board. Work sources only.
 ---
 
 # daily-burndown
@@ -10,8 +10,6 @@ description: >-
 Collect the day's work activity from the asker's connected sources and write one day file plus a refreshed in-flight board into `<ops-record>`. Apply [conventions/agent-work-logging.md](../../conventions/agent-work-logging.md).
 
 When [`ops-capture`](../ops-capture/SKILL.md) runs during the day, the day file may already hold captured lines. This run consolidates those lines and does not rediscover the items they came from.
-
-This is **not** a launch playbook. Do not run it from `init`, `gather`, or `learn`. Locate neat-os the same way those playbooks do (`resolve-consume.sh` / `require('@shedcollective/neat-os').resolveConsume()`). **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 ## Settings
 

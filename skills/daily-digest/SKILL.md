@@ -2,15 +2,12 @@
 name: daily-digest
 description: >-
   Distil today's burndown day file into a short end-of-day post a person can
-  read in a moment, and deliver it to the routine's destination. Not a launch
-  playbook.
+  read in a moment, and deliver it to the routine's destination.
 ---
 
 # daily-digest
 
 Turn the day file that `daily-burndown` (and any `enhance-daily-update` runs) wrote into one short post: what actually happened today that is worth knowing, who is out, and what is on tomorrow. Apply [conventions/agent-work-logging.md](../../conventions/agent-work-logging.md).
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 ## When to use
 
