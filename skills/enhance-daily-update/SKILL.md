@@ -3,14 +3,12 @@ name: enhance-daily-update
 description: >-
   Append perspective detail into today's shared burndown in a private operations
   record using that person's own connectors. Default layout is by project; a
-  passport may name other top-level sections. Not a launch playbook.
+  passport may name other top-level sections.
 ---
 
 # enhance-daily-update
 
 After `daily-burndown` has written the shared day body, a later run adds detail **from one perspective** (for example front end, or back end and devops) using that person's own connectors. The default day shape is by project. A bot passport may name other top-level sections. Apply [conventions/agent-work-logging.md](../../conventions/agent-work-logging.md).
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 ## Parameters (from the routine or asker)
 

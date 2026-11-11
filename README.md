@@ -110,15 +110,7 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 
 ## The playbooks
 
-- `init` creates the `AGENTS.md` and `.agents/` files in a product repository from the templates. It leaves every placeholder empty.
-- `gather` fills those files from evidence in the repository, then interviews you for what the tree cannot show, starting with the client and the product. It is not finished until those two are real answers.
-- `learn` reads recent commits and merges and drafts proposals for what could become a shared principle or playbook. It never publishes them. A person opens that pull request.
-- `ticket` creates a Jira Task from a brief, or enhances an existing one, in the shape and tone the client can read ([conventions/ticket-content.md](conventions/ticket-content.md)). It writes to Jira only, never to the repository.
-- `assurance` reads one pull request against its ticket and posts an evidence pack. It does not implement, push, approve, or merge.
-- `pin-majors-with-reasons` upgrades dependencies by blast radius and does not take a pinned major on a routine bump.
-- `cloud-agent-environment` sets up install and start scripts for a Cloud Agent Environment that already exists. It does not create the Environment.
-
-`init`, `gather`, `learn`, and `ticket` are described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks (`daily-burndown`, `enhance-daily-update`, `project-update`, `client-brief`, `meeting-prep`, `daily-digest`, `morning-brief`, `ops-capture`, `bids-register`, `finance-client-backfill`, `finance-client-sync`, `finance-lookup`) are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design playbooks (`design-brief`, `mockup`, `brand-from-site`, `brand-board-from-assets`, `naming-and-voice`, `design-handoff`), the assurance playbook `design-qa`, and UX playbooks (`ux-audit`, `research-synthesis`, `wireframes`) follow [conventions/design-ux-agents.md](conventions/design-ux-agents.md). All playbooks are under [skills/](skills/).
+The playbooks are listed in [skills/README.md](skills/README.md). What the adoption playbooks (`init`, `gather`, `learn`) and `ticket` do is described in [docs/adoption.md](docs/adoption.md). Agency operations playbooks are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design and UX rules are [conventions/design-ux-agents.md](conventions/design-ux-agents.md).
 
 `daily-digest` turns the day file into a short end-of-day post for a team channel. `morning-brief` composes one morning message per person and replaces separate morning health, digest, day-plan, and meeting-prep brief messages. Agency operations playbooks take their inputs from the settings in [conventions/routine-settings.md](conventions/routine-settings.md).
 
@@ -146,8 +138,8 @@ Work lands on `develop`. A release-prep pull request sets the version. Prepare r
 | --- | --- |
 | [PURPOSE.md](PURPOSE.md) | What neat-os is for |
 | [docs/README.md](docs/README.md) | Where documentation lives and the full map |
-| [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, moving an existing install, and moving from shed-os |
-| [docs/launch-skills.md](docs/launch-skills.md) | What `init`, `gather`, `learn`, and `ticket` do, and where `assurance`, `pin-majors-with-reasons`, and `cloud-agent-environment` live |
+| [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, running a playbook, moving an existing install, and moving from shed-os |
+| [docs/adoption.md](docs/adoption.md) | What the adoption playbooks (`init`, `gather`, `learn`) and `ticket` do. The list of playbooks is [skills/README.md](skills/README.md) |
 | [docs/cursor-environments.md](docs/cursor-environments.md) | The GitHub App, Cloud Agent Environments, and how they differ |
 | [docs/team-setup.md](docs/team-setup.md) | Cursor and GitHub administration for the team |
 | [docs/release.md](docs/release.md) | How neat-os is released on `shedcollective/neat-os`. Notes are on the GitHub Release |
@@ -155,7 +147,7 @@ Work lands on `develop`. A release-prep pull request sets the version. Prepare r
 | [docs/contributing.md](docs/contributing.md) | How to change neat-os |
 | [docs/decisions/](docs/decisions/README.md) | Why locked behaviour is the way it is. New records are paused until v1 |
 
-Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of mechanism that make up neat-os (principle, convention, playbook, skill, script, agent) are defined in [schema/README.md](schema/README.md). How pages are written is locked in [conventions/writing.md](conventions/writing.md).
+Agents working in this repository read [AGENTS.md](AGENTS.md). The six kinds of mechanism that make up neat-os (principle, convention, playbook, skill, script, agent) are defined in [schema/README.md](schema/README.md). How pages are written is locked in [conventions/writing.md](conventions/writing.md). Prose comments are locked in [conventions/code-comments.md](conventions/code-comments.md).
 
 ## What neat-os does not do
 

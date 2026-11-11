@@ -4,14 +4,12 @@ description: >-
   Prepare a person for their external meetings and follow them up. Mode brief
   prepares the day's meetings; mode proposals turns a transcript into numbered
   ticket proposals that the person approves before anything is applied.
-  Settings come from the person's routine. Not a launch playbook.
+  Settings come from the person's routine.
 ---
 
 # meeting-prep
 
 Brief one person before each qualifying meeting, then turn what was agreed into ticket proposals afterwards. Each person runs this playbook from their own routine, with their own connectors and their own settings. Apply [conventions/agent-work-logging.md](../../conventions/agent-work-logging.md).
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does (`resolve-consume.sh` or `require('@shedcollective/neat-os').resolveConsume()`). **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
 
 ## When to use
 

@@ -7,7 +7,7 @@ description: Set up install and start scripts for a Cursor Cloud Agent Environme
 
 Set up a reliable install and start for a Cursor Cloud Agent on a product repo. The agent discovers what the tree needs, probes the network, installs from lockfiles as archives, starts backing services, and writes down the hosts and secret names. Generic guidance and helper scripts. No per-project folklore.
 
-This is **not** a launch playbook. Do not run it from `init`, `gather`, or `learn`. Locate neat-os the same way (`resolve-consume.sh` or `require('@shedcollective/neat-os').resolveConsume()`): `NEAT_OS_ROOT`, then `node_modules/@shedcollective/neat-os`, then `vendor/shedcollective/neat-os`, then sibling `../neat-os`. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`. Call the helper scripts from the resolved tree so a pin update fixes them.
+Do not run it from `init`, `gather`, or `learn`. Call the helper scripts from the resolved tree so a pin update fixes them.
 
 How an Environment differs from the GitHub App is [docs/cursor-environments.md](../../docs/cursor-environments.md). This playbook starts once that Environment exists and the product repo and neat-os are cloned together. It does not create the Environment.
 
@@ -37,7 +37,7 @@ A product repo needs Cloud Agent install and start scripts, or the existing ones
 | Input | Where it comes from |
 | --- | --- |
 | Product repo | The git root the agent was started in. |
-| neat-os | The resolve order above. `vendor/` has no skills. |
+| neat-os | The resolve order in [docs/consume.md](../../docs/consume.md). `vendor/` has no skills. |
 | Runtimes, lockfiles, services, tests | The tree: version files, manifests, Compose, Makefile, CI, `AGENTS.md`. |
 | GitHub token for Composer | Cursor Team secret `COMPOSER_GITHUB_TOKEN`, type Runtime Secret. Not in the repo. |
 | Allowed hosts | The hosts the filled scripts contact, probed, then recorded. A person saves the allowlist. |
