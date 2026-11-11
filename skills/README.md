@@ -40,6 +40,7 @@ Adoption playbooks (`init`, `gather`, `learn`) bring a repository into neat-os (
 | [ops-capture](ops-capture/SKILL.md) | Captures new email, shared threads, applied meeting proposals, and stated decisions into the private operations record. |
 | [pin-majors-with-reasons](pin-majors-with-reasons/SKILL.md) | Upgrades dependencies and leaves a pinned major where it is. |
 | [project-update](project-update/SKILL.md) | Writes a short project status from the operations record and live connectors. |
+| [release](release/SKILL.md) | Cuts a git-flow release on a product repository from the Release slot, then stops before the production deploy. Runs only when a person names it. |
 | [research-synthesis](research-synthesis/SKILL.md) | Turns interview notes into themes, sourced quotes, and opportunities. |
 | [ticket](ticket/SKILL.md) | Creates or updates a Jira task, or a GitHub Issue in an OS repository, and writes nothing to the repository. |
 | [ux-audit](ux-audit/SKILL.md) | Reviews a whole user flow and reports ranked heuristic and accessibility findings. |
