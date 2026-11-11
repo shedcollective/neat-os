@@ -71,9 +71,7 @@ A single, unstacked pull request uses the locked title in [PR titles](#pr-titles
 
 While working, commit whenever is convenient. A work-in-progress commit is fine. What matters is the shape of the history a reviewer reads, not when the commits were made.
 
-**Before the first push for review,** reshape that history so each commit is one concern, ordered with hindsight of the finished work. A refactor, the behaviour change, the tests, and a config or dependency change are separate commits when the work includes them. The message names only that concern. An abandoned attempt does not appear. A dependency that was tried and then removed is not in the history.
-
-To build that history before the first push, stage the finished work in chunks onto a clean branch, for example with `git add -p`, or run an interactive rebase. Once the branch is pushed and under review, do not rewrite its history. Add new commits for review feedback.
+An agent may reshape and force-push its own branch until review starts, so each commit is one concern. An abandoned attempt, such as a dependency that was tried and then removed, does not appear. Once a person is reviewing, do not rewrite the branch history. Add new commits for feedback.
 
 A genuinely tiny change is one commit. That is one concern in a few lines, such as a wording fix in one file. Do not split that change, and do not add a commit so the count looks larger.
 
