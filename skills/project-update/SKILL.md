@@ -2,15 +2,12 @@
 name: project-update
 description: >-
   Produce a short project status from the private operations record and live
-  connectors. Link product .agents/ facts; do not invent them. Not a launch
-  playbook.
+  connectors. Link product .agents/ facts; do not invent them.
 ---
 
 # project-update
 
 Write a crisp status for one project: what is in flight, what moved, what is blocked, and the next move. Read the private operations record and the asker's live connectors. Link the product repository's `.agents/` files; do not copy them into the update.
-
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os.
 
 ## Settings
 

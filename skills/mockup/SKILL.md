@@ -11,8 +11,6 @@ description: >-
 
 Turn a filled intake card into 2 to 3 Figma options. Follow [conventions/design-ux-agents.md](../../conventions/design-ux-agents.md).
 
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
-
 ## When to use
 
 - The intake card is filled and the asker wants mockup options.

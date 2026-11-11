@@ -7,7 +7,7 @@ description: Assure a full pull request on a product repo that consumes neat-os.
 
 Assure one full pull request on a product repo that consumes neat-os. This playbook is the brief a Cloud Agent runs when an Assurance listener wakes. It reads the diff against the ticket and posts one evidence pack. It does not build the change.
 
-This is **not** a launch playbook or a build playbook. Do not run it from `init`, `gather`, or `learn`. Do not resume the build agent's thread, branch, or plan. Locate it the same way as the launch playbooks (`resolve-consume.sh` / `require('@shedcollective/neat-os').skillsDir`). **Do not** search the public web for neat-os. **Do not** copy it into `.agents/skills/`.
+Do not run it from `init`, `gather`, or `learn`. Do not resume the build agent's thread, branch, or plan.
 
 An assurance listener (path B) wakes a Cloud Agent, which follows this file. A later scale-out (path A) is a GitHub Actions workflow that sets a pending check and starts the same Cloud Agent. Path A is not built, and the pilot does not require it. When Actions has credits and a preview URL exists, the same pack sections can carry richer evidence: an accessibility scan in CI on Accessibility, a bundle-size budget on Performance, and visual regression plus a load or smoke check against the preview on Blast radius / regression. This playbook does not add that workflow, those checks, or that listener.
 

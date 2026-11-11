@@ -9,8 +9,6 @@ description: >-
 
 Start every design request here. Follow [conventions/design-ux-agents.md](../../conventions/design-ux-agents.md).
 
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
-
 ## When to use
 
 - A new design request has arrived, before mockups, a brand board, naming, or a handoff.

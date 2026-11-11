@@ -10,8 +10,6 @@ description: >-
 
 Turn a filled intake card into naming and tone-of-voice options. Follow [conventions/design-ux-agents.md](../../conventions/design-ux-agents.md).
 
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
-
 ## When to use
 
 - The intake card is filled and the asker wants naming options, tone of voice, or both.

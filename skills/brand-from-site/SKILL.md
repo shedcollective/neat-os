@@ -10,8 +10,6 @@ description: >-
 
 Read a public website and put what you can see into a **new** Figma file. Follow [conventions/design-ux-agents.md](../../conventions/design-ux-agents.md).
 
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
-
 A teammate may already have a version of this playbook. If they point at one, use theirs and stop.
 
 ## When to use
