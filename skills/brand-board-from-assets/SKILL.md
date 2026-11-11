@@ -25,8 +25,8 @@ Turn supplied brand assets into a first-pass board and an open-decisions list. F
 1. Read the PDF or AI assets through the asker's own connectors. Stop if the assets are missing.
 2. Extract what the assets show: colour, type, spacing, logo, and imagery notes. Flag unknowns. Do not invent tokens ([never-invent-facts](../../principles/never-invent-facts.md)).
 3. Create a **new** Figma file. Set the file name at creation. The Figma connector cannot rename a file. Do not edit a client-owned file unless the asker says so for that file ([Client-owned Figma files](../../conventions/design-ux-agents.md#client-owned-figma-files)). Never publish a library.
-4. List open decisions. Write them to the reply, and to `design/<brand>/open.md` by pull request.
+4. List open decisions in the reply, and on the Jira ticket when one exists. Do not open a pull request to `design/<brand>/open.md` for that list.
 
 ## Stop
 
-Complete when the new Figma file exists and the open-decisions list is in the reply. Not complete if a client-owned file was edited without the asker's say-so, a library was published, or a guess was written as a token.
+Complete when the new Figma file exists and the open-decisions list is in the reply. Not complete if a client-owned file was edited without the asker's say-so, a library was published, a guess was written as a token, or a pull request was opened to the operations record.

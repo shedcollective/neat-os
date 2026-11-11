@@ -18,8 +18,8 @@ Visual QA of a built page against Figma frames is [`design-qa`](../skills/design
 | --- | --- |
 | Brand capture | A **new** Figma file. Never an existing file. Set the file name at creation. The Figma connector cannot rename a file. |
 | Mockup, brand board, styleguide, or visual system | A new Figma file, or a draft in a file this run created. A client-owned file only as in [Client-owned Figma files](#client-owned-figma-files). |
-| Naming and tone of voice | Options in the reply. Chosen options go in `design/<brand>/locked.md` by pull request. |
-| Design handoff | A dated folder in the private operations record, by pull request. |
+| Naming and tone of voice | Options in the reply. Chosen options go on the Jira ticket when one exists, otherwise in the reply. |
+| Design handoff | A Jira ticket with the Figma link, PNG or JPG attachments, the decided spec, and any open decisions. |
 | Visual QA | A comment on the ticket or pull request, with screenshots. The assurance agent posts it. |
 | UX audit | A new draft report, or a comment. |
 | Research synthesis | A new draft report. |
@@ -86,20 +86,13 @@ A wireframe project turns a brief into an IA package and a clickable greyscale w
 
 ## Client-owned Figma files
 
-Do not edit a client-owned Figma file unless the asker explicitly says so for that file. Say-so for one file does not cover another. When it is allowed, work on a duplicated page, or on a branch where Figma allows branching, never on the live page. Log what changed, with the file, the page or branch, and each change, in the reply and in `design/<brand>/figma-index.md` by pull request. Publishing a library still needs a director.
+Do not edit a client-owned Figma file unless the asker explicitly says so for that file. Say-so for one file does not cover another. When it is allowed, work on a duplicated page, or on a branch where Figma allows branching, never on the live page. Log what changed, with the file, the page or branch, and each change, in the reply, and on the ticket when there is one. Publishing a library still needs a director.
 
 ## Record
 
-The private operations record holds the design record. Team or host memory holds how-to only, never the record.
+The design record is the Jira ticket and the Figma file. Put the Figma link, the self-checked PNGs, the spec, locked choices, and open decisions on the ticket when one exists, and in the reply when it does not. Do not open a pull request to `design/<brand>/` in the private operations record for that history.
 
-```
-design/<brand>/locked.md
-design/<brand>/open.md
-design/<brand>/figma-index.md
-design/<brand>/handoffs/YYYY-MM-DD-<slug>/
-```
-
-Writes to those paths go only by pull request. A director merges. Use `<ops-record>` and `<write-rule>` from [routine-settings.md](routine-settings.md) when a wrapper names the record.
+Filled passports and other operations material still live in the private operations record. Historical files under `design/` may remain. The design agent does not add to them unless a person asks. Team or host memory holds how-to only, never the record.
 
 ## Sources
 
@@ -134,7 +127,7 @@ A design system the design agent builds follows these rules:
 | design agent | [`brand-from-site`](../skills/brand-from-site/SKILL.md) | Capture a public site's brand into a new Figma file |
 | design agent | [`brand-board-from-assets`](../skills/brand-board-from-assets/SKILL.md) | Extract a brand board from PDF or AI assets, then an open-decisions list |
 | design agent | [`naming-and-voice`](../skills/naming-and-voice/SKILL.md) | Naming options with rationale, clash and domain checks, and tone-of-voice drafts |
-| design agent | [`design-handoff`](../skills/design-handoff/SKILL.md) | Figma link, PNGs, spec, and open decisions into the private record. Code as a ticket |
+| design agent | [`design-handoff`](../skills/design-handoff/SKILL.md) | Figma link, PNGs, spec, and open decisions on the Jira ticket. Code as a ticket |
 | assurance agent | [`design-qa`](../skills/design-qa/SKILL.md) | Comment visual diffs between a built page and its Figma frames. Reads `tokens.json` |
 | UX agent | [`ux-audit`](../skills/ux-audit/SKILL.md) | Ranked findings on a whole flow, each with a named principle and an evidence label. Report only |
 | UX agent | [`research-synthesis`](../skills/research-synthesis/SKILL.md) | Themes, sourced quotes, and opportunities, with no personal data |
