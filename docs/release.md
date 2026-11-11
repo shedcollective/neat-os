@@ -71,8 +71,10 @@ If a tag or Release landed on the wrong commit:
 ```bash
 gh release delete vX.Y.Z --cleanup-tag --yes   # when a Release exists
 git push origin --delete vX.Y.Z               # when only the tag exists
-gh release create vX.Y.Z --target main --title "vX.Y.Z" --notes "…"
+gh release create vX.Y.Z --draft --target main --title "vX.Y.Z" --notes "…"
 ```
+
+Check that the draft targets `main`, then publish it, the same as in [Publish the draft](#publish-the-draft).
 
 ## Who does what
 
