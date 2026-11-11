@@ -15,7 +15,7 @@ A wrapper is the short file in a person's agent that says which playbook to run 
 | `<connectors>` | The sources the playbook may read. Always the asker's own connected accounts, never another person's. | calendar, mail, chat, tickets, version control |
 | `<write-rule>` | How changes reach `<ops-record>`. | Day file and in-flight board: commit to the default branch. `clients/`: pull request, a director merges. |
 | `<quiet-when-empty>` | Whether a run with nothing to report stays silent (`yes`) or writes an explicit empty stub (`no`). | `yes` |
-| `<neat-os-path>` | Absolute path of the one shared neat-os checkout on this computer. The checkout is on `main`. On Grok Bot computers the value is `/home/box/shared/neat-os`. | `/<shared>/neat-os` |
+| `<neat-os-path>` | Absolute path of the one shared neat-os checkout on this computer. The checkout is on `main`. | `/home/box/shared/neat-os` |
 
 A playbook may add its own settings, such as a prep tag or a log path. It lists them in a Settings table and uses these names for everything the table above covers.
 
