@@ -19,7 +19,6 @@ The shape, the acceptance criteria rule, and the tone rules are locked in [conve
 - **The client reads it.** Nothing about the agent, the conversation, the codebase search, cost, margin, other clients, credentials or private URLs. Tone per the convention: British English, short active sentences, the client's own names for things, no filler words, no emoji.
 - **Enhance rewrites the body.** Replace the description with the current decided outcome. Comments stay as they are. Type, status, priority, assignee, estimate, labels and components stay as they are.
 - **No adapter in neat-os.** Use whatever ticket tool the runner already has (a Jira MCP tool, a Jira CLI, `gh issue`). If none is available, stop and say so; do not install one or search the public web for a Jira client.
-- Company knowledge comes from the resolved neat-os tree. Locate it the same locked way `init` does (`resolve-consume.sh` or `require('@shedcollective/neat-os').resolveConsume()`): `NEAT_OS_ROOT`, then `node_modules/@shedcollective/neat-os`, then `vendor/shedcollective/neat-os`, then sibling `../neat-os`. `SHED_OS_ROOT` and the shed-os package paths still resolve and are deprecated (`docs/consume.md`). Do **not** search the public web for neat-os.
 
 ## When to use
 

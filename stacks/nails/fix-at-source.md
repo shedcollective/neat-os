@@ -20,7 +20,7 @@ A bug or missing behaviour in a Nails product app looks like it lives in a Nails
 3. Open a GitHub issue on that repo with `gh issue create --repo nails/<name>` and assign the package maintainers listed in that repo's README or CODEOWNERS. Tell the human in the same turn.
 4. If that repo is already a workspace root, open a pull request there that links the issue. Do not merge it.
 5. If that repo is not in the workspace, stop after the issue. Tell the human a pull request is preferred. Do not clone a Nails repo unsolicited. Do not edit `vendor/`.
-6. If the product ticket is blocked, a temporary app patch is allowed. The patch comment and the product pull request must say it is temporary and must name the Nails issue.
+6. If the product ticket is blocked, a temporary app patch is allowed. The patch comment uses the temporary upstream patch form in [conventions/code-comments.md](../../conventions/code-comments.md#temporary-upstream-patch). The product pull request says the patch is temporary and links the upstream issue.
 
 ## Stop
 

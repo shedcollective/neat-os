@@ -4,7 +4,7 @@ description: >-
   Event or frequent-sweep job: capture new client email, client and shared
   Slack threads, applied meeting proposals, and decisions a director states
   into the private operations record as small idempotent commits. Owned by the
-  operations lead. Not a launch playbook.
+  operations lead.
 ---
 
 # ops-capture
@@ -13,7 +13,7 @@ Capture operations events into `<ops-record>` when they happen, instead of waiti
 
 The **operations lead** owns this playbook. [`daily-burndown`](../daily-burndown/SKILL.md) consolidates what this run captured and does not rediscover it. Why events are captured as they happen: [ADR-0026](../../docs/decisions/0026-capture-operations-events-as-they-happen.md).
 
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`. A team bot does not run this routine without a filled bot passport ([docs/team-setup.md](../../docs/team-setup.md#team-bots)).
+A team bot does not run this routine without a filled bot passport ([docs/team-setup.md](../../docs/team-setup.md#team-bots)).
 
 ## When to use
 

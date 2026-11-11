@@ -34,7 +34,7 @@ Decide which kind of mechanism it is before you create it. The six kinds are def
 | --- | --- |
 | Principle | One judgement rule that changed a real decision in shipped work and cannot be checked by software. Create `principles/<slug>.md` with the sections *Applies when*, *The decision it changes*, and *Source*, and add it under a goal in `principles/README.md`. Keep the set small, and delete a principle that stops changing behaviour ([ADR-0018](decisions/0018-no-numeric-principle-cap.md)). Candidates usually arrive as `learn` proposals, and a person elevates them. |
 | Convention | A fact every Shed repository shares, such as git-flow or which ticket system to use. Create `conventions/<topic>.md` and list it in `conventions/README.md`. Playbooks read it, and `gather` must not ask about it. |
-| Playbook | An ordered sequence whose failure mode is a skipped step. Launch playbooks are `init`, `gather`, and `learn`. On-demand playbooks also live under `skills/<name>/SKILL.md` (today: [`pin-majors-with-reasons`](../skills/pin-majors-with-reasons/SKILL.md), [`assurance`](../skills/assurance/SKILL.md), [`release`](../skills/release/SKILL.md)). The frontmatter has `name` and `description`; the body has *When to use*, *Steps*, and *Stop*. |
+| Playbook | An ordered sequence whose failure mode is a skipped step. It lives at `skills/<name>/SKILL.md` and is listed in [skills/README.md](../skills/README.md). The frontmatter has `name` and `description`; the body has *When to use*, *Steps*, and *Stop*. |
 | Skill | A capability a playbook step invokes. Same `SKILL.md` shape. Keep it short. |
 | Script | Deterministic code: the same input gives the same output. It has `--help`, exits non-zero on failure, and prompts only when a terminal is attached. Prefer a script to prose whenever software can do the job ([encode-lessons-in-structure](../principles/encode-lessons-in-structure.md)). Scripts live in `skills/*/scripts/` or `scripts/`. |
 | Agent | A subagent with its own context. Do not add an `agents/` folder until there is a demonstrated need. |
@@ -51,7 +51,7 @@ Stack packs are playbook-shaped files under [`stacks/<name>/`](../stacks/). They
 
 ## Writing
 
-Every page a person reads follows [conventions/writing.md](../conventions/writing.md): write for a developer who has only the repository, one page does one job, plain words, one name per thing. The root [README.md](../README.md) is the entry point and pages under `docs/` go deeper. Install recipes appear only in [consume.md](consume.md). No page links to notes kept outside the repository ([ADR-0008](decisions/0008-repo-is-source-of-truth.md)).
+Every page a person reads follows [conventions/writing.md](../conventions/writing.md): write for a developer who has only the repository, one page does one job, plain words, one name per thing. Prose comments follow [conventions/code-comments.md](../conventions/code-comments.md). The root [README.md](../README.md) is the entry point and pages under `docs/` go deeper. Install recipes appear only in [consume.md](consume.md). No page links to notes kept outside the repository ([ADR-0008](decisions/0008-repo-is-source-of-truth.md)).
 
 ## Out of bounds
 

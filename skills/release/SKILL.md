@@ -14,7 +14,7 @@ Cut a **git-flow release** on a product repository. Production deploy after the 
 
 Run this playbook only when a person names it. A version that looks due is not a request.
 
-This is **not** a launch playbook. Do not run it from `init`, `gather`, or `learn`. Locate neat-os the same way those playbooks do (`resolve-consume.sh` / `require('@shedcollective/neat-os').resolveConsume()`). **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`. A product repository does not override the playbook. It fills the Release slot.
+Do not run it from `init`, `gather`, or `learn`. A product repository does not override the playbook. It fills the Release slot.
 
 Releasing neat-os itself follows [docs/release.md](../../docs/release.md). If Version files in the Release slot is `none`, stop and report that sentence. Do not start a release branch.
 
@@ -128,7 +128,7 @@ Copy this list into the todo list. A skipped step stays, with a `skip:` reason.
 - [ ] Tag and release merge verified on the production branch
 - [ ] Stop. The person deploys
 
-1. **Read the slot and locate neat-os.** `git rev-parse --show-toplevel`. Resolve neat-os with the locked order. Read the Release slot and the integration branch. Apply [Settings](#settings) when a bullet is unanswered.
+1. **Read the slot.** `git rev-parse --show-toplevel`. Read the Release slot and the integration branch. Apply [Settings](#settings) when a bullet is unanswered.
 
 2. **Confirm the semver.** Fetch. Read the latest tag on the production branch and the top-level version in each version file with `jq -r '.version'`. Ask with a structured question. The prompt shows the tag, those versions, the production branch, and the tag that would be created (`<tag prefix><semver>`). Choices are the next patch, the next minor, and a free-typed version. From `1.2.0`, the next patch is `1.2.1` and the next minor is `1.3.0`. Do not offer a next major. If the latest tag is not `MAJOR.MINOR.PATCH`, offer only the free-typed version. Strip a typed tag prefix before `git flow release start`. If the person types a prefix that does not match the slot, stop and ask. Compare the proposed `MAJOR.MINOR.PATCH` with each file. If it is equal to or lower than any current version, abort and report the path and both numbers. Do not start.
 

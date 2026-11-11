@@ -9,8 +9,6 @@ description: >-
 
 Read notes or transcripts the asker can already see, and write a synthesis. Follow [conventions/design-ux-agents.md](../../conventions/design-ux-agents.md).
 
-This is **not** a launch playbook. Locate neat-os the same way `init` does. **Do not** search the public web for neat-os. **Do not** copy this playbook into `.agents/skills/`.
-
 ## When to use
 
 - The asker has interview notes or transcripts and wants themes, sourced quotes, and opportunities.
