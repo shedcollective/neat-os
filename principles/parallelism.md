@@ -8,4 +8,3 @@ Principles under this goal:
 
 - [keep-human-gates](keep-human-gates.md)
 - [surface-conflicts](surface-conflicts.md)
-- [claim-a-shared-number](claim-a-shared-number.md)
