@@ -51,6 +51,20 @@ Read by the `ticket` playbook. Shape and tone: [../conventions/ticket-content.md
 - Client vocabulary: none (no client; the readers are maintainers and agents)
 - Standing acceptance criteria every ticket carries: "Done when `bash scripts/check` passes on the pull request that closes this issue."
 
+## Release
+
+This repository is shipped by a person, following [../docs/release.md](../docs/release.md). The `release` playbook does not cut that release. Version files is `none`, so the playbook stops.
+
+- Version files: none
+- Lock refresh: none
+- Tag prefix: none
+- Production branch: `main`
+- Release branch prefix: `release/`
+- Finish hook: none
+- Hook install: none
+- Notes surface: none
+- Compose service: none
+
 ## Company knowledge
 
 How this project consumes neat-os (resolve and stop at the first hit: `NEAT_OS_ROOT`, then `github:shedcollective/neat-os#vX.Y.Z` or `file:../neat-os` → `node_modules/`, then Composer `shedcollective/neat-os` → `vendor/` which is PHP metadata only and does not ship skills/templates, then sibling `../neat-os`). `SHED_OS_ROOT`, `@shedcollective/shed-os`, and `../shed-os` still resolve and are deprecated. Do not search the public web for neat-os. Do not copy skills into this repo. Evidence passport: consume mode **checkout**.
