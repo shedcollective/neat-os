@@ -34,6 +34,8 @@ A pull request body is the note a reviewer reads before they decide. It states *
 
 Write the opening in plain sentences. Say what a person can do, or rely on, that they could not before, and why this is the change. Stop when the reviewer can accept or reject it. Do not repeat that reason later in the body.
 
+The body does not record branch state such as behind or conflicting, because GitHub shows it and it goes stale.
+
 When a concrete before and after shows the change more clearly than another sentence, include one. Leave it out when the opening is already clear.
 
 When the change is a decision or a trade-off, name the decision and name the path the reviewer should open. When the change is straightforward, do not invent a decision.
