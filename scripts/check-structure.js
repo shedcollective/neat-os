@@ -50,6 +50,7 @@ const required = [
   'docs/team-setup.md',
   'docs/decisions/README.md',
   'docs/decisions/0000-template.md',
+  'skills/README.md',
   'skills/init/SKILL.md',
   'skills/init/scripts/copy-templates.sh',
   'skills/init/scripts/resolve-consume.sh',
@@ -172,6 +173,94 @@ for (const name of skillNames) {
     fail(`${rel} missing: every skills/<name>/ directory carries a SKILL.md`);
   }
   assertFrontmatter(rel, name);
+}
+
+// skills/README.md is the only playbook list. A table row is
+// `| [name](name/SKILL.md) |`. Each skills/<name>/ folder has one row, and
+// every row names a folder that exists, so a new playbook cannot land in
+// the tree while the list still omits it.
+function playbookRows(readme) {
+  const rows = [];
+  const re = /^\| \[([a-z0-9-]+)\]\(([a-z0-9-]+)\/SKILL\.md\) \|/gm;
+  let match;
+  while ((match = re.exec(readme)) !== null) {
+    rows.push({ name: match[1], target: match[2] });
+  }
+  return rows;
+}
+
+function playbookListProblems(readme, folders) {
+  const problems = [];
+  const seen = new Set();
+  for (const row of playbookRows(readme)) {
+    if (row.name !== row.target) {
+      problems.push(`skills/README.md row "${row.name}" points at ${row.target}/SKILL.md, not ${row.name}/SKILL.md`);
+    }
+    if (!folders.includes(row.target)) {
+      problems.push(`skills/README.md lists "${row.name}", and skills/${row.target}/ does not exist`);
+    }
+    if (seen.has(row.name)) {
+      problems.push(`skills/README.md lists skills/${row.name}/ more than once`);
+    }
+    seen.add(row.name);
+  }
+  for (const folder of folders) {
+    if (!seen.has(folder)) {
+      problems.push(`skills/README.md has no row for skills/${folder}/`);
+    }
+  }
+  return problems;
+}
+
+function assertPlaybookListCase(label, readme, folders, expectedFragments) {
+  const problems = playbookListProblems(readme, folders);
+  if (expectedFragments.length === 0) {
+    if (problems.length) {
+      fail(`playbook list self-test ${label}: expected no problems, got ${problems.join('; ')}`);
+    }
+    return;
+  }
+  for (const fragment of expectedFragments) {
+    if (!problems.some((problem) => problem.includes(fragment))) {
+      fail(`playbook list self-test ${label}: expected a problem containing "${fragment}", got ${problems.join('; ') || 'none'}`);
+    }
+  }
+}
+
+assertPlaybookListCase(
+  'match',
+  '| [init](init/SKILL.md) | Copies.\n| [gather](gather/SKILL.md) | Fills.\n',
+  ['init', 'gather'],
+  [],
+);
+assertPlaybookListCase(
+  'missing row',
+  '| [init](init/SKILL.md) | Copies.\n',
+  ['init', 'gather'],
+  ['skills/gather/'],
+);
+assertPlaybookListCase(
+  'missing folder',
+  '| [init](init/SKILL.md) | Copies.\n| [ghost](ghost/SKILL.md) | No such folder.\n',
+  ['init'],
+  ['skills/ghost/'],
+);
+assertPlaybookListCase(
+  'link target',
+  '| [init](gather/SKILL.md) | Copies.\n',
+  ['gather'],
+  ['not init/SKILL.md'],
+);
+assertPlaybookListCase(
+  'prose link is not a row',
+  'See [init](init/SKILL.md).\n',
+  ['init'],
+  ['skills/init/'],
+);
+
+const playbookProblems = playbookListProblems(read('skills/README.md'), skillNames);
+if (playbookProblems.length) {
+  fail(playbookProblems.join('\n'));
 }
 
 // ticket writes to the ticket system only (ADR-0012): no script of its own,

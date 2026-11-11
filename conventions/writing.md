@@ -34,6 +34,8 @@ A pull request body is the note a reviewer reads before they decide. It states *
 
 Write the opening in plain sentences. Say what a person can do, or rely on, that they could not before, and why this is the change. Stop when the reviewer can accept or reject it. Do not repeat that reason later in the body.
 
+The body does not record branch state such as behind or conflicting, because GitHub shows it and it goes stale.
+
 When a concrete before and after shows the change more clearly than another sentence, include one. Leave it out when the opening is already clear.
 
 When the change is a decision or a trade-off, name the decision and name the path the reviewer should open. When the change is straightforward, do not invent a decision.
@@ -77,7 +79,7 @@ Deferred: the message shown when the payment provider rejects a card.
 | Term | Meaning | Do not write |
 | --- | --- | --- |
 | neat-os | This repository and the package it publishes | "the OS core", "the skeleton" |
-| playbook | A `SKILL.md` under `skills/` with When to use, Steps, and Stop. The six are `init`, `gather`, `learn`, `ticket`, `assurance`, and `pin-majors-with-reasons`. | "launch skill" |
+| playbook | A `SKILL.md` under `skills/` with When to use, Steps, and Stop. The list is [skills/README.md](../skills/README.md). | "launch skill" |
 | ticket | One Jira Task in a product repo, or one GitHub Issue in an OS repo | "task", "issue" or "story" as a second name for the same thing |
 | Agent Guide | The `.agents/README.md` file in a product repo | "the gist", "IDE spread" |
 | project slots | The files under `.agents/` that `init` creates and `gather` fills | "IDE spread slots" |
