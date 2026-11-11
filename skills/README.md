@@ -4,9 +4,9 @@ Each folder under `skills/` is one playbook. This page is the list.
 
 `scripts/check-structure.js` fails when a folder here has no row, or a row points at a folder that is not there.
 
-## Launch
+## Adoption
 
-`init`, `gather`, and `learn` bring a repository into neat-os ([ADR-0002](../docs/decisions/0002-launch-skill-split.md)).
+Adoption playbooks (`init`, `gather`, `learn`) bring a repository into neat-os ([ADR-0002](../docs/decisions/0002-launch-skill-split.md)).
 
 | Playbook | Purpose |
 | --- | --- |

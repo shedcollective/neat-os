@@ -2,7 +2,7 @@
 
 Canonical guide for agents working **in this repository**. Edit here only.
 
-This is the Shed agency OS core: shared principles, launch skills, and the project scaffold that `init` copies into other repos as an **IDE spread** structure (Agent Guide + slots). `gather` fills that spread from repo evidence plus interview. Knowledge is **repo-bound** so Cursor cloud agents can run without an IDE plugin.
+This is the Shed agency OS core: shared principles, adoption playbooks (`init`, `gather`, `learn`), and the project scaffold that `init` copies into other repos as an **IDE spread** structure (Agent Guide + slots). `gather` fills that spread from repo evidence plus interview. Knowledge is **repo-bound** so Cursor cloud agents can run without an IDE plugin.
 
 **Dual-mode consume:** Local / IDE installs `github:shedcollective/neat-os#vX.Y.Z` into `node_modules/` (or Composer VCS into `vendor/`). That install is vendoring. Cloud Agents use a sibling client + neat-os (`NEAT_OS_ROOT` / `file:`). Both share this resolve order (stop at the first hit): `NEAT_OS_ROOT` → `node_modules/@shedcollective/neat-os` → `vendor/shedcollective/neat-os` → `../neat-os`. `SHED_OS_ROOT`, `@shedcollective/shed-os`, `vendor/shedcollective/shed-os`, and `../shed-os` still resolve, and each prints a deprecation warning. Agents and Cloud Agents install with that git pin. A product repository may install the published package from GitHub Packages. The recipe is in [docs/consume.md](docs/consume.md). An agent token gets a 403 from that registry, so agents do not use it ([ADR-0019](docs/decisions/0019-publish-github-packages.md)). Do **not** search the public web for “neat-os init”. `init` must **not** copy company skills into a client `.agents/skills/`.
 
@@ -24,7 +24,7 @@ This is the Shed agency OS core: shared principles, launch skills, and the proje
 
 ## Working in this checkout
 
-This repo is itself a neat-os tree, so the launch playbooks run against it without any install. Facts that trip contributors:
+This repo is itself a neat-os tree, so the adoption playbooks (`init`, `gather`, `learn`) run against it without any install. Facts that trip contributors:
 
 - **Consume mode is `checkout`.** `bash skills/init/scripts/resolve-consume.sh` reports `mode: checkout` here; it is the last-resort hit after `NEAT_OS_ROOT` → `node_modules` → `vendor` → sibling (ADR-0003). Product repos never see this mode.
 - **`NEAT_OS_ROOT` must be absolute.** A relative value (`../neat-os`) is skipped with a warning and resolution falls through to the next hit. Set it only when you need this checkout to win over an installed package: `export NEAT_OS_ROOT="$PWD"` from the repo root. Leave it unset for normal work here. `SHED_OS_ROOT` is a deprecated fallback.

@@ -57,7 +57,7 @@ The `repositoryDependencies` setting in `.cursor/environment.json` widens the ag
 | Default branch | `develop` |
 | `main` | Pull requests only, no direct pushes, once the team is ready to enforce it |
 | Install | GitHub Packages or a git pin for Node, and Composer VCS for PHP. Agents use the git pin. See [consume.md](consume.md) ([ADR-0019](decisions/0019-publish-github-packages.md)). |
-| Agent files | Created by `init`, filled by `gather`, with `learn` run later when useful. See [launch-skills.md](launch-skills.md). |
+| Agent files | Created by `init`, filled by `gather`, with `learn` run later when useful. See [adoption.md](adoption.md). |
 | Skills | Read from the installed package. Never copied into `.agents/skills/`. |
 | Agent Guide | Kept rich and in the repository. `gather` fills it; `init` does not. |
 | First smoke test | Install only. No deploy, no edits to client content. One pull request that shows the install working is enough. |

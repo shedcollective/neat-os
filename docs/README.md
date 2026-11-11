@@ -6,8 +6,8 @@ Each page does one job. If two pages seem to say the same thing, one of them is 
 
 | Page | Job |
 | --- | --- |
-| [consume.md](consume.md) | Install neat-os in a product repository, move an existing install, move a wrapper pin, and move from shed-os. The only place the install recipes appear. |
-| [launch-skills.md](launch-skills.md) | What the launch playbooks and `ticket` do. The list of playbooks is [skills/README.md](../skills/README.md) |
+| [consume.md](consume.md) | Install neat-os in a product repository, run a playbook, move an existing install, move a wrapper pin, and move from shed-os. The only place the install recipes appear. |
+| [adoption.md](adoption.md) | What the adoption playbooks (`init`, `gather`, `learn`) and `ticket` do. The list of playbooks is [skills/README.md](../skills/README.md) |
 | [agency-ops.md](agency-ops.md) | Agency operations playbooks and the work-logging convention; private record stays out of this tree |
 | [cursor-environments.md](cursor-environments.md) | The Cursor GitHub App, Cloud Agent Environments, and the install, kept apart |
 | [team-setup.md](team-setup.md) | Cursor team and GitHub organisation settings, the steps for a new or existing project, and the bot passport rule for team bots |

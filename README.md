@@ -110,7 +110,7 @@ Adopt once: a person pins a release, then runs `init`, then `gather`. After that
 
 ## The playbooks
 
-The playbooks are listed in [skills/README.md](skills/README.md). What the launch playbooks and `ticket` do is described in [docs/launch-skills.md](docs/launch-skills.md). Agency operations playbooks are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design and UX rules are [conventions/design-ux-agents.md](conventions/design-ux-agents.md).
+The playbooks are listed in [skills/README.md](skills/README.md). What the adoption playbooks (`init`, `gather`, `learn`) and `ticket` do is described in [docs/adoption.md](docs/adoption.md). Agency operations playbooks are mapped in [docs/agency-ops.md](docs/agency-ops.md). Design and UX rules are [conventions/design-ux-agents.md](conventions/design-ux-agents.md).
 
 `daily-digest` turns the day file into a short end-of-day post for a team channel. `morning-brief` composes one morning message per person and replaces separate morning health, digest, day-plan, and meeting-prep brief messages. Agency operations playbooks take their inputs from the settings in [conventions/routine-settings.md](conventions/routine-settings.md).
 
@@ -138,8 +138,8 @@ Work lands on `develop`. A release-prep pull request sets the version. Prepare r
 | --- | --- |
 | [PURPOSE.md](PURPOSE.md) | What neat-os is for |
 | [docs/README.md](docs/README.md) | Where documentation lives and the full map |
-| [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, moving an existing install, and moving from shed-os |
-| [docs/launch-skills.md](docs/launch-skills.md) | What the launch playbooks and `ticket` do. The list of playbooks is [skills/README.md](skills/README.md) |
+| [docs/consume.md](docs/consume.md) | Installing neat-os in a product repository, running a playbook, moving an existing install, and moving from shed-os |
+| [docs/adoption.md](docs/adoption.md) | What the adoption playbooks (`init`, `gather`, `learn`) and `ticket` do. The list of playbooks is [skills/README.md](skills/README.md) |
 | [docs/cursor-environments.md](docs/cursor-environments.md) | The GitHub App, Cloud Agent Environments, and how they differ |
 | [docs/team-setup.md](docs/team-setup.md) | Cursor and GitHub administration for the team |
 | [docs/release.md](docs/release.md) | How neat-os is released on `shedcollective/neat-os`. Notes are on the GitHub Release |
