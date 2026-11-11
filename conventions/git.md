@@ -69,7 +69,20 @@ A single, unstacked pull request uses the locked title in [PR titles](#pr-titles
 
 **Locked.** Each commit is one concern, so a reviewer can read it on its own. The message says what changed and why. A pull request may hold several commits. Do not put the whole piece of work into one commit because those commits land together. Do not split so thinly that an intermediate commit does not stand on its own.
 
+**Commit each concern when it is done.** Make that commit during the work, as soon as the concern stands on its own. Do not save the refactor, the behaviour change, the tests, and any config or dependency change for one commit at the end. Each of those is its own commit when the work includes it, and the message names only that concern.
+
+A genuinely tiny change is one commit. That is one concern in a few lines, such as a wording fix in one file. Do not split that change, and do not add a commit so the count looks larger.
+
 When a piece of work is recorded as several commits, order them so a reviewer can follow the change from the first commit to the last. When the work includes documentation, that documentation is the first commit. After that, a commit comes before the commits that depend on it.
+
+A typical fix that also refactors, adds a test, and bumps a dependency is four commits. A config change is the same kind of commit as the dependency bump. `GH-42` is the placeholder key from [tickets.md](tickets.md), not an issue in this repository. The dependency commit is first because the later commits call the new version. The refactor is next, because the behaviour change uses it. The test follows the behaviour it covers. When the work also changes a guide, that documentation commit is first, before these four:
+
+```
+chore: bump the quantity validator the basket calls (GH-42)
+refactor: extract the quantity check so the fix can land on its own (GH-42)
+fix: reject a negative quantity before the basket saves (GH-42)
+test: cover a negative quantity on the basket (GH-42)
+```
 
 Subjects stay Conventional Commits (`feat|fix|chore|refactor|docs|test|style`), with the ticket key per [tickets.md](tickets.md).
 
