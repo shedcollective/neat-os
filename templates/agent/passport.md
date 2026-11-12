@@ -2,6 +2,8 @@
 
 A filled bot passport lives in the private operations record, never in neat-os. Change it by pull request. A director merges. Do not run a routine until this page is filled.
 
+Before writing to a repo or an operations record outside a playbook run (a passport or wrapper edit, a doc edit, a commit, or a pull request), read `AGENTS.md`, `conventions/writing.md`, `conventions/attribution.md`, and `conventions/ticket-content.md` from `/home/box/shared/neat-os` and follow them. State present-tense facts only. Do not record who did it or an approval history. Do not hard-code a current version. The commit author is the person driving the session.
+
 ## Job
 
 <one line: what this bot does>

@@ -777,6 +777,25 @@ for (const sentence of [
     fail(`templates/agent/passport.md Pin must lock the shared checkout on main: missing "${sentence}"`);
   }
 }
+
+// Outside a playbook run, an agent reads the writing conventions from the
+// shared checkout before it writes. The phrases are the rule in AGENTS.md.
+// The passport and wrapper templates carry the same line.
+for (const rel of ['AGENTS.md', 'templates/agent/passport.md', 'templates/ops/bot-skill.md']) {
+  const text = read(rel);
+  for (const sentence of [
+    'Before writing to a repo or an operations record outside a playbook run',
+    'present-tense facts only',
+    'Do not record who did it or an approval history',
+    'Do not hard-code a current version',
+    'The commit author is the person driving the session',
+    '/home/box/shared/neat-os',
+  ]) {
+    if (!text.includes(sentence)) {
+      fail(`${rel} must lock the read-before-write rule: missing "${sentence}"`);
+    }
+  }
+}
 if (!/^## Team bots$/m.test(read('docs/team-setup.md'))) {
   fail('docs/team-setup.md must say every team bot has a bot passport before it runs a routine');
 }
