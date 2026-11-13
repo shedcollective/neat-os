@@ -23,6 +23,7 @@ Adoption playbooks (`init`, `gather`, `learn`) bring a repository into neat-os (
 | [brand-board-from-assets](brand-board-from-assets/SKILL.md) | Builds a brand board in a new Figma file from brand asset files. Does not publish a library. |
 | [brand-from-site](brand-from-site/SKILL.md) | Captures a public website's brand into a new Figma file. Does not edit an existing file. |
 | [client-brief](client-brief/SKILL.md) | Assembles a high-level client brief from the private operations record. Includes no billing figures. |
+| [cloud-agent-environment](cloud-agent-environment/SKILL.md) | Sets up install and start scripts for a Cloud Agent Environment that already exists. Does not create the Environment. |
 | [daily-burndown](daily-burndown/SKILL.md) | Writes the day's work digest into the private operations record and refreshes the in-flight board. |
 | [daily-digest](daily-digest/SKILL.md) | Turns the day's digest into a short end-of-day post and delivers it. |
 | [design-brief](design-brief/SKILL.md) | Collects brand, audience, format, deadline, and sources for a design request, and checks the asker's Figma seat. |
