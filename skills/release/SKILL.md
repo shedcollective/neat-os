@@ -50,10 +50,10 @@ A blank value, `awaiting interview`, `to confirm`, `{{to confirm}}`, or `TODO / 
 
 ## Hard rules
 
-- **Ask for the semver.** Use the runner's structured question (choices in the chat). Do not ask in prose, and do not guess. A version already written in the chat is not a confirmation. Show the latest tag and the current version-file values in the prompt. Offer the next patch and the next minor from that tag. The person can type another version. Do not start until they answer. If the proposed semver is equal to or lower than the current version in any configured version file, abort and report both values. Do not start the release.
+- **Ask for the semver.** Use the runner's structured question (choices in the chat). Do not ask in prose, and do not guess. A version already written in the chat is not a confirmation. The prompt shows the latest tag, the current version-file values, the production branch, and the tag that will be created (`<tag prefix><semver>`). Offer the next patch, the next minor, and a free-typed version. Do not offer a next major. A patch is bug fixes, minor tweaks, or copy changes. A minor is new features or significant changes. A major is rarely used, and only when the person types that version. Do not start until they answer. If the proposed semver is equal to or lower than the current version in any configured version file, abort and report both values. Do not start the release.
 - **Ask for the notes.** Show the draft in a second structured question and wait. One choice approves the draft as written. The other means the person will edit the notes in chat. Do not finish until that edited text arrives. If the drafted release notes are empty, abort and report. Do not ask for approval of an empty list, and do not finish.
 - **The tag lands on the production branch.** After finish, the tag commit and the release merge are reachable from `origin/<production branch>`. A tag that exists only on the integration branch is not a release. The default branch is often that integration branch, so a tag or a published release that does not name the production branch lands there instead. Verify. Then stop.
-- **Never force-push** the production branch or the integration branch. `git flow release finish -f <file> -p` uses `-f` as the notes file and `-p` to push. Those flags are not `--force`.
+- **Never force-push** the production branch or the integration branch. Finish with `git flow release finish <semver> --tag --messagefile /tmp/release-notes-<semver>.txt --push`. In `git-flow-next`, `-f` means `--force` and `-p` is not push. Never pass `-f`. Always pass `--tag --messagefile <file> --push`.
 - **Never skip hooks.** Do not pass `--no-verify`. If the finish hook fails, fix the version files or the lock, commit those files, and finish again.
 - **Never finish** when a version file is not `<semver>`, or when the lock refresh still produces a diff.
 - **If finish fails halfway, stop and report.** Name the branches, the tag, and whether each exists on origin. Do not push, reset, delete, or move a tag to recover.
@@ -65,7 +65,7 @@ A blank value, `awaiting interview`, `to confirm`, `{{to confirm}}`, or `TODO / 
 Check these before `git flow release start`. Fetch first so the tag and the remote branches in the semver question are current.
 
 - Working tree clean, then on the integration branch. `git fetch origin`. Local integration matches `origin/<integration branch>`.
-- git-flow is installed. Its branch names and prefixes match the slot: production branch, integration branch, release prefix, tag prefix. The git-flow key for the production branch is `gitflow.branch.master` even when that branch is `main`. If git-flow is missing or the values differ, stop and report. Do not run `git flow init`.
+- `git-flow-next` is required. `git flow version` reports `git-flow-next`, not classic `git-flow` `0.4.1`. Validate `git flow config list` (or `git config --get-regexp '^gitflow\.'`) against the Release slot. Match the key names without regard to letter case. Native `git-flow-next` keys are `gitflow.branch.<production branch>.type=base`, `gitflow.branch.<integration branch>.type=base`, `gitflow.branch.<integration branch>.parent=<production branch>`, `gitflow.branch.<integration branch>.downstreamstrategy=merge` (required so the update onto the integration branch, usually `develop`, is always a merge commit), `gitflow.branch.<integration branch>.autoupdate=true` (required so that branch auto-updates when its parent, `<production branch>`, changes), `gitflow.branch.release.parent=<production branch>`, `gitflow.branch.release.startpoint=<integration branch>`, `gitflow.branch.release.prefix=<release prefix>`, `gitflow.branch.release.tag=true`, and `gitflow.branch.release.tagprefix=<tag prefix>`. `<release prefix>` and `<tag prefix>` are the Release slot bullets, and `empty` means that value is empty. `git-flow-next` transparently translates legacy AVH keys (`gitflow.branch.master`, `gitflow.branch.develop`, `gitflow.prefix.release`, `gitflow.prefix.versiontag`). The legacy production key is `gitflow.branch.master` even when that branch is `main`. Native `git-flow-next` keys, or those translated AVH keys confirmed by `git flow config list`, satisfy the branch names and prefixes when the values match the slot. Translated AVH keys do not replace `downstreamstrategy=merge` or `autoupdate=true` on the integration branch. If `git-flow-next` is missing, or any of these values differ or are absent, stop and report. Do not change the git-flow config, and do not run `git flow init`.
 - When Finish hook is not `none`, run Hook install. When that command fails, stop.
 - Run Lock refresh and Hook install through the runtime the slot names ([use-the-declared-runtime](../../principles/use-the-declared-runtime.md)). If the command fails because the runtime is down, stop and report. Do not start a stack the slot does not name. When the lock refresh runs in a container, the Compose service name comes from the Compose service bullet (the same name Layout & start lists under Containers / Compose). Do not pass a container id, and do not hard-code a service name.
 
@@ -96,18 +96,19 @@ git log --merges --first-parent <prev-tag>..HEAD --format='%s'
 
 Drop `Merge tag '…'` and `Merge branch 'release/…'`.
 
-Rewrite each remaining merge into one bullet. The key and the title come from the merged branch or the pull request. The type is the lowercase Conventional Commits type from that pull request title ([conventions/git.md](../../conventions/git.md#pr-titles)). This shape is an example:
+Rewrite each remaining merge into one bullet. The key and the title come from the merged branch or the pull request. The type is the lowercase Conventional Commits type from that pull request title ([conventions/git.md](../../conventions/git.md#pr-titles)). Sort entries with a ticket key (`- [<KEY>] ...`) to the top, and place entries with no key at the bottom. Keep the `git log` order inside each group. Do not drop an entry because it has no key. This shape is an example:
 
 ```text
 Release 1.2.0
 
 - [ACME-123] feat: Respect the parent publish state
 - [ACME-124] chore: Update dependencies
+- Update the footer copy (no ticket key)
 ```
 
-`ACME-123` stands in for the key on that merge. Do not invent a key. If the branch and the pull request have no key, show the title and say the key was absent. If the drafted release notes are empty, abort and report. Squash-merge may have removed the merge signal. Do not back-fill bullets from individual commits, and do not finish with an empty list.
+`ACME-123` stands in for the key on that merge. Do not invent a key. If the branch and the pull request have no key, show the title and say the key was absent, and place that bullet at the bottom. If the drafted release notes are empty, abort and report. Squash-merge may have removed the merge signal. Do not back-fill bullets from individual commits, and do not finish with an empty list.
 
-The approved text is the changelog. The merge commit stays the git-flow default (`Merge branch 'release/<semver>'`). `git flow release finish -f` writes the **tag** message. `-p` pushes the integration branch, the production branch, and the tag.
+The approved text is the changelog. The merge commit stays the git-flow default (`Merge branch 'release/<semver>'`). Finish with `git flow release finish <semver> --tag --messagefile /tmp/release-notes-<semver>.txt --push`. `--messagefile` writes the **tag** message. `--push` pushes the integration branch, the production branch, and the tag.
 
 When Notes surface is `annotated tag`, a person reads `git show <tag>`. When it is a repo-relative path, write the same text there too, and include that file in the version commit.
 
@@ -118,19 +119,19 @@ Copy this list into the todo list. A skipped step stays, with a `skip:` reason.
 - [ ] Release slot read. Unanswered bullets asked once and written back
 - [ ] Semver confirmed with a structured question
 - [ ] Integration branch clean, fetched, and matching origin
-- [ ] git-flow config matches the slot. Hook install has run when a hook is named
+- [ ] `git-flow-next` config matches the slot. Hook install has run when a hook is named
 - [ ] `git flow release start <semver>`
 - [ ] Version files bumped. Lock refresh has run when it is not `none`
 - [ ] Only those files committed
 - [ ] Notes drafted and approved with a structured question
 - [ ] Versions still match, and the lock refresh produces no diff
-- [ ] `git flow release finish -f <notesfile> -p <semver>`
-- [ ] Tag and release merge verified on the production branch
+- [ ] `git flow release finish <semver> --tag --messagefile /tmp/release-notes-<semver>.txt --push`
+- [ ] Tag and release merge verified on the production branch, and the back-merge verified on the integration branch
 - [ ] Stop. The person deploys
 
 1. **Read the slot.** `git rev-parse --show-toplevel`. Read the Release slot and the integration branch. Apply [Settings](#settings) when a bullet is unanswered.
 
-2. **Confirm the semver.** Fetch. Read the latest tag on the production branch and the top-level version in each version file with `jq -r '.version'`. Ask with a structured question. The prompt shows the tag, those versions, the production branch, and the tag that would be created (`<tag prefix><semver>`). Choices are the next patch, the next minor, and a free-typed version. From `1.2.0`, the next patch is `1.2.1` and the next minor is `1.3.0`. Do not offer a next major. If the latest tag is not `MAJOR.MINOR.PATCH`, offer only the free-typed version. Strip a typed tag prefix before `git flow release start`. If the person types a prefix that does not match the slot, stop and ask. Compare the proposed `MAJOR.MINOR.PATCH` with each file. If it is equal to or lower than any current version, abort and report the path and both numbers. Do not start.
+2. **Confirm the semver.** Fetch. Read the latest tag on the production branch and the top-level version in each version file with `jq -r '.version'`. Ask with a structured question. The prompt shows the tag, those versions, the production branch, and the tag that will be created (`<tag prefix><semver>`). Choices are the next patch, the next minor, and a free-typed version. From `1.2.0`, the next patch is `1.2.1` and the next minor is `1.3.0`. Do not offer a next major. A patch is bug fixes, minor tweaks, or copy changes. A minor is new features or significant changes. A major is rarely used, and only when the person types that version. If the latest tag is not `MAJOR.MINOR.PATCH`, offer only the free-typed version. Strip a typed tag prefix before `git flow release start`. If the person types a prefix that does not match the slot, stop and ask. Compare the proposed `MAJOR.MINOR.PATCH` with each file. If it is equal to or lower than any current version, abort and report the path and both numbers. Do not start.
 
 3. **Check preconditions.** Apply [Preconditions](#preconditions). Then `git flow release start <semver>`.
 
@@ -141,7 +142,7 @@ Copy this list into the todo list. A skipped step stays, with a `skip:` reason.
 6. **Finish.** Assert each JSON version with `jq -r '.version'` and confirm it is `<semver>`. That read is the top-level key only. Re-run Lock refresh when it is not `none`. If it produces a diff, do not finish. Commit the lock only when the diff is confined to the expected lockfiles, then check again. Then:
 
    ```bash
-   git flow release finish -f /tmp/release-notes-<semver>.txt -p <semver>
+   git flow release finish <semver> --tag --messagefile /tmp/release-notes-<semver>.txt --push
    ```
 
 7. **Verify the production branch.** Fetch. Let `<tag>` be `<tag prefix><semver>`.
@@ -149,12 +150,13 @@ Copy this list into the todo list. A skipped step stays, with a `skip:` reason.
    ```bash
    git ls-remote --tags origin "refs/tags/<tag>"
    git merge-base --is-ancestor "<tag>" "origin/<production branch>"
+   git merge-base --is-ancestor "<tag>" "origin/<integration branch>"
    ```
 
-   The ancestor check must exit 0: the tag commit is on the production branch. Also confirm `origin/<production branch>` contains the release merge, and `origin/<integration branch>` contains `Merge tag '<tag>' into <integration branch>`. If the ancestor check fails, or the tag is only on the integration branch, stop and report the SHAs. Do not delete the tag, do not force-push, and do not invent a recovery. The same rule for neat-os tags is in [docs/release.md](../../docs/release.md).
+   Both ancestor checks must exit 0. `origin/<production branch>` must contain the release merge. `origin/<integration branch>` must contain the back-merge from `<production branch>`. `git-flow-next` auto-updates the integration branch, because `autoupdate=true`, with a merge commit such as `Merge branch '<production branch>' into <integration branch>`, because `downstreamstrategy=merge`. The subject is not `Merge tag '<tag>'`. If either ancestor check fails, or the tag is only on the integration branch, stop and report the SHAs. Do not delete the tag, do not force-push, and do not invent a recovery. The same rule for neat-os tags is in [docs/release.md](../../docs/release.md).
 
 8. **Stop.** Tell the person the tag and that they deploy production themselves. Do not deploy.
 
 ## Stop
 
-The playbook is complete when the tag and the release merge are on `origin/<production branch>`, the integration branch has the tag back-merge, and the person has been told they deploy. It is also complete when it stopped because the slot was unanswered, the proposed version was equal to or lower than a current version, the drafted release notes are empty, git-flow did not match, a hook or lock check failed, or finish failed halfway. It is not complete if a deploy was started, a hook was skipped, or a tag was left only on the integration branch without that being reported.
+The playbook is complete when the tag and the release merge are on `origin/<production branch>`, the integration branch has the back-merge from `<production branch>`, and the person has been told they deploy. It is also complete when it stopped because the slot was unanswered, the proposed version was equal to or lower than a current version, the drafted release notes are empty, `git-flow-next` was missing or did not match, a hook or lock check failed, or finish failed halfway. It is not complete if a deploy was started, a hook was skipped, or a tag was left only on the integration branch without that being reported.
