@@ -16,7 +16,7 @@ A Cloud Agent needs the product repository and neat-os in the same run. If every
 
 The token that the Cursor GitHub App gives an agent can read repositories but cannot read GitHub Packages (403). Do not work around that with a personal Packages token. An agent installs from git, as [consume.md](consume.md) describes. A product repository may install from GitHub Packages. That recipe is on the same page ([ADR-0019](decisions/0019-publish-github-packages.md)).
 
-The `repositoryDependencies` setting in a product repository's `.cursor/environment.json` (for example `github.com/shedcollective/neat-os`) widens the token so it can read that repository. It does not clone the repository into the run, and it does not replace a two-repository Environment.
+The `repositoryDependencies` setting in a product repository's `.cursor/environment.json` grants access. It does not clone the repository into the run, and it does not replace a two-repository Environment. Each entry is host-qualified, such as `github.com/org/repo`. Cursor includes an entry only when the account has write access and the repository has the same owner as the primary repository. Other entries are skipped silently.
 
 ## Create an Environment
 

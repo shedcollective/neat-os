@@ -3,6 +3,7 @@
 # Runs: structure (paths, indexes, package agreement) → policy (short ADR-backed
 # prose lint) → neutral reference (client and internal detail in published text) →
 # smoke (init / gather / resolve-consume against temp repos).
+# A playbook may add skills/<name>/smoke.js. The loop below runs each one.
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
@@ -11,5 +12,12 @@ node scripts/check-structure.js
 node scripts/check-policy.js
 node scripts/check-neutral.js
 node scripts/check-smoke.js
+
+# Playbook smoke lives beside SKILL.md. A folder without that file is skipped.
+for smoke in skills/*/smoke.js; do
+  if [[ -f "$smoke" ]]; then
+    node "$smoke"
+  fi
+done
 
 echo "neat-os check OK"
