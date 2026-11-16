@@ -68,7 +68,7 @@ The six kinds of mechanism are defined in [schema/README.md](schema/README.md). 
   </picture>
 </p>
 
-Pin a release tag (`#vX.Y.Z`) for a product repository. `#develop` is for unreleased work. How a release happens is in [docs/release.md](docs/release.md). First install, moving an existing install, and moving from shed-os are in [docs/consume.md](docs/consume.md), and nowhere else.
+Pin a release tag (`#vX.Y.Z`) for a product repository. `#develop` is for unreleased work. How a release happens is in [docs/release.md](docs/release.md). First install, moving an existing install, how team and personal agents read the shared checkout, and moving from shed-os are in [docs/consume.md](docs/consume.md), and nowhere else.
 
 ### On your computer, in the Cursor IDE
 

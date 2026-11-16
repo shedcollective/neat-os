@@ -24,10 +24,11 @@ Adoption playbooks (`init`, `gather`, `learn`) bring a repository into neat-os (
 | [brand-from-site](brand-from-site/SKILL.md) | Captures a public website's brand into a new Figma file. Does not edit an existing file. |
 | [client-brief](client-brief/SKILL.md) | Assembles a high-level client brief from the private operations record. Includes no billing figures. |
 | [cloud-agent-environment](cloud-agent-environment/SKILL.md) | Sets up install and start scripts for a Cloud Agent Environment that already exists. Does not create the Environment. |
+| [cve](cve/SKILL.md) | Reports a new advisory as a ticket, or re-aligns an existing CVE ticket with current alerts and lockfiles. Does not change a repository. |
 | [daily-burndown](daily-burndown/SKILL.md) | Writes the day's work digest into the private operations record and refreshes the in-flight board. |
 | [daily-digest](daily-digest/SKILL.md) | Turns the day's digest into a short end-of-day post and delivers it. |
 | [design-brief](design-brief/SKILL.md) | Collects brand, audience, format, deadline, and sources for a design request, and checks the asker's Figma seat. |
-| [design-handoff](design-handoff/SKILL.md) | Bundles the chosen option into the private operations record, and sends code work out as a ticket. |
+| [design-handoff](design-handoff/SKILL.md) | Puts the chosen option on the Jira ticket, with the Figma link, PNGs, and spec. |
 | [design-qa](design-qa/SKILL.md) | Compares a built page with its Figma frames and comments on the differences. Belongs to the assurance role. |
 | [enhance-daily-update](enhance-daily-update/SKILL.md) | Appends one person's perspective to the day's shared digest. |
 | [finance-client-backfill](finance-client-backfill/SKILL.md) | Creates missing client records in the director's accounting tool from the private operations record. |
@@ -38,6 +39,7 @@ Adoption playbooks (`init`, `gather`, `learn`) bring a repository into neat-os (
 | [morning-brief](morning-brief/SKILL.md) | Composes one morning message per person from existing facts. |
 | [naming-and-voice](naming-and-voice/SKILL.md) | Proposes 2 to 3 naming options and tone-of-voice drafts, and recommends one. |
 | [ops-capture](ops-capture/SKILL.md) | Captures new email, shared threads, applied meeting proposals, and stated decisions into the private operations record. |
+| [os-checkout-sync](os-checkout-sync/SKILL.md) | Fetches and fast-forwards the shared checkout on `main`. Records the version beside the checkout. Reports only on failure, divergence, or a new release. |
 | [pin-majors-with-reasons](pin-majors-with-reasons/SKILL.md) | Upgrades dependencies and leaves a pinned major where it is. |
 | [project-update](project-update/SKILL.md) | Writes a short project status from the operations record and live connectors. |
 | [release](release/SKILL.md) | Cuts a git-flow release on a product repository from the Release slot, then stops before the production deploy. Runs only when a person names it. |
