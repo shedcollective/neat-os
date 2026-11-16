@@ -67,7 +67,7 @@ For an OS repository the same playbook writes a GitHub Issue with `gh issue crea
 
 ## Other playbooks
 
-`assurance` reads one pull request on a product repository and posts an evidence pack. It does not implement the change. `pin-majors-with-reasons` upgrades dependencies and leaves a pinned major where it is. They are not part of adoption.
+`assurance` reads one pull request on a product repository and posts an evidence pack. It does not implement the change. The command that writes that comment is [`skills/assurance/scripts/post-evidence-pack.md`](../skills/assurance/scripts/post-evidence-pack.md). `pin-majors-with-reasons` upgrades dependencies and leaves a pinned major where it is. They are not part of adoption.
 
 Agency operations, design, and UX playbooks are on demand and are not part of product-repo adoption. The operations map is [agency-ops.md](agency-ops.md). Design and UX rules are [conventions/design-ux-agents.md](../conventions/design-ux-agents.md). Every playbook is listed in [skills/README.md](../skills/README.md).
 
